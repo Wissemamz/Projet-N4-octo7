@@ -1,4 +1,4 @@
-package Entity;
+package Entity; //ezfzefxc
 
 import java.io.IOException;
 import java.awt.Graphics2D;
