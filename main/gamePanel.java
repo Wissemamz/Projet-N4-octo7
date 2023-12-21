@@ -13,25 +13,25 @@ import Entity.player;
 
 public class gamePanel extends JPanel implements Runnable{
 	// SCREEN SETINGS
-	final int originalTileSize= 16; //16x16 pixels
-	final int scale = 6;
+	final int originalTileSize= 16; //16x16 pixels //carreaux
+	final int scale = 6; //carreaux
 	
-	public final int tileSize = originalTileSize * scale;
+	public final int tileSize = originalTileSize * scale; //carreaux
 	
-	final int maxScreenCol=5; 
-	final int maxScreenRow=5;
-	final int screenWidth=tileSize * maxScreenCol;
-	final int screenHeight=tileSize * maxScreenRow;
+	final int maxScreenCol=5; //longueur
+	final int maxScreenRow=5; //largeur
+	final int screenWidth=tileSize * maxScreenCol; //5 carreaux en longueur
+	final int screenHeight=tileSize * maxScreenRow;  //5 carreaux en largeur
 	
 	//FPS
-	int FPS = 60;
+	int FPS = 60; //combien d'images par seconde
 	
-	KeyMove KeyM= new KeyMove();
+	KeyMove KeyM= new KeyMove(); //
 	Thread gameThread;
 	player player = new player(this, KeyM);
 	
-	//set players default positions
-	public int playerX = 100;
+	//positions des robots
+	public int playerX = 100; 
 	public int playerY = 100;
 	public int playerSpeed = 4;
 
