@@ -1,24 +1,35 @@
-package main; //essaie change
+package main;
 
-import javax.swing.JFrame;
+import java.util.Scanner;
+
+
 
 public class main {
 
-	public static void main(String[] args) {
-		JFrame window = new JFrame();
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(false);
-		window.setTitle("Octupunks");
-		
-		gamePanel gamePanel = new gamePanel();
-		window.add(gamePanel);
-		
-		window.pack();
-		
-		window.setLocationRelativeTo(null);
-		window.setVisible(true);
 	
-		gamePanel.startGameThread();
+
+	public static void main(String[] args){
+		final var scanner = new Scanner(System.in);
+		final var game = new jeu();
+
+		var player = Player.FIRST;
+
+		while(true){
+			System.out.println(game);
+			System.out.println(player + " / 1 ou 0 ? -->  \n");
+			final var inputUser=scanner.nextInt();
+
+			game.processInput(player,inputUser);
+			player=nextPlayer(player);
+		}
 	}
 
+	private static Player nextPlayer(Player player){
+		if(player == Player.FIRST){
+			return Player.SECOND;
+		}else{
+			return Player.FIRST;
+		}
+
+	}
 }
