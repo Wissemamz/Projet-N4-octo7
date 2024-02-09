@@ -37,13 +37,18 @@ public class Instruction {
             if (parametre.length==0){
                 return;
             }
-            for (int i=0; i<3; i++){
-                if (parametre[1].equals(grille[r.getAbscisse()][r.getOrdonnee()][i].getName())){
-                    r.setFichier((grille[r.getAbscisse()][r.getOrdonnee()][i]));
-                    grille[r.getAbscisse()][r.getOrdonnee()][i] = null;
+            else if (parametre.length==0) {
+                for (int i=0; i<3; i++){
+                    if (parametre[1].equals(grille[r.getAbscisse()][r.getOrdonnee()][i].getName())){
+                        r.setFichier((grille[r.getAbscisse()][r.getOrdonnee()][i]));
+                        grille[r.getAbscisse()][r.getOrdonnee()][i] = null;
+                        return;
+                    }
                 }
             }
+            else return; 
         }
+
         else if (commande == "DROP"){
 
         }

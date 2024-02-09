@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Jeu {
     static ObjetJ [][][] grille = new ObjetJ[5][5][3];
     public Jeu() {
@@ -9,6 +12,39 @@ public class Jeu {
         grille[4][4][0] = robot2;
     }
     
+
+    
+     public ArrayList<Instruction> parseTextFromInput() {
+        ArrayList<Instruction> instructionsList = new ArrayList<>();
+        
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Veuillez entrer le texte (tapez 'fin' pour terminer) :");
+
+        // Lire le texte jusqu'à ce que l'utilisateur entre "fin"
+        while (true) {
+            String inputLine = scanner.nextLine();
+
+            if (inputLine.equals("fin")) {
+                break; // Sortir de la boucle si l'utilisateur entre "fin"
+            }
+
+            String[] parts = inputLine.split("\\s+");
+            String command = parts[0];
+
+            String[] parameters = new String[parts.length - 1];
+            System.arraycopy(parts, 1, parameters, 0, parameters.length);
+
+            Instruction instruction = new Instruction(command, parameters);
+            instructionsList.add(instruction);
+        }
+
+        scanner.close(); // Fermer le scanner
+
+        return instructionsList;
+    }
+
+
     public void setNiveau1() {
         for (int i=0 ;i<3; i++){
             grille[1][3][i] = new Obstacle("obstacle 01",1,3,i);
