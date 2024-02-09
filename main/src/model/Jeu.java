@@ -9,8 +9,8 @@ import java.util.Scanner;
 public class Jeu {
     static ObjetJ [][][] grille = new ObjetJ[5][5][3];
     private Random random;
-    private ObjetJ robot1;
-    private ObjetJ robot2;
+    private Robot robot1;
+    private Robot robot2;
 
     public Jeu() {
         this.robot1= new Robot("Robot1", 4, 0,0);
@@ -82,7 +82,7 @@ public class Jeu {
     public void jouer(ArrayList<Instruction> instruR1,ArrayList<Instruction> instruR2 ){
         int taille = instruR1.size()<instruR2.size() ? instruR1.size() : instruR2.size();
         ArrayList<Instruction> instru = instruR1.size()<instruR2.size() ? instruR2 : instruR1;
-        ObjetJ robot= instruR1.size()<instruR2.size() ? robot2 : robot1;
+        Robot robot= instruR1.size()<instruR2.size() ? robot2 : robot1;
 
         for (int i=0; i<taille; i++){
             double choix=random.nextDouble();
