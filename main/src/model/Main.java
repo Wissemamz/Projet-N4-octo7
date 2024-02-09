@@ -5,6 +5,7 @@ public class Main {
         Jeu leJeu = new Jeu();
         leJeu.setNiveau1();
         leJeu.afficherJeu();
+        leJeu.parseTextFromInput();
     }
 }
     

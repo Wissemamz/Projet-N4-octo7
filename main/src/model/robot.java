@@ -28,6 +28,7 @@ public class Robot extends ObjetJ{
 
     public void setFichier(ObjetJ f){this.fichier=(Fichier) f;}  
 
+
     @Override
     public void afficher(){
         System.out.print("(°+°)");
