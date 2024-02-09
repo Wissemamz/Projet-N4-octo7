@@ -3,20 +3,26 @@ package model;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Jeu {
-    static ObjetJ [][][] grille = new ObjetJ[5][5][3];
+    static ObjetJ[][][] grille = new ObjetJ[5][5][3];
+
+    private Random random;
+    private ObjetJ robot1;
+    private ObjetJ robot2;
+
     public Jeu() {
-        ObjetJ robot1 = new Robot("Robot1", 4, 0,0);
-        ObjetJ robot2 = new Robot("Robot2", 4, 4,0);
+        this.robot1 = new Robot("Robot1", 4, 0, 0);
+        this.robot2 = new Robot("Robot2", 4, 4, 0);
         grille[4][0][0] = robot1;
         grille[4][4][0] = robot2;
     }
-    
 
-    
-     public ArrayList<Instruction> parseTextFromInput() {
+    public ArrayList<Instruction> parseTextFromInput() {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
-        
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Veuillez entrer le texte (tapez 'fin' pour terminer) :");
@@ -44,35 +50,52 @@ public class Jeu {
         return instructionsList;
     }
 
-
     public void setNiveau1() {
-        for (int i=0 ;i<3; i++){
-            grille[1][3][i] = new Obstacle("obstacle 01",1,3,i);
-            grille[2][1][i] = new Obstacle("obstacle 02",2,1,i);
-            grille[3][4][i] = new Obstacle("obstacle 03",3,4,i);
-            grille[4][2][i] = new Obstacle("obstacle 04",4,1,i);        
+        for (int i = 0; i < 3; i++) {
+            grille[1][3][i] = new Obstacle("obstacle 01", 1, 3, i);
+            grille[2][1][i] = new Obstacle("obstacle 02", 2, 1, i);
+            grille[3][4][i] = new Obstacle("obstacle 03", 3, 4, i);
+            grille[4][2][i] = new Obstacle("obstacle 04", 4, 1, i);
         }
-        grille[2][2][1] = new Fichier("199",2,2,1);
+        grille[2][2][1] = new Fichier("199", 2, 2, 1);
     }
-    
-    public void afficherJeu () {
-            for (ObjetJ[][] ligne : grille) {
-                for (ObjetJ[] colonne : ligne) {
-                    for (ObjetJ obj : colonne){
-                        if (obj == null) {
-                            System.out.print("     ");
-                        } else {
-                            obj.afficher();
-                        }
-                    }
-                    System.out.print("|");
-                }
-                System.out.println();    
-            }
-    }
-    
-    
-        //public void jouerNiveau1(){}
-}
-    
 
+    public void afficherJeu() {
+        for (ObjetJ[][] ligne : grille) {
+            for (ObjetJ[] colonne : ligne) {
+                for (ObjetJ obj : colonne) {
+                    if (obj == null) {
+                        System.out.print("     ");
+                    } else {
+                        obj.afficher();
+                    }
+                }
+                System.out.print("|");
+            }
+            System.out.println();
+        }
+    }
+
+    public void jouer(ArrayList<Instruction> instruR1, ArrayList<Instruction> instruR2) {
+        int taille = instruR1.size() < instruR2.size() ? instruR1.size() : instruR2.size();
+        ArrayList<Instruction> instru = instruR1.size() < instruR2.size() ? instruR2 : instruR1;
+        ObjetJ robot = instruR1.size() < instruR2.size() ? robot2 : robot1;
+
+        for (int i = 0; i < taille; i++) {
+            double choix = random.nextDouble();
+            if (choix < 0.5) {
+                instruR1.get(i).execute(grille, robot1);
+                instruR2.get(i).execute(grille, robot2);
+            } else {
+                instruR2.get(i).execute(grille, robot2);
+                instruR1.get(i).execute(grille, robot1);
+            }
+        }
+        for (int i = taille; i < instru.size(); i++) {
+            instru.get(i).execute(grille, robot);
+        }
+
+    }
+
+    // public void jouerNiveau1(){}
+}
