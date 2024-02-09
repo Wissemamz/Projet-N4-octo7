@@ -31,6 +31,6 @@ public class Fichier extends ObjetJ {
 
     @Override
     public void afficher(){
-        System.out.print("F_num");
+        System.out.print(" "+ getName()+" ");
     }
 }

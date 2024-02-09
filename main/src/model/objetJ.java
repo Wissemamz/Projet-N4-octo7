@@ -6,7 +6,7 @@ public abstract class ObjetJ {
     public int ordonnee;
     public int caseJ;
 
-    public ObjetJ (String name, int abscisse, int ordonnee, int caseJ) {
+    public ObjetJ(String name, int abscisse, int ordonnee, int caseJ) {
         if (name == null) {
             throw new NullPointerException();
         }   

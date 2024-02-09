@@ -1,12 +1,16 @@
 package model;
 
+import java.util.Random;
+
 public class Jeu {
     static ObjetJ [][][] grille = new ObjetJ[5][5][3];
+    private Random random;
     public Jeu() {
         ObjetJ robot1 = new Robot("Robot1", 4, 0,0);
         ObjetJ robot2 = new Robot("Robot2", 4, 4,0);
         grille[4][0][0] = robot1;
         grille[4][4][0] = robot2;
+        this.random=new Random();
     }
     
     public void setNiveau1() {
@@ -35,6 +39,20 @@ public class Jeu {
             }
     }
     
+    public void jouer(){
+        
+        for(int i=0;i<;i++){
+            double choix=random.nextDouble();
+            if(choix<0.5){
+                robot1.agir();
+                robot2.agir();
+            }
+            else{
+                robot2.agir();
+                robot1.agir();
+            }
+        }
+    }
     
         //public void jouerNiveau1(){}
 }
