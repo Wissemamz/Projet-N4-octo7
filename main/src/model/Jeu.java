@@ -22,12 +22,12 @@ public class Jeu {
     
 
     
-     public ArrayList<Instruction> parseTextFromInput() {
+     public ArrayList<Instruction> parseTextFromInput(int r) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
         
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Veuillez entrer le texte (tapez 'fin' pour terminer) :");
+        System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'fin' pour terminer) :");
 
         // Lire le texte jusqu'à ce que l'utilisateur entre "fin"
         while (true) {
@@ -79,7 +79,12 @@ public class Jeu {
             }
     }
     
-    public void jouer(ArrayList<Instruction> instruR1,ArrayList<Instruction> instruR2 ){
+    public void jouer(){
+        setNiveau1();
+        afficherJeu();
+        ArrayList<Instruction> instruR1 = parseTextFromInput(1);
+        ArrayList<Instruction> instruR2 = parseTextFromInput(2);
+
         int taille = instruR1.size()<instruR2.size() ? instruR1.size() : instruR2.size();
         ArrayList<Instruction> instru = instruR1.size()<instruR2.size() ? instruR2 : instruR1;
         Robot robot= instruR1.size()<instruR2.size() ? robot2 : robot1;
