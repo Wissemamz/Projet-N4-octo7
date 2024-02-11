@@ -24,7 +24,7 @@ public abstract class ObjetJ {
     public int getOrdonnee(){return this.ordonnee;}
     public int getCaseJ(){return this.caseJ;}
     
-    abstract void afficher();
+    public abstract void afficher();
 
   
 

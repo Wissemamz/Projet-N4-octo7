@@ -47,7 +47,7 @@ public class Jeu {
             instructionsList.add(instruction);
         }
 
-        scanner.close(); // Fermer le scanner
+        //scanner.close();
 
         return instructionsList;
     }
@@ -99,9 +99,11 @@ public class Jeu {
                 instruR2.get(i).execute(grille,robot2);
                 instruR1.get(i).execute(grille,robot1);
             }
+            afficherJeu();
         }
         for(int i=taille;i<instru.size();i++){
             instru.get(i).execute(grille,robot);
+            afficherJeu();
         }
 
     }

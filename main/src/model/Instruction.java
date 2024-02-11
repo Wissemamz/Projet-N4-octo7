@@ -66,15 +66,17 @@ public class Instruction {
             else return;
         }
 
-        else if (commande == "LINK"){
+        else if (commande.equals(Commande.LINK.toString())){
             if (parametre.length == 1){
-                switch (parametre[1]){
+                switch (parametre[0]){
                     case "0" :
                         if (r.getAbscisse()>=4 || r.getAbscisse()<0){
                             r.meurt();
                         }
                         else {
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=null;
                             r.setAbscisse((r.getAbscisse())+1);
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=r;
                         }
                         break;
                     case "1" :
@@ -82,7 +84,9 @@ public class Instruction {
                             r.meurt();
                         }
                         else {
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=null;
                             r.setOrdonnee((r.getOrdonnee())-1);
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=r;
                         }
                         break;
                     case "2" :
@@ -90,7 +94,9 @@ public class Instruction {
                             r.meurt();
                         }
                         else {
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=null;
                             r.setAbscisse((r.getAbscisse())-1);
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=r;
                         }
                         break;
                     case "3" :
@@ -98,7 +104,9 @@ public class Instruction {
                             r.meurt();
                         }
                         else {
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=null;
                             r.setOrdonnee((r.getOrdonnee())+1);
+                            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()]=r;
                         }
                         break;
                     default :
