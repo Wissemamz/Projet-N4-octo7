@@ -4,7 +4,7 @@ public class Robot extends ObjetJ{
     private boolean vivant;
     private int X; 
     private Fichier fichier;
-
+    
     public Robot(String name, int abscisse, int ordonnee, int caseJ){
         super(name,abscisse,ordonnee,caseJ);
         this.vivant = true;
@@ -32,5 +32,4 @@ public class Robot extends ObjetJ{
     public void afficher(){
         System.out.print("(°+°)");
     }
-   
 }
