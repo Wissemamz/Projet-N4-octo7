@@ -32,7 +32,7 @@ public class Instruction {
         return parametre[i];
     }
     
-    public void execute (ObjetJ[][][] grille, Robot r){
+    public void execute (ObjetJ[][][] grille,Robot r){
         if (commande == "GRAB"){
             if (parametre.length==0){
                 return;
