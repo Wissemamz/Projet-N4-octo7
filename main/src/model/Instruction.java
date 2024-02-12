@@ -50,11 +50,64 @@ public class Instruction {
         }
 
         else if (commande == "DROP"){
-
+            if (parametre.length == 0){
+                if (r.getFichier() == null) return;
+                else {
+                    for (int i=0; i<3; i++){
+                        if (grille[r.getAbscisse()][r.getOrdonnee()][i] == null){
+                            grille[r.getAbscisse()][r.getOrdonnee()][i] = r.getFichier();
+                            r.setFichier(null);
+                            return;
+                        }
+                    }
+                    return;
+                }
+            }
+            else return;
         }
+
         else if (commande == "LINK"){
-
+            if (parametre.length == 1){
+                switch (parametre[1]){
+                    case "0" :
+                        if (r.getAbscisse()>=4 || r.getAbscisse()<0){
+                            r.meurt();
+                        }
+                        else {
+                            r.setAbscisse((r.getAbscisse())+1);
+                        }
+                        break;
+                    case "1" :
+                        if (r.getOrdonnee()>4 || r.getOrdonnee()<=0){
+                            r.meurt();
+                        }
+                        else {
+                            r.setOrdonnee((r.getOrdonnee())-1);
+                        }
+                        break;
+                    case "2" :
+                        if (r.getAbscisse()>4 || r.getAbscisse()<=0){
+                            r.meurt();
+                        }
+                        else {
+                            r.setAbscisse((r.getAbscisse())-1);
+                        }
+                        break;
+                    case "3" :
+                        if (r.getOrdonnee()>=4 || r.getOrdonnee()<0){
+                            r.meurt();
+                        }
+                        else {
+                            r.setOrdonnee((r.getOrdonnee())+1);
+                        }
+                        break;
+                    default :
+                        return;
+                }
+            }
+            else return;
         }
+
         else if (commande == "ADDI"){
 
         }

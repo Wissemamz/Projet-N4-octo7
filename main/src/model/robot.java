@@ -16,6 +16,8 @@ public class Robot extends ObjetJ{
         return this.vivant;
     }
 
+    public void meurt(){ this.vivant = false; }
+
     public int getX(){ return this.X; }
 
     public Fichier getFichier(){ return this.fichier; }
