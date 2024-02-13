@@ -2,13 +2,17 @@ package model;
 
 public class Robot extends ObjetJ{
     private boolean vivant;
-    private int X; 
+    private Registre X;
+    private Registre T;
+    private Registre last;
     private Fichier fichier;
 
     public Robot(String name, int abscisse, int ordonnee, int caseJ){
         super(name,abscisse,ordonnee,caseJ);
         this.vivant = true;
-        this.X=0;
+        this.X = new Registre();
+        this.T = new Registre();
+        this.last = X;
         this.fichier = null;
     }
 
@@ -18,17 +22,23 @@ public class Robot extends ObjetJ{
 
     public void meurt(){ this.vivant = false; }
 
-    public int getX(){ return this.X; }
+    public Registre getX(){ return this.X; }
+
+    public Registre getT(){ return this.T; }
 
     public Fichier getFichier(){ return this.fichier; }
+
+    public Registre getLastRegistre() { return this.last; }
     
     public void setAbscisse(int value){abscisse=value;}
     
     public void setOrdonnee(int value){ordonnee=value;}
 
-    public void setX(int value){this.X=value;}
+    public void setCaseJ(int value){caseJ=value;}
 
-    public void setFichier(ObjetJ f){this.fichier=(Fichier) f;}  
+    public void setFichier(ObjetJ f){this.fichier=(Fichier) f;} 
+    
+    public void setLastRegistre(Registre Y) {this.last = Y;} 
 
 
     @Override

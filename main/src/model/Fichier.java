@@ -12,6 +12,12 @@ public class Fichier extends ObjetJ {
         this.p = 0;
     }
 
+    public void setAbscisse(int value){abscisse=value;}
+    
+    public void setOrdonnee(int value){ordonnee=value;}
+
+    public void setCaseJ(int value){caseJ=value;}
+
     public int F() {
         if (!EOF()) {
             Integer i = elements.get(p);
