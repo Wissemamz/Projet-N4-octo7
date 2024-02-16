@@ -3,7 +3,7 @@ package model;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 
-public class Robot extends ObjetJ{
+public class robot extends ObjetJ{
     private boolean vivant;
     private Registre X;
     private Registre T;
@@ -11,7 +11,7 @@ public class Robot extends ObjetJ{
     private Registre last;
     private Fichier fichier;
 
-    public Robot(String name, int abscisse, int ordonnee, int caseJ){
+    public robot(String name, int abscisse, int ordonnee, int caseJ){
         super(name,abscisse,ordonnee,caseJ);
         this.vivant = true;
         this.X = new Registre();

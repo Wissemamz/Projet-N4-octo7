@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "model.Main",
+            "projectName": "Projet-N4-1_ee5a7c6c"
+        },
+        {
+            "type": "java",
             "name": "OctopunksGUI",
             "request": "launch",
             "mainClass": "model.OctopunksGUI",
