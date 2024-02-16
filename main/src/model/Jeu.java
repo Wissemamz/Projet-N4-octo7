@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,7 +24,6 @@ public class Jeu {
         grille[4][4][0] = robot2;
         this.random=new Random();
     }
-    
 
     
     public ArrayList<Instruction> parseTextFromInput(int r) {
@@ -56,7 +56,6 @@ public class Jeu {
 
         return instructionsList;
     }
-
 
     public void setNiveau1() {
         for (int i=0 ;i<4; i++){
@@ -175,4 +174,4 @@ public class Jeu {
     
     
 
- }
+}
