@@ -179,10 +179,18 @@ public class Instruction {
                     r.getT().setValeur(r.getX().getValeur()) ;    
                     r.setLastRegistre(r.getT());
                 }
+                else  if (parametre[0].equals("X") && parametre[1].equals("X")){
+                    r.getX().setValeur(r.getX().getValeur()) ; 
+                    r.setLastRegistre(r.getX());               
+                }
                 else  if (parametre[0].equals("T") && parametre[1].equals("X")){
                     r.getX().setValeur(r.getT().getValeur()) ; 
                     r.setLastRegistre(r.getX());               
                 }
+                else  if (parametre[0].equals("T") && parametre[1].equals("T")){
+                    r.getT().setValeur(r.getT().getValeur()) ; 
+                    r.setLastRegistre(r.getT());
+                } 
                 else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("X")){
                     int val = Integer.parseInt(parametre[0]);
                     r.getX().setValeur(val); 
@@ -192,6 +200,51 @@ public class Instruction {
                     int val = Integer.parseInt(parametre[0]);
                     r.getT().setValeur(val);  
                     r.setLastRegistre(r.getT());                
+                }
+                else if (parametre[0].equals("X") && parametre[1].equals("F")){
+                    if (r.getFichier()==null) return;
+                    else {
+                        r.getF().setValeur(r.getX().getValeur()) ;    
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                }
+                else  if (parametre[0].equals("F") && parametre[1].equals("X")){
+                    if (r.getFichier()==null) return;
+                    else {
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()) ;
+                        r.setLastRegistre(r.getX()); 
+                    }             
+                }
+                else if (parametre[0].equals("T") && parametre[1].equals("F")){
+                    if (r.getFichier()==null) return;
+                    else {
+                        r.getF().setValeur(r.getT().getValeur()) ;    
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                }
+                else  if (parametre[0].equals("F") && parametre[1].equals("T")){
+                    if (r.getFichier()==null) return;
+                    else {
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()) ;  
+                        r.setLastRegistre(r.getT());  
+                    }              
+                }
+                else if (parametre[0].equals("F") && parametre[1].equals("F")){
+                    if (r.getFichier()==null) return;
+                    else {
+                        r.getF().setValeur(r.getFichier().F()) ;    
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                }
+                else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("F")){
+                    int val = Integer.parseInt(parametre[0]);
+                    if (r.getFichier()==null) return;
+                    else {
+                        r.getF().setValeur(val) ;    
+                        r.getFichier().F(r.getF().getValeur());
+                    }               
                 }
                 else return;
             }   
@@ -205,6 +258,21 @@ public class Instruction {
                         r.getX().setValeur(r.getX().getValeur()+r.getT().getValeur());
                         r.setLastRegistre(r.getX());  
                     }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getX().setValeur(r.getX().getValeur()+r.getX().getValeur());
+                        r.setLastRegistre(r.getX()); 
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getX().setValeur(r.getT().getValeur()+r.getT().getValeur());
+                        r.setLastRegistre(r.getX()); 
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur());
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()+r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
                     else if (parametre[1]=="X" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
                         int val = Integer.parseInt(parametre[2]);
                         r.getX().setValeur(r.getX().getValeur()+val);
@@ -224,6 +292,35 @@ public class Instruction {
                         int val = Integer.parseInt(parametre[1]);
                         r.getX().setValeur(r.getT().getValeur()+val);
                         r.setLastRegistre(r.getX());  
+                    }
+                    else if ((parametre[1]=="X" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()+r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur());
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()+r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if ((parametre[1]=="T" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="T")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getT().getValeur()+r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()+val);
+                        r.setLastRegistre(r.getX());  
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()+val);
+                        r.setLastRegistre(r.getX());   
                     }
                 }
                 else if (parametre[0]=="T"){
@@ -231,6 +328,21 @@ public class Instruction {
                         r.getT().setValeur(r.getX().getValeur()+r.getT().getValeur());
                         r.setLastRegistre(r.getT());
                     }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getT().setValeur(r.getX().getValeur()+r.getX().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getT().setValeur(r.getT().getValeur()+r.getT().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur());
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()+r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
                     else if (parametre[1]=="X" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
                         int val = Integer.parseInt(parametre[2]);
                         r.getT().setValeur(r.getX().getValeur()+val);
@@ -250,6 +362,90 @@ public class Instruction {
                         int val = Integer.parseInt(parametre[1]);
                         r.getT().setValeur(r.getT().getValeur()+val);
                         r.setLastRegistre(r.getT());
+                    }
+                    else if ((parametre[1]=="X" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getX().getValeur()+r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if ((parametre[1]=="T" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="T")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getT().getValeur()+r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()+val);
+                        r.setLastRegistre(r.getT());  
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()+val);
+                        r.setLastRegistre(r.getT());   
+                    }
+                }
+                else if (parametre[0]=="F"){
+                    if ((parametre[1]=="X" && parametre[2]=="T") || (parametre[1]=="T" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getX().getValeur()+r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getF().setValeur(r.getX().getValeur()+r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getF().setValeur(r.getT().getValeur()+r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()+r.getFichier().F());
+                        //r.getF().setValeur(r.getFichier().F());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="X" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getX().getValeur()+val);
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="X"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(val+r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(val+r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="T"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(val+r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if ((parametre[1]=="X" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getX().getValeur()+r.getF().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if ((parametre[1]=="T" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="T")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getT().getValeur()+r.getF().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()+val);
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()+val);
+                        r.getFichier().F(r.getF().getValeur());  
                     }
                 }
             }        
@@ -262,6 +458,21 @@ public class Instruction {
                         r.getX().setValeur(r.getX().getValeur()*r.getT().getValeur());
                         r.setLastRegistre(r.getX()); 
                     }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getX().setValeur(r.getX().getValeur()*r.getX().getValeur());
+                        r.setLastRegistre(r.getX()); 
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getX().setValeur(r.getT().getValeur()*r.getT().getValeur());
+                        r.setLastRegistre(r.getX()); 
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur());
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()*r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
                     else if (parametre[1]=="X" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
                         int val = Integer.parseInt(parametre[2]);
                         r.getX().setValeur(r.getX().getValeur()*val);
@@ -281,6 +492,29 @@ public class Instruction {
                         int val = Integer.parseInt(parametre[1]);
                         r.getX().setValeur(r.getT().getValeur()*val);
                         r.setLastRegistre(r.getX()); 
+                    }
+
+                    else if ((parametre[1]=="X" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()*r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if ((parametre[1]=="T" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="T")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getT().getValeur()*r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()*val);
+                        r.setLastRegistre(r.getX());  
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()*val);
+                        r.setLastRegistre(r.getX());   
                     }
                 }
                 else if (parametre[0]=="T"){
@@ -293,6 +527,21 @@ public class Instruction {
                         r.getT().setValeur(r.getX().getValeur()*val);
                         r.setLastRegistre(r.getT());
                     }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getT().setValeur(r.getX().getValeur()*r.getX().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getT().setValeur(r.getT().getValeur()*r.getT().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur());
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()*r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
                     else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="X"){
                         int val = Integer.parseInt(parametre[1]);
                         r.getT().setValeur(r.getX().getValeur()*val);
@@ -308,6 +557,90 @@ public class Instruction {
                         r.getT().setValeur(r.getT().getValeur()*val);
                         r.setLastRegistre(r.getT());
                     }
+                    else if ((parametre[1]=="X" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getX().getValeur()*r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if ((parametre[1]=="T" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="T")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getT().getValeur()*r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()*val);
+                        r.setLastRegistre(r.getT());  
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()*val);
+                        r.setLastRegistre(r.getT());   
+                    }
+                }
+                else if (parametre[0]=="F"){
+                    if ((parametre[1]=="X" && parametre[2]=="T") || (parametre[1]=="T" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getX().getValeur()*r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getF().setValeur(r.getX().getValeur()*r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getF().setValeur(r.getT().getValeur()*r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()*r.getFichier().F());
+                        //r.getF().setValeur(r.getFichier().F());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="X" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getX().getValeur()*val);
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="X"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(val*r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(val*r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="T"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(val*r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if ((parametre[1]=="X" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="X")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getX().getValeur()*r.getF().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if ((parametre[1]=="T" && parametre[2]=="F") || (parametre[1]=="F" && parametre[2]=="T")){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getT().getValeur()*r.getF().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()*val);
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()*val);
+                        r.getFichier().F(r.getF().getValeur());  
+                    }
                 }
             }   
         }
@@ -318,6 +651,21 @@ public class Instruction {
                     if (parametre[1]=="X" && parametre[2]=="T"){
                         r.getX().setValeur(r.getX().getValeur()-r.getT().getValeur());
                         r.setLastRegistre(r.getX()); 
+                    }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getX().setValeur(r.getX().getValeur()-r.getX().getValeur());
+                        r.setLastRegistre(r.getX()); 
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getX().setValeur(r.getT().getValeur()-r.getT().getValeur());
+                        r.setLastRegistre(r.getX()); 
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur());
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()-r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
                     }
                     else if (parametre[1]=="T" && parametre[2]=="X"){
                         r.getX().setValeur(r.getT().getValeur()-r.getX().getValeur());
@@ -343,11 +691,58 @@ public class Instruction {
                         r.getX().setValeur(val-r.getT().getValeur());
                         r.setLastRegistre(r.getX()); 
                     }
+                    else if (parametre[1]=="X" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()-r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="X"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()-r.getX().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getT().getValeur()-r.getF().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="T"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()-r.getT().getValeur());
+                        r.setLastRegistre(r.getX());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(val-r.getF().getValeur());
+                        r.setLastRegistre(r.getX());  
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur()-val);
+                        r.setLastRegistre(r.getX());   
+                    }
                 }
                 else if (parametre[0]=="T"){
                     if (parametre[1]=="X" && parametre[2]=="T"){
                         r.getT().setValeur(r.getX().getValeur()-r.getT().getValeur());
                         r.setLastRegistre(r.getT()); 
+                    }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getT().setValeur(r.getX().getValeur()-r.getX().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getT().setValeur(r.getT().getValeur()-r.getT().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getF().getValeur());
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getX().setValeur(r.getX().getValeur()-r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
                     }
                     else if (parametre[1]=="T" && parametre[2]=="X"){
                         r.getT().setValeur(r.getT().getValeur()-r.getX().getValeur());
@@ -372,6 +767,114 @@ public class Instruction {
                         int val = Integer.parseInt(parametre[1]);
                         r.getT().setValeur(val-r.getT().getValeur());
                         r.setLastRegistre(r.getT()); 
+                    }
+                    else if (parametre[1]=="X" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getX().getValeur()-r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="X"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()-r.getX().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getT().getValeur()-r.getF().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="T"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()-r.getT().getValeur());
+                        r.setLastRegistre(r.getT());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(val-r.getF().getValeur());
+                        r.setLastRegistre(r.getT());  
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getT().setValeur(r.getF().getValeur()-val);
+                        r.setLastRegistre(r.getT());   
+                    }
+                }
+                else if (parametre[0]=="F"){
+                    if (parametre[1]=="X" && parametre[2]=="T"){
+                        r.getF().setValeur(r.getX().getValeur()-r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="X"){
+                        r.getF().setValeur(r.getT().getValeur()-r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="X" && parametre[2]=="X"){
+                        r.getF().setValeur(r.getX().getValeur()-r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="T"){
+                        r.getF().setValeur(r.getT().getValeur()-r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()-r.getFichier().F());
+                        //r.getF().setValeur(r.getFichier().F());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="X" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getX().getValeur()-val);
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="X"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(val-r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getT().getValeur()-val);
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="T"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(val-r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="X" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getX().getValeur()-r.getF().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="X"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()-r.getX().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="T" && parametre[2]=="F"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getT().getValeur()-r.getF().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2]=="T"){
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()-r.getT().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1].matches("[+-]?\\d*(\\.\\d+)?") && parametre[2]=="F"){
+                        int val = Integer.parseInt(parametre[1]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(val-r.getF().getValeur());
+                        r.getFichier().F(r.getF().getValeur());
+                    }
+                    else if (parametre[1]=="F" && parametre[2].matches("[+-]?\\d*(\\.\\d+)?")){
+                        int val = Integer.parseInt(parametre[2]);
+                        r.getF().setValeur(r.getFichier().F());
+                        r.getF().setValeur(r.getF().getValeur()-val);
+                        r.getFichier().F(r.getF().getValeur());  
                     }
                 }
             }   
@@ -398,6 +901,33 @@ public class Instruction {
                         pos[0] = pos[0] + val -1;
                     }
                 }
+            }
+        }
+        else if (commande.equals(Commande.MAKE.toString())){
+            if (parametre.length!=1) return;
+            else {
+                r.setFichier(new Fichier(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
+            }
+        }
+        else if (commande.equals(Commande.MAKELIFO.toString())){
+            if (parametre.length!=1) return;
+            else {
+                r.setFichier(new Fichier(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
+            }
+        }
+        else if (commande.equals(Commande.MAKEFIFO.toString())){
+            if (parametre.length!=1) return;
+            else {
+                r.setFichier(new Fichier(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
+            }
+        }
+        else if (commande.equals(Commande.TEST_EOF.toString())){
+            // mettre le registre T à 1 si le fichier est a sa fin, sinon 0
+            if (parametre.length!=0) return;
+            else {
+                if (r.getFichier()==null) return;
+                else if (r.getFichier().EOF()) r.getT().setValeur(1);
+                else r.getT().setValeur(0);
             }
         }
     }

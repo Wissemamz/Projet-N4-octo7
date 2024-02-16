@@ -1,16 +1,20 @@
 package model;
 
 import java.util.Random;
-
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 public class Jeu {
     static ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
-    private Robot robot1;
-    private Robot robot2;
+    public Robot robot1;
+    public Robot robot2;
 
     public Jeu() {
         this.robot1= new Robot("Robot1", 4, 0,0);
@@ -25,6 +29,7 @@ public class Jeu {
      public ArrayList<Instruction> parseTextFromInput(int r) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
         
+        @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'fin' pour terminer) :");
@@ -60,7 +65,11 @@ public class Jeu {
             grille[3][4][i] = new Obstacle("obstacle",3,4,i);
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
-        grille[2][2][1] = new Fichier("199",2,2,1);
+        Fichier fichier = new Fichier("199",2,2,1);
+        fichier.F(2);
+        fichier.F(1);
+        fichier.setPos(0);
+        grille[2][2][1] = fichier;
         grille[2][3][2] = new Fichier("299",2,3,2);
         System.out.println("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]:");
         System.out.println();
@@ -132,5 +141,40 @@ public class Jeu {
             tab[0]++;
         }
     }
-}
+
+    public ArrayList<Instruction> parseTextFromInputGraphique(String robotText) {
+        ArrayList<Instruction> instructionsList = new ArrayList<>();
+        // Séparer le texte par lignes
+        String[] lines = robotText.split("\n");
     
+        // Parcourir chaque ligne de texte
+        for (String line : lines) {
+            // Si la ligne contient "fin", arrêter la lecture
+            if (line.trim().equalsIgnoreCase("fin")) {
+                break;
+            }
+            
+            // Séparer la ligne par les espaces
+            String[] parts = line.split("\\s+");
+    
+            String command = parts[0];
+    
+            // Si la ligne contient des paramètres
+            if (parts.length > 1) {
+                String[] parameters = new String[parts.length - 1];
+                System.arraycopy(parts, 1, parameters, 0, parameters.length);
+                Instruction instruction = new Instruction(command, parameters);
+                instructionsList.add(instruction);
+            } else {
+                // Si la ligne ne contient que la commande sans paramètres
+                Instruction instruction = new Instruction(command);
+                instructionsList.add(instruction);
+            }
+        }
+    
+        return instructionsList;
+    }
+    
+    
+
+ }

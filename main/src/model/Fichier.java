@@ -12,11 +12,19 @@ public class Fichier extends ObjetJ {
         this.p = 0;
     }
 
+    public Fichier(String num, int abscisse, int ordonnee, int caseJ,ArrayList<Integer> elements) {
+        super(num, abscisse, ordonnee, caseJ);
+        this.elements = elements;
+        this.p=0;
+    }
+
     public void setAbscisse(int value){abscisse=value;}
     
     public void setOrdonnee(int value){ordonnee=value;}
 
     public void setCaseJ(int value){caseJ=value;}
+
+    public int getPosFichier() {return this.p;}
 
     public int F() {
         if (!EOF()) {
@@ -24,12 +32,17 @@ public class Fichier extends ObjetJ {
             p++;
             return i.intValue();
         }
-        else return -1;
+        else return 0;
     }
 
     public void F(int i){
-        this.elements.add(i);
+        if (!EOF()) {
+            this.elements.set(p,i);
+        }
+        else this.elements.add(i);
     }
+
+    public void setPos(int pos) {this.p = pos;}
 
     public boolean EOF(){
         return (p==elements.size());
