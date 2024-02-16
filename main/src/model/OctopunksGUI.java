@@ -21,10 +21,8 @@ public class OctopunksGUI extends JFrame {
     private JPanel gamePanel;
     private int x, y, z;
 
-    private Robot robot1;
-    private Robot robot2;
-
-    private Obstacle obstacle;
+    ImageIcon scaledIcon;
+    JPanel gridPanel;
 
 
     public OctopunksGUI() {
@@ -37,31 +35,51 @@ public class OctopunksGUI extends JFrame {
 
         //---------------------------------------affichage de menu-----------------------------------------
         setTitle("Menu");
-        setSize(300, 250); // Augmentation de la hauteur pour accommoder le titre
+        setSize(400, 320); // Augmentation de la hauteur pour accommoder le titre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        //setResizable(false);
+        
 
         // Panel principal pour contenir tous les composants
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBackground(Color.white);
+
 
         // Titre "OCTOPUNKS" en haut de la page
         JLabel titleLabel = new JLabel("OCTOPUNKS", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2, 1, 0, 10)); // Ajout de marges entre les boutons
+        buttonPanel.setLayout(new FlowLayout()); // Ajout de marges entre les boutons
 
-        // Boutons avec taille fixe et police plus grande
-        JButton btnTextuelle = new JButton("Version Textuelle");
-        btnTextuelle.setPreferredSize(new Dimension(150, 40));
-        btnTextuelle.setFont(new Font("Arial", Font.PLAIN, 14));
+         // Chargement des images pour les backgrounds des cases
+         ImageIcon iconGraph = new ImageIcon("main/src/images/Graphique1.png"); // Assurez-vous de charger une image de 16x16 pixels
+    
+         // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+         Image image = iconGraph.getImage();
+         Image newImageGraph = image.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+         ImageIcon scaledIconGraph = new ImageIcon(newImageGraph);
 
-        JButton btnGraphique = new JButton("Version Graphique");
-        btnGraphique.setPreferredSize(new Dimension(150, 40));
-        btnGraphique.setFont(new Font("Arial", Font.PLAIN, 14));
+         // Chargement des images pour les backgrounds des cases
+         ImageIcon iconText = new ImageIcon("main/src/images/Textuel.png"); // Assurez-vous de charger une image de 16x16 pixels
+    
+         // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+         Image imageText = iconText.getImage();
+         Image newImageText = imageText.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+         ImageIcon scaledIconText = new ImageIcon(newImageText);
+
+
+        // Créer les boutons avec les images
+        JButton btnGraphique = new JButton(scaledIconGraph);
+        JButton btnTextuelle = new JButton(scaledIconText);
+
+        // Définir la taille des boutons
+        btnGraphique.setPreferredSize(new Dimension(250, 100));
+        btnTextuelle.setPreferredSize(new Dimension(250, 100));
 
         btnTextuelle.addActionListener(new ActionListener() {
             @Override
@@ -77,25 +95,57 @@ public class OctopunksGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Créer un nouveau menu pour la version graphique
-                JFrame graphiqueMenu = new JFrame("Menu Graphique");
-                graphiqueMenu.setSize(300, 250);
+                JFrame graphiqueMenu = new JFrame("OCTOPUNKS GUI");
+                graphiqueMenu.setSize(400, 320);
                 graphiqueMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 graphiqueMenu.setLocationRelativeTo(null);
+                graphiqueMenu.setResizable(false);
 
                 JPanel graphiqueMainPanel = new JPanel();
                 graphiqueMainPanel.setLayout(new BorderLayout());
 
                 JLabel graphiqueTitleLabel = new JLabel("Menu Graphique", SwingConstants.CENTER);
-                graphiqueTitleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                graphiqueTitleLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
                 graphiqueMainPanel.add(graphiqueTitleLabel, BorderLayout.NORTH);
+                graphiqueMainPanel.setBackground(Color.white);
 
                 JPanel graphiqueButtonPanel = new JPanel();
                 graphiqueButtonPanel.setLayout(new FlowLayout());
+                graphiqueButtonPanel.setBackground(Color.GRAY);
 
-                JButton btnCommencerGraphique = new JButton("Commencer");
-                btnCommencerGraphique.setPreferredSize(new Dimension(150, 40));
-                btnCommencerGraphique.setFont(new Font("Arial", Font.PLAIN, 14));
+                JButton btnCommencerGraphique = new JButton("START");
+                btnCommencerGraphique.setPreferredSize(new Dimension(200, 60));
+                btnCommencerGraphique.setFont(new Font("Arial", Font.PLAIN, 20));
+                btnCommencerGraphique.setBackground(Color.GREEN);
 
+                JButton btnLevels = new JButton("Levels");
+                btnLevels.setPreferredSize(new Dimension(200, 60));
+                btnLevels.setFont(new Font("Arial", Font.PLAIN, 20));
+                btnLevels.setBackground(Color.cyan);
+
+
+                JButton btnExit = new JButton("Exit");
+                btnExit.setPreferredSize(new Dimension(200, 60));
+                btnExit.setFont(new Font("Arial", Font.PLAIN, 20));
+                btnExit.setBackground(Color.red);
+
+                
+                // Ajouter les actions pour les nouveaux boutons "Levels" et "Exit"
+                btnLevels.addActionListener(new ActionListener() {
+                @Override
+                    public void actionPerformed(ActionEvent e) {
+                     // Ajouter l'action pour le bouton "Levels"
+                     System.exit(0);                   
+                     }
+                });
+
+                btnExit.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                    // Ajouter l'action pour le bouton "Exit"
+                    System.exit(0); // Quitter l'application
+                }
+                });
                 btnCommencerGraphique.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -106,6 +156,8 @@ public class OctopunksGUI extends JFrame {
                 });
 
                 graphiqueButtonPanel.add(btnCommencerGraphique);
+                graphiqueButtonPanel.add(btnLevels);
+                graphiqueButtonPanel.add(btnExit);
 
                 graphiqueMainPanel.add(graphiqueButtonPanel, BorderLayout.CENTER);
 
@@ -116,7 +168,7 @@ public class OctopunksGUI extends JFrame {
 
         buttonPanel.add(btnTextuelle);
         buttonPanel.add(btnGraphique);
-
+        buttonPanel.setBackground(Color.BLACK);
         // Ajout du panel des boutons au panel principal
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
         // Ajout du panel principal à la fenêtre
@@ -125,7 +177,9 @@ public class OctopunksGUI extends JFrame {
 
         // --------------------------------------------- FIN MENU ---------------------------------------
     }
-    private void createGridCells(JPanel gridPanel, int x, int y, ImageIcon scaledIcon, Robot robot1,  Robot robot2) {
+
+
+    private void createGridCells(JPanel gridPanel, int x, int y, ImageIcon scaledIcon) {
         // Effacer le contenu précédent du panel
         gridPanel.removeAll();
         
@@ -184,10 +238,11 @@ public class OctopunksGUI extends JFrame {
             getContentPane().removeAll();
     
             setTitle("Octopunks");
+            setBackground(Color.darkGray);
     
             // Code area
             // Création du panneau droit avec une grille de 5x5
-            JPanel gridPanel = new JPanel();
+            gridPanel = new JPanel();
             gridPanel.setLayout(new GridLayout(10, 10));
     
             // Chargement des images pour les backgrounds des cases
@@ -196,14 +251,9 @@ public class OctopunksGUI extends JFrame {
             // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
             Image image = icon.getImage();
             Image newImage = image.getScaledInstance(55, 55, Image.SCALE_SMOOTH);
-            ImageIcon scaledIcon = new ImageIcon(newImage);
+            scaledIcon = new ImageIcon(newImage);
 
-
-            robot1 = new Robot("Robot1", 4, 0, 0);
-            robot2 = new Robot("Robot2", 4, 4, 1);
-            obstacle = new Obstacle("obstacle", 0, 0, 0);
-
-            createGridCells(gridPanel, x, y, scaledIcon, robot1, robot2);
+            createGridCells(gridPanel, x, y, scaledIcon);
     
             JScrollPane codeScrollPane = new JScrollPane(gridPanel);
     
@@ -212,21 +262,24 @@ public class OctopunksGUI extends JFrame {
             JScrollPane memoryScrollPane1 = new JScrollPane(memoryArea1);
             JLabel titleLabel1 = new JLabel("ROBOT 1", SwingConstants.CENTER);
             memoryScrollPane1.setColumnHeaderView(titleLabel1); // Utiliser le titre en tant que header
+            memoryArea1.setBackground(Color.gray);
     
             memoryArea2 = new JTextArea(10,72);
             JScrollPane memoryScrollPane2 = new JScrollPane(memoryArea2);
             JLabel titleLabel2 = new JLabel("ROBOT 2", SwingConstants.CENTER);
             memoryScrollPane2.setColumnHeaderView(titleLabel2); // Utiliser le titre en tant que header
-    
+            memoryArea2.setBackground(Color.gray);
+
             // Buttons
             stepButton = new JButton("Pas");
             stepButton.addActionListener(new ActionListener() {
+                
+
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Appeler la méthode jouer() du jeu lorsque le bouton "Pas" est cliqué
-                    jeu.jouer();
-                    // Mettre à jour l'interface graphique après chaque pas
-                    updateGUI();
+                   jeu.jouerGUI();
+
+                   updateGUI();
                 }
             });
             stopButton = new JButton("Stop");
@@ -307,9 +360,13 @@ public class OctopunksGUI extends JFrame {
     }*/
 
     protected void updateGUI() {
-        // Mettre à jour la grille graphique en fonction de l'état actuel des robots et de la grille
-        // Vous devez implémenter cette méthode pour refléter les changements dans votre interface graphique
-        // Par exemple, mettre à jour les icônes des robots dans la grille, etc.
+        // Ajouter le JLabel représentant la sous-case à la case principale
+
+        
+        createGridCells(gridPanel, x, y, scaledIcon);
+    
+        // Rafraîchir l'affichage de la grille après l'exécution de la première instruction "LINK"
+        // (vous devez implémenter cette partie selon vos besoins)
     }
     
 }
