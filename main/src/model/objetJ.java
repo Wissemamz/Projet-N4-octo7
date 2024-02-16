@@ -1,10 +1,14 @@
 package model;
 
+import javax.swing.ImageIcon;
+
 public abstract class ObjetJ {
     private String name;
     public int abscisse;
     public int ordonnee;
     public int caseJ;
+    private Object commande;
+    private Object parametre;
 
     public ObjetJ (String name, int abscisse, int ordonnee, int caseJ) {
         if (name == null) {
@@ -25,8 +29,12 @@ public abstract class ObjetJ {
     public int getCaseJ(){return this.caseJ;}
     
     public abstract void afficher();
-
+    public abstract ImageIcon getIcon();
   
+    public void clear() {
+        this.commande = null;
+        this.parametre = null;
+    }
 
    
 }

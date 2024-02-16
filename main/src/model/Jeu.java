@@ -5,9 +5,11 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JTextArea;
+
 
 public class Jeu {
-    static ObjetJ [][][] grille = new ObjetJ[5][5][4];
+    public ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
     private Robot robot1;
     private Robot robot2;
@@ -131,6 +133,50 @@ public class Jeu {
             afficherJeu();
             tab[0]++;
         }
+    }
+
+
+    public ArrayList<Instruction> parseTextFromInputGUI(String robotText) {
+        ArrayList<Instruction> instructionsList = new ArrayList<>();
+        // Séparer le texte par lignes
+        String[] lines = robotText.split("\n");
+    
+        // Parcourir chaque ligne de texte
+        for (String line : lines) {
+            // Séparer la ligne par les espaces
+            String[] parts = line.split("\\s+");
+    
+            String command = parts[0];
+    
+            // Si la ligne contient des paramètres
+            if (parts.length > 1) {
+                String[] parameters = new String[parts.length - 1];
+                System.arraycopy(parts, 1, parameters, 0, parameters.length);
+                Instruction instruction = new Instruction(command, parameters);
+                instructionsList.add(instruction);
+            } else {
+                // Si la ligne ne contient que la commande sans paramètres
+                Instruction instruction = new Instruction(command);
+                instructionsList.add(instruction);
+            }
+        }
+    
+        return instructionsList;
+    }
+
+    public void jouerUneEtape(JTextArea robot1TextArea, JTextArea robot2TextArea) {
+        // Convertir le contenu des zones de mémoire en listes d'instructions pour chaque robot
+        ArrayList<Instruction> instruR1 = parseTextFromInputGUI(robot1TextArea.getText());
+        ArrayList<Instruction> instruR2 = parseTextFromInputGUI(robot2TextArea.getText());
+    
+        // Exécuter une seule instruction pour chaque robot
+        int[] tab1 = {0};
+        int[] tab2 = {0};
+        if (robot1.getVivant()) instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1);
+        if (robot2.getVivant()) instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2);
+    
+        // Mettre à jour l'affichage
+        afficherJeu();
     }
 }
     
