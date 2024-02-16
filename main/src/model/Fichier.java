@@ -1,18 +1,14 @@
 package model;
 
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
 public abstract class Fichier extends ObjetJ {
-    //private ArrayList<Integer> elements;
 
     public Fichier(String num, int abscisse, int ordonnee, int caseJ) {
         super(num, abscisse, ordonnee, caseJ);
-        //this.elements = new ArrayList<>(); 
     }
-
-    /*public Fichier(String num, int abscisse, int ordonnee, int caseJ,ArrayList<Integer> elements) {
-        super(num, abscisse, ordonnee, caseJ);
-        this.elements = elements;
-        this.p=0;
-    }*/
 
     public void setAbscisse(int value){abscisse=value;}
     
@@ -21,39 +17,23 @@ public abstract class Fichier extends ObjetJ {
     public void setCaseJ(int value){caseJ=value;}
 
     public abstract int getPosFichier();
-    //public abstract void setPos(int pos);
     public abstract int F();
     public abstract void F(int i);
     public abstract boolean TEST_EOF();
     public abstract void VOID_F();
     public abstract void SEEK(int n);
 
-    /*
-    public int getPosFichier() {return this.p;}
+    @Override
+    public ImageIcon getIcon() {
+        // Chargement des images pour les backgrounds des cases
+        ImageIcon icon = new ImageIcon("main/src/images/file.png");
 
-    public void setPos(int pos) {this.p = pos;}
-
-    public int F() {
-        if (!EOF()) {
-            Integer i = elements.get(p);
-            p++;
-            return i.intValue();
-        }
-        else return 0;
+        // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+        Image image = icon.getImage();
+        Image newImage = image.getScaledInstance(55, 55, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(newImage);
+        return scaledIcon;
     }
-
-    public void F(int i){
-        if (!EOF()) {
-            this.elements.set(p,i);
-        }
-        else this.elements.add(i);
-        p++;
-    } 
-
-    public boolean EOF(){
-        return (p==elements.size());
-    }
-    */ 
 
     @Override
     public void afficher(){

@@ -57,15 +57,15 @@ public class Robot extends ObjetJ{
     public void afficher(){
         System.out.print("(°+°)");
     }
-
+    @Override
     public ImageIcon getIcon() {
         // Chargement des images pour les backgrounds des cases
-        ImageIcon icon = new ImageIcon("main/src/images/ocot_down.png"); // Assurez-vous de charger une image de 16x16 pixels
+        ImageIcon icon = new ImageIcon("main/src/images/robot.png");
 
         // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
         Image image = icon.getImage();
-        Image newImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImage = image.getScaledInstance(55, 55, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(newImage);
         return scaledIcon;
-    }  
+    }
 }

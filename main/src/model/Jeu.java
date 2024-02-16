@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JTextArea;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -12,7 +14,7 @@ import javax.swing.JPanel;
 
 
 public class Jeu {
-    static ObjetJ [][][] grille = new ObjetJ[5][5][4];
+    public ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
     public Robot robot1;
     public Robot robot2;
@@ -139,18 +141,14 @@ public class Jeu {
         }
     }
 
-    public ArrayList<Instruction> parseTextFromInputGraphique(String robotText) {
+
+    public ArrayList<Instruction> parseTextFromInput(String robotText) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
         // Séparer le texte par lignes
         String[] lines = robotText.split("\n");
     
         // Parcourir chaque ligne de texte
         for (String line : lines) {
-            // Si la ligne contient "fin", arrêter la lecture
-            if (line.trim().equalsIgnoreCase("fin")) {
-                break;
-            }
-            
             // Séparer la ligne par les espaces
             String[] parts = line.split("\\s+");
     
@@ -171,7 +169,83 @@ public class Jeu {
     
         return instructionsList;
     }
-    
-    
 
+
+    public void jouerGUI() {
+        setNiveau1();
+        ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
+        ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
+
+        int i=0, j=0;
+        int[] tab1 = {i};
+        int[] tab2 = {j};
+        while (tab1[0]<instruR1.size() && tab2[0]<instruR2.size()){
+            double choix=random.nextDouble();
+            if(choix<0.5){
+                if (robot1.getVivant()) instruR1.get(tab1[0]).execute(grille,robot1,instruR1,tab1);
+                if (robot2.getVivant()) instruR2.get(tab2[0]).execute(grille,robot2,instruR2,tab2);
+            }
+            else{
+                if (robot2.getVivant()) instruR2.get(tab2[0]).execute(grille,robot2,instruR2,tab2);
+                if (robot1.getVivant()) instruR1.get(tab1[0]).execute(grille,robot1,instruR1,tab1);
+            }
+            tab1[0]++;
+            tab2[0]++;
+            afficherJeu();
+        }
+    
+        int k=0;
+        int[] tab = {k};
+        ArrayList<Instruction> instru;
+        Robot robot;
+    
+        if (tab1[0]==instruR1.size() && tab2[0]==instruR2.size()) return;
+        if (tab1[0]==instruR1.size() && tab2[0]<instruR2.size()) {
+            tab[0]=tab2[0];
+            instru = instruR2;
+            robot = robot2;
+        } 
+        else {
+            tab[0]=tab1[0];
+            instru = instruR1;
+            robot = robot1;
+        }
+    
+        while (tab[0]<instru.size() && robot.getVivant()) {
+            instru.get(tab[0]).execute(grille,robot,instru,tab);
+            afficherJeu();
+            tab[0]++;
+        }
+    }
+    
+    
+    public ArrayList<Instruction> parseTextFromInputGUI(String robotText) {
+        ArrayList<Instruction> instructionsList = new ArrayList<>();
+        // Séparer le texte par lignes
+        String[] lines = robotText.split("\n");
+            
+        // Parcourir chaque ligne de texte
+        for (String line : lines) {
+            // Séparer la ligne par les espaces
+            String[] parts = line.split("\\s+");
+            
+            String command = parts[0];
+            
+            // Si la ligne contient des paramètres
+            if (parts.length > 1) {
+                String[] parameters = new String[parts.length - 1];
+                System.arraycopy(parts, 1, parameters, 0, parameters.length);
+                Instruction instruction = new Instruction(command, parameters);
+                instructionsList.add(instruction);
+            } else {
+                // Si la ligne ne contient que la commande sans paramètres
+                Instruction instruction = new Instruction(command);
+                instructionsList.add(instruction);
+            }
+        }
+            
+        return instructionsList;
+    }
+    
 }
+    
