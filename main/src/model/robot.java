@@ -45,7 +45,7 @@ public class Robot extends ObjetJ{
 
     public void setFichier(ObjetJ f){
         this.fichier=(Fichier) f;
-        F.setValeur(fichier.F());
+        //F.setValeur(fichier.F());
     }
 
 

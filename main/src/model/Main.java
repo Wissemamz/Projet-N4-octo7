@@ -9,7 +9,6 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 OctopunksGUI octo =  new OctopunksGUI();
-            
             }
         });
     }

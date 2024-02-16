@@ -26,7 +26,7 @@ public class Jeu {
     
 
     
-     public ArrayList<Instruction> parseTextFromInput(int r) {
+    public ArrayList<Instruction> parseTextFromInput(int r) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
         
         @SuppressWarnings("resource")

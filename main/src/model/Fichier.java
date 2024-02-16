@@ -40,6 +40,7 @@ public class Fichier extends ObjetJ {
             this.elements.set(p,i);
         }
         else this.elements.add(i);
+        p++;
     }
 
     public void setPos(int pos) {this.p = pos;}
