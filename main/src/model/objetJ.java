@@ -25,4 +25,8 @@ public abstract class ObjetJ {
     public int getCaseJ(){return this.caseJ;}
     
     public abstract void afficher();
+
+  
+
+   
 }

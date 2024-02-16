@@ -65,12 +65,10 @@ public class Jeu {
             grille[3][4][i] = new Obstacle("obstacle",3,4,i);
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
-        Fichier fichier = new Fichier("199",2,2,1);
-        fichier.F(2);
-        fichier.F(1);
-        fichier.setPos(0);
+        Fichier fichier = new TableauDynamique("199",2,2,1);
+
         grille[2][2][1] = fichier;
-        grille[2][3][2] = new Fichier("299",2,3,2);
+        grille[2][3][2] = new TableauDynamique("299",2,3,2);
         System.out.println("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]:");
         System.out.println();
     }

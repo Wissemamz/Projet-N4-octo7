@@ -1,22 +1,18 @@
 package model;
 
-import java.util.ArrayList;
-
-public class Fichier extends ObjetJ {
-    private ArrayList<Integer> elements;
-    private int p;
+public abstract class Fichier extends ObjetJ {
+    //private ArrayList<Integer> elements;
 
     public Fichier(String num, int abscisse, int ordonnee, int caseJ) {
         super(num, abscisse, ordonnee, caseJ);
-        this.elements = new ArrayList<>(); 
-        this.p = 0;
+        //this.elements = new ArrayList<>(); 
     }
 
-    public Fichier(String num, int abscisse, int ordonnee, int caseJ,ArrayList<Integer> elements) {
+    /*public Fichier(String num, int abscisse, int ordonnee, int caseJ,ArrayList<Integer> elements) {
         super(num, abscisse, ordonnee, caseJ);
         this.elements = elements;
         this.p=0;
-    }
+    }*/
 
     public void setAbscisse(int value){abscisse=value;}
     
@@ -24,7 +20,18 @@ public class Fichier extends ObjetJ {
 
     public void setCaseJ(int value){caseJ=value;}
 
+    public abstract int getPosFichier();
+    //public abstract void setPos(int pos);
+    public abstract int F();
+    public abstract void F(int i);
+    public abstract boolean TEST_EOF();
+    public abstract void VOID_F();
+    public abstract void SEEK(int n);
+
+    /*
     public int getPosFichier() {return this.p;}
+
+    public void setPos(int pos) {this.p = pos;}
 
     public int F() {
         if (!EOF()) {
@@ -41,13 +48,12 @@ public class Fichier extends ObjetJ {
         }
         else this.elements.add(i);
         p++;
-    }
-
-    public void setPos(int pos) {this.p = pos;}
+    } 
 
     public boolean EOF(){
         return (p==elements.size());
-    } 
+    }
+    */ 
 
     @Override
     public void afficher(){

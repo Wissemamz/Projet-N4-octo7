@@ -906,19 +906,19 @@ public class Instruction {
         else if (commande.equals(Commande.MAKE.toString())){
             if (parametre.length!=1) return;
             else {
-                r.setFichier(new Fichier(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
+                r.setFichier(new TableauDynamique(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
             }
         }
         else if (commande.equals(Commande.MAKELIFO.toString())){
             if (parametre.length!=1) return;
             else {
-                r.setFichier(new Fichier(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
+                r.setFichier(new Pile(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
             }
         }
         else if (commande.equals(Commande.MAKEFIFO.toString())){
             if (parametre.length!=1) return;
             else {
-                r.setFichier(new Fichier(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
+                r.setFichier(new File(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
             }
         }
         else if (commande.equals(Commande.TEST_EOF.toString())){
@@ -926,9 +926,24 @@ public class Instruction {
             if (parametre.length!=0) return;
             else {
                 if (r.getFichier()==null) return;
-                else if (r.getFichier().EOF()) r.getT().setValeur(1);
+                else if (r.getFichier().TEST_EOF()) r.getT().setValeur(1);
                 else r.getT().setValeur(0);
             }
+        }
+        else if (commande.equals(Commande.SEEK.toString())){
+            // mettre le registre T à 1 si le fichier est a sa fin, sinon 0
+            if (parametre.length!=0) return;
+            else {
+                if (r.getFichier()==null) return;
+                else if (r.getFichier().TEST_EOF()) r.getT().setValeur(1);
+                else r.getT().setValeur(0);
+            }
+        }
+        else if (commande.equals(Commande.VOID_F.toString())){
+            // mettre le registre T à 1 si le fichier est a sa fin, sinon 0
+            if (parametre.length!=0) return;
+            else if (r.getFichier()==null) return;
+            else r.getFichier().VOID_F();
         }
     }
 }
