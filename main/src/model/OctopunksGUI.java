@@ -189,6 +189,8 @@ public class OctopunksGUI extends JFrame {
         // Parcourir les dimensions de la grille principale
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
+               
+                
                 // Créer un JPanel pour chaque case de la grille principale
                 JPanel mainCellPanel = new JPanel(new GridLayout(2, 2)); // grille de 2x2 pour chaque case principale
                 
@@ -202,11 +204,37 @@ public class OctopunksGUI extends JFrame {
                 // Parcourir les sous-cases de la grille principale
                 for (int k = 0; k < z; k++) {
                     
-                    
+                    final int finalK = k;
                     // Créer un JLabel pour chaque sous-case
                     subCellLabels[k] = new JLabel();
 
                     
+              
+
+                    // Vérifier le type de l'élément et agir en conséquence
+                    if (jeu.grille[i][j][k] instanceof Fichier) {
+                        // Ajoutez un tooltip pour afficher des informations sur le fichier
+                        subCellLabels[k].setToolTipText("Numero du fichier : " + jeu.grille[i][j][k].getName());
+                    } else if (jeu.grille[i][j][k] instanceof Robot) {
+                        // Ajoutez un tooltip pour afficher des informations sur le robot
+                        subCellLabels[k].setToolTipText("Robot : " + jeu.grille[i][j][k].getName());
+                    } else if (jeu.grille[i][j][k] instanceof Obstacle) {
+                        // Ajoutez un tooltip pour afficher des informations sur le danger
+                        subCellLabels[k].setToolTipText("Danger");
+                    } else {
+                        // Le cas par défaut, par exemple, pour les cases vides
+                        subCellLabels[k].setToolTipText("Case vide");
+                    }
+
+                    // Ajoutez un MouseListener pour afficher le tooltip au survol de la souris
+                    subCellLabels[k].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            // Affichez le tooltip au survol de la souris
+                            String commentaire = subCellLabels[finalK].getToolTipText();
+                            System.out.println(commentaire);
+                        }
+                    });
                   
                     if(jeu.grille[i][j][k]==null){
                         subCellLabels[k].setIcon(scaledIcon);
