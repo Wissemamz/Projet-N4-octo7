@@ -5,9 +5,6 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JTextArea;
-
-
 public class Jeu {
     public ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
@@ -22,8 +19,8 @@ public class Jeu {
     public Jeu() {
         this.robot1= new Robot("Robot1", 4, 0,0);
         this.robot2= new Robot("Robot2", 4, 4,0);
-        //grille[4][0][0] = robot1;
-        //grille[4][4][0] = robot2;
+        grille[4][0][0] = robot1;
+        grille[4][4][0] = robot2;
         this.random=new Random();
     }
     

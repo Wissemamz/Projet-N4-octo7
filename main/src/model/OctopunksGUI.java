@@ -6,9 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 
 public class OctopunksGUI extends JFrame {
@@ -199,25 +196,16 @@ public class OctopunksGUI extends JFrame {
                 
                 // Créer un JLabel pour chaque sous-case de la grille principale
                 JLabel[] subCellLabels = new JLabel[4];
-                
 
                 // Parcourir les sous-cases de la grille principale
                 for (int k = 0; k < z; k++) {
-                    
-                    
                     // Créer un JLabel pour chaque sous-case
                     subCellLabels[k] = new JLabel();
-
-                    
-                  
                     if(jeu.grille[i][j][k]==null){
                         subCellLabels[k].setIcon(scaledIcon);
                     }else{
                        subCellLabels[k].setIcon(jeu.grille[i][j][k].getIcon());
-
                     }
-
-
                     // Ajouter le JLabel représentant la sous-case à la case principale
                     mainCellPanel.add(subCellLabels[k]);
                 }
@@ -254,10 +242,11 @@ public class OctopunksGUI extends JFrame {
             Image image = icon.getImage();
             Image newImage = image.getScaledInstance(55, 55, Image.SCALE_SMOOTH);
             scaledIcon = new ImageIcon(newImage);
+            Prototype = gridPanel;
+
+            jeu.setNiveau1GUI();
 
             createGridCells(gridPanel, x, y, scaledIcon);
-
-            Prototype = gridPanel;
 
             JScrollPane codeScrollPane = new JScrollPane(gridPanel);
     
