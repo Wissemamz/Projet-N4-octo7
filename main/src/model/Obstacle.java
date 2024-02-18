@@ -6,7 +6,6 @@ import javax.swing.ImageIcon;
 
 public class Obstacle extends ObjetJ{
     
-   
     public Obstacle(String name, int abscisse, int ordonnee, int caseJ){
         super(name,abscisse,ordonnee,caseJ);
     }

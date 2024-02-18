@@ -1,18 +1,23 @@
 package model;
 
 import java.util.Random;
-
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JTextArea;
 
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
 public class Jeu {
     public ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
-    private Robot robot1;
-    private Robot robot2;
+    public Robot robot1;
+    public Robot robot2;
 
     // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
     private int positionR1 = 0;
@@ -26,12 +31,12 @@ public class Jeu {
         //grille[4][4][0] = robot2;
         this.random=new Random();
     }
-    
 
     
-     public ArrayList<Instruction> parseTextFromInput(int r) {
+    public ArrayList<Instruction> parseTextFromInput(int r) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
         
+        @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'fin' pour terminer) :");
@@ -59,7 +64,6 @@ public class Jeu {
         return instructionsList;
     }
 
-
     public void setNiveau1() {
         for (int i=0 ;i<4; i++){
             grille[1][3][i] = new Obstacle("obstacle",1,3,i);
@@ -67,8 +71,10 @@ public class Jeu {
             grille[3][4][i] = new Obstacle("obstacle",3,4,i);
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
-        grille[2][2][1] = new Fichier("199",2,2,1);
-        grille[2][3][2] = new Fichier("299",2,3,2);
+        Fichier fichier = new TableauDynamique("199",2,2,1);
+
+        grille[2][2][1] = fichier;
+        grille[2][3][2] = new TableauDynamique("299",2,3,2);
         System.out.println("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]:");
         System.out.println();
     }
