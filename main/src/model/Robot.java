@@ -68,6 +68,18 @@ public class Robot extends ObjetJ{
         Image image = icon.getImage();
         Image newImage = image.getScaledInstance(55, 55, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(newImage);
-        return scaledIcon;
+
+        // Chargement des images pour les backgrounds des cases
+        ImageIcon iconDead = new ImageIcon("main/src/images/Dead.png");
+
+        // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+        Image imageDead = iconDead.getImage();
+        Image newImageDead = imageDead.getScaledInstance(55, 55, Image.SCALE_SMOOTH);
+        ImageIcon scaledIconDead = new ImageIcon(newImageDead);
+        if(this.vivant == true){
+            return scaledIcon;
+        }else {
+            return scaledIconDead;   
+        }
     }
 }
