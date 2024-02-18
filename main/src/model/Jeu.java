@@ -120,12 +120,14 @@ public class Jeu {
         robot1.setOrdonnee(0);
         robot1.setCaseJ(0);
         robot1.ressuciter();
+        robot1.setFichier(null);
 
         grille[4][4][0] = robot2;
         robot2.setAbscisse(4);
         robot2.setOrdonnee(4);
         robot2.setCaseJ(0);
         robot2.ressuciter();
+        robot2.setFichier(null);
 
         for (int i=0 ;i<4; i++){
             grille[1][3][i] = new Obstacle("obstacle",1,3,i);

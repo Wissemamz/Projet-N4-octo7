@@ -36,10 +36,7 @@ public class Instruction {
     
     public void execute (ObjetJ[][][] grille,Robot r,ArrayList<Instruction> instructions,int[] pos){
         if (commande.equals(Commande.GRAB.toString())){
-            if (parametre.length==0){
-                return;
-            }
-            else if (parametre.length==1) {
+            if (parametre.length==1 && r.getFichier()==null) {
                 for (int i=0; i<4; i++){
                     if (grille[r.getAbscisse()][r.getOrdonnee()][i] != null)
                     {
