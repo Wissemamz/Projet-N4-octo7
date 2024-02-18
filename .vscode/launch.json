@@ -8,15 +8,15 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
-            "mainClass": "model.Main",
-            "projectName": "Projet-N4_9337616f"
+            "mainClass": "main.src.model.Main",
+            "projectName": "PROJET-N4-1"
         },
         {
             "type": "java",
             "name": "OctopunksGUI",
             "request": "launch",
-            "mainClass": "model.OctopunksGUI",
-            "projectName": "Projet-N4_9337616f"
+            "mainClass": "main.src.model.OctopunksGUI",
+            "projectName": "PROJET-N4-1"
         },
         {
             "type": "java",
@@ -28,8 +28,8 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
-            "mainClass": "model.Main",
-            "projectName": "Projet-N4_34f461c2"
+            "mainClass": "main.src.model.Main",
+            "projectName": "PROJET-N4-1"
         }
     ]
 }
