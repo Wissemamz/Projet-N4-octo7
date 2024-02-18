@@ -95,6 +95,7 @@ public class OctopunksGUI extends JFrame {
         btnGraphique.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 // Créer un nouveau menu pour la version graphique
                 JFrame graphiqueMenu = new JFrame("OCTOPUNKS GUI");
                 graphiqueMenu.setSize(400, 320);
