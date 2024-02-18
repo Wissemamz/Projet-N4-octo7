@@ -72,6 +72,9 @@ public class Jeu {
                 }
             }
         }
+        grille[4][0][0] = robot1;
+        grille[4][4][0] = robot2;
+        
         for (int i=0 ;i<4; i++){
             grille[1][3][i] = new Obstacle("obstacle",1,3,i);
             grille[2][1][i] = new Obstacle("obstacle",2,1,i);
@@ -79,7 +82,6 @@ public class Jeu {
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
         Fichier fichier = new TableauDynamique("199",2,2,1);
-
         grille[2][2][1] = fichier;
         grille[2][3][2] = new TableauDynamique("299",2,3,2);
         System.out.println("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]:");
@@ -124,7 +126,7 @@ public class Jeu {
         robot2.setOrdonnee(4);
         robot2.setCaseJ(0);
         robot2.ressuciter();
-        
+
         for (int i=0 ;i<4; i++){
             grille[1][3][i] = new Obstacle("obstacle",1,3,i);
             grille[2][1][i] = new Obstacle("obstacle",2,1,i);
