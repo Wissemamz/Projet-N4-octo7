@@ -14,11 +14,16 @@ public class Jeu {
     private Robot robot1;
     private Robot robot2;
 
+    // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
+    private int positionR1 = 0;
+    private int positionR2 = 0;
+
+
     public Jeu() {
         this.robot1= new Robot("Robot1", 4, 0,0);
         this.robot2= new Robot("Robot2", 4, 4,0);
-        grille[4][0][0] = robot1;
-        grille[4][4][0] = robot2;
+        //grille[4][0][0] = robot1;
+        //grille[4][4][0] = robot2;
         this.random=new Random();
     }
     
@@ -67,7 +72,7 @@ public class Jeu {
         System.out.println("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]:");
         System.out.println();
     }
-    
+
     public void afficherJeu () {
             for (ObjetJ[][] ligne : grille) {
                 System.out.print("|");
@@ -85,6 +90,23 @@ public class Jeu {
             }
             System.out.println(); 
             System.out.println(); 
+    }
+
+    public void setNiveau1GUI() {
+        grille[4][0][0] = robot1;
+        grille[4][4][0] = robot2;
+        for (int i=0 ;i<4; i++){
+            grille[1][3][i] = new Obstacle("obstacle",1,3,i);
+            grille[2][1][i] = new Obstacle("obstacle",2,1,i);
+            grille[3][4][i] = new Obstacle("obstacle",3,4,i);
+            grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
+        }
+        grille[2][2][1] = new Fichier("199",2,2,1);
+        grille[2][3][2] = new Fichier("299",2,3,2);
+    }
+
+    public void afficherJeuGUI() {
+            System.out.println("vous etes dans la partie graphique de OCTOPUNKS");
     }
     
     public void jouer(){
@@ -165,7 +187,7 @@ public class Jeu {
     }
 
 
-    public void jouerGUI() {
+    /*public void jouerGUI() {
         setNiveau1();
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
         ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
@@ -211,6 +233,46 @@ public class Jeu {
             tab[0]++;
         }
     }
+    */
+
+    public void jouerGUI() {
+        // Si les deux zones de texte sont vides ou si l'une des deux est vide, retourner
+        if (OctopunksGUI.memoryArea1.getText().isEmpty() || OctopunksGUI.memoryArea2.getText().isEmpty()) {
+            return;
+        }
+    
+        // Récupérer les instructions à partir des zones de texte
+        ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
+        ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
+    
+        // Récupérer la prochaine instruction à exécuter pour chaque robot
+        Instruction nextInstruR1 = getNextInstruction(instruR1, positionR1);
+        Instruction nextInstruR2 = getNextInstruction(instruR2, positionR2);
+    
+        // Exécuter les instructions pour chaque robot s'ils sont vivants
+        if (robot1.getVivant() && nextInstruR1 != null) {
+            nextInstruR1.execute(grille, robot1, instruR1, null);
+            positionR1++; // Avancer la position pour le robot 1
+        }
+        if (robot2.getVivant() && nextInstruR2 != null) {
+            nextInstruR2.execute(grille, robot2, instruR2, null);
+            positionR2++; // Avancer la position pour le robot 2
+        }
+    
+        // Mettre à jour l'affichage du jeu
+        afficherJeuGUI();
+    }
+    
+    private Instruction getNextInstruction(ArrayList<Instruction> instructions, int position) {
+        // Vérifier si nous avons atteint la fin des instructions
+        if (instructions == null || position >= instructions.size()) {
+            return null;
+        }
+    
+        // Récupérer l'instruction à la position actuelle
+        return instructions.get(position);
+    }
+    
     
     
     public ArrayList<Instruction> parseTextFromInputGUI(String robotText) {

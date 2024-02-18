@@ -23,11 +23,12 @@ public class OctopunksGUI extends JFrame {
 
     ImageIcon scaledIcon;
     JPanel gridPanel;
+    JPanel Prototype;
 
 
     public OctopunksGUI() {
         jeu = new Jeu();
-        jeu.setNiveau1();
+        jeu.setNiveau1GUI();
 
         x = 5;
         y = 5;
@@ -254,7 +255,9 @@ public class OctopunksGUI extends JFrame {
             scaledIcon = new ImageIcon(newImage);
 
             createGridCells(gridPanel, x, y, scaledIcon);
-    
+
+            Prototype = gridPanel;
+
             JScrollPane codeScrollPane = new JScrollPane(gridPanel);
     
             // Memory areas
@@ -273,21 +276,37 @@ public class OctopunksGUI extends JFrame {
             // Buttons
             stepButton = new JButton("Pas");
             stepButton.addActionListener(new ActionListener() {
-                
-
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                   jeu.jouerGUI();
 
-                   updateGUI();
+                    // Bloquer les zones de texte
+                    OctopunksGUI.memoryArea1.setEditable(false);
+                    OctopunksGUI.memoryArea2.setEditable(false);
+
+                    jeu.jouerGUI();
+
+                    updateGUI();
                 }
             });
+
+
             stopButton = new JButton("Stop");
             stopButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Réinitialiser le jeu et réactiver la zone de code
-                    //resetGame();
+                    // Débloquer les zones de texte
+                    OctopunksGUI.memoryArea1.setEditable(true);
+                    OctopunksGUI.memoryArea2.setEditable(true);
+
+                    // Effacer le contenu des zones mémoires
+                    memoryArea1.setText("");
+                    memoryArea2.setText("");
+
+                    // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
+                    jeu.setNiveau1GUI();
+                    
+                    // Mettre à jour l'affichage de la grille
+                    createGridCells(Prototype, x, y, scaledIcon);
                 }
             });
     
