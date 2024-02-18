@@ -1,15 +1,18 @@
 package model;
 
 import java.util.Random;
-
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.JTextArea;
+
 
 public class Jeu {
     public ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
-    private Robot robot1;
-    private Robot robot2;
+    public Robot robot1;
+    public Robot robot2;
 
     // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
     private int positionR1 = 0;
@@ -23,12 +26,12 @@ public class Jeu {
         grille[4][4][0] = robot2;
         this.random=new Random();
     }
-    
 
     
-     public ArrayList<Instruction> parseTextFromInput(int r) {
+    public ArrayList<Instruction> parseTextFromInput(int r) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
         
+        @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'fin' pour terminer) :");
@@ -56,16 +59,24 @@ public class Jeu {
         return instructionsList;
     }
 
-
     public void setNiveau1() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                for (int k = 0; k < grille[i][j].length; k++) {
+                    grille[i][j][k] = null; // Affecter null à chaque élément
+                }
+            }
+        }
         for (int i=0 ;i<4; i++){
             grille[1][3][i] = new Obstacle("obstacle",1,3,i);
             grille[2][1][i] = new Obstacle("obstacle",2,1,i);
             grille[3][4][i] = new Obstacle("obstacle",3,4,i);
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
-        grille[2][2][1] = new Fichier("199",2,2,1);
-        grille[2][3][2] = new Fichier("299",2,3,2);
+        Fichier fichier = new TableauDynamique("199",2,2,1);
+
+        grille[2][2][1] = fichier;
+        grille[2][3][2] = new TableauDynamique("299",2,3,2);
         System.out.println("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]:");
         System.out.println();
     }
@@ -90,16 +101,41 @@ public class Jeu {
     }
 
     public void setNiveau1GUI() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                for (int k = 0; k < grille[i][j].length; k++) {
+                    grille[i][j][k] = null; // Affecter null à chaque élément
+                }
+            }
+        }
         grille[4][0][0] = robot1;
+        robot1.setAbscisse(4);
+        robot1.setOrdonnee(0);
+        robot1.setCaseJ(0);
+        robot1.ressuciter();
+
         grille[4][4][0] = robot2;
+        robot2.setAbscisse(4);
+        robot2.setOrdonnee(4);
+        robot2.setCaseJ(0);
+        robot2.ressuciter();
+        
         for (int i=0 ;i<4; i++){
             grille[1][3][i] = new Obstacle("obstacle",1,3,i);
             grille[2][1][i] = new Obstacle("obstacle",2,1,i);
             grille[3][4][i] = new Obstacle("obstacle",3,4,i);
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
-        grille[2][2][1] = new Fichier("199",2,2,1);
-        grille[2][3][2] = new Fichier("299",2,3,2);
+        Fichier fichier1 = new TableauDynamique("199",2,2,1);
+        grille[2][2][1] = fichier1;
+        fichier1.setAbscisse(2);
+        fichier1.setOrdonnee(2);
+        fichier1.setCaseJ(1);
+        Fichier fichier2 = new TableauDynamique("299",2,3,2);
+        grille[2][3][2] = fichier2;
+        fichier2.setAbscisse(2);
+        fichier2.setOrdonnee(3);
+        fichier2.setCaseJ(2);
     }
 
     public void afficherJeuGUI() {
@@ -234,9 +270,9 @@ public class Jeu {
 
     public void jouerGUI() {
         // Si les deux zones de texte sont vides ou si l'une des deux est vide, retourner
-        if (OctopunksGUI.memoryArea1.getText().isEmpty() || OctopunksGUI.memoryArea2.getText().isEmpty()) {
+        /*if (OctopunksGUI.memoryArea1.getText().isEmpty() || OctopunksGUI.memoryArea2.getText().isEmpty()) {
             return;
-        }
+        }*/
     
         // Récupérer les instructions à partir des zones de texte
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
@@ -270,7 +306,10 @@ public class Jeu {
         return instructions.get(position);
     }
     
-    
+    public void resetPosition() { 
+        positionR1=0;
+        positionR2=0;
+    }
     
     public ArrayList<Instruction> parseTextFromInputGUI(String robotText) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();

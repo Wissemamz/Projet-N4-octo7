@@ -7,9 +7,7 @@ public abstract class ObjetJ {
     public int abscisse;
     public int ordonnee;
     public int caseJ;
-    private Object commande;
-    private Object parametre;
-
+    
     public ObjetJ (String name, int abscisse, int ordonnee, int caseJ) {
         if (name == null) {
             throw new NullPointerException();
@@ -30,11 +28,5 @@ public abstract class ObjetJ {
     
     public abstract void afficher();
     public abstract ImageIcon getIcon();
-  
-    public void clear() {
-        this.commande = null;
-        this.parametre = null;
-    }
 
-   
 }

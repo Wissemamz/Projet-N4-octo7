@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "model.Main",
+            "projectName": "Projet-N4_9337616f"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "main.src.model.Main",
+            "projectName": "PROJET-N4-1"
+        },
+        {
+            "type": "java",
+            "name": "OctopunksGUI",
+            "request": "launch",
+            "mainClass": "main.src.model.OctopunksGUI",
+            "projectName": "PROJET-N4-1"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -14,8 +35,8 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
-            "mainClass": "model.Main",
-            "projectName": "Projet-N4_34f461c2"
+            "mainClass": "main.src.model.Main",
+            "projectName": "PROJET-N4-1"
         }
     ]
 }
