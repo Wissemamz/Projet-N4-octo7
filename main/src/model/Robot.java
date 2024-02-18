@@ -27,6 +27,8 @@ public class Robot extends ObjetJ{
 
     public void meurt(){ this.vivant = false; }
 
+    public void ressuciter(){ this.vivant = true; }
+
     public Registre getX(){ return this.X; }
 
     public Registre getT(){ return this.T; }

@@ -8,6 +8,13 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
+            "mainClass": "model.Main",
+            "projectName": "Projet-N4_9337616f"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
             "mainClass": "main.src.model.Main",
             "projectName": "PROJET-N4-1"
         },

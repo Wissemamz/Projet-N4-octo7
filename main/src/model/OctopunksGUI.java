@@ -95,6 +95,7 @@ public class OctopunksGUI extends JFrame {
         btnGraphique.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 // Créer un nouveau menu pour la version graphique
                 JFrame graphiqueMenu = new JFrame("OCTOPUNKS GUI");
                 graphiqueMenu.setSize(400, 320);
@@ -105,7 +106,7 @@ public class OctopunksGUI extends JFrame {
                 JPanel graphiqueMainPanel = new JPanel();
                 graphiqueMainPanel.setLayout(new BorderLayout());
 
-                JLabel graphiqueTitleLabel = new JLabel("Menu Graphique", SwingConstants.CENTER);
+                JLabel graphiqueTitleLabel = new JLabel("Menu", SwingConstants.CENTER);
                 graphiqueTitleLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
                 graphiqueMainPanel.add(graphiqueTitleLabel, BorderLayout.NORTH);
                 graphiqueMainPanel.setBackground(Color.white);
@@ -267,7 +268,7 @@ public class OctopunksGUI extends JFrame {
             getContentPane().removeAll();
     
             setTitle("Octopunks");
-            setBackground(Color.darkGray);
+            setBackground(Color.GRAY);
     
             // Code area
             // Création du panneau droit avec une grille de 5x5
@@ -293,13 +294,13 @@ public class OctopunksGUI extends JFrame {
             JScrollPane memoryScrollPane1 = new JScrollPane(memoryArea1);
             JLabel titleLabel1 = new JLabel("ROBOT 1", SwingConstants.CENTER);
             memoryScrollPane1.setColumnHeaderView(titleLabel1); // Utiliser le titre en tant que header
-            memoryArea1.setBackground(Color.gray);
+            memoryArea1.setBackground(Color.LIGHT_GRAY);
     
             memoryArea2 = new JTextArea(10,72);
             JScrollPane memoryScrollPane2 = new JScrollPane(memoryArea2);
             JLabel titleLabel2 = new JLabel("ROBOT 2", SwingConstants.CENTER);
             memoryScrollPane2.setColumnHeaderView(titleLabel2); // Utiliser le titre en tant que header
-            memoryArea2.setBackground(Color.gray);
+            memoryArea2.setBackground(Color.LIGHT_GRAY);
 
             // Buttons
             stepButton = new JButton("Pas");
@@ -332,9 +333,11 @@ public class OctopunksGUI extends JFrame {
 
                     // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
                     jeu.setNiveau1GUI();
+                    jeu.resetPosition();
                     
                     // Mettre à jour l'affichage de la grille
                     createGridCells(Prototype, x, y, scaledIcon);
+
                 }
             });
     
@@ -374,7 +377,7 @@ public class OctopunksGUI extends JFrame {
             getContentPane().add(gamePanel, BorderLayout.CENTER);
             getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 
-            //setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
+            setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
             //setUndecorated(true); // Enlever la décoration de fenêtre (barre de titre, boutons de fermeture, etc.)
 
             pack();
