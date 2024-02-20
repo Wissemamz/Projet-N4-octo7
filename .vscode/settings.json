@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "java.project.sourcePaths": [
         "main\\src\\test"
     ]
+=======
+    "cmake.configureOnOpen": true
+>>>>>>> fc43217bf6cd4ca8284eb0f3a4dfb9177d1739cb
 }
