@@ -230,9 +230,6 @@ public class OctopunksGUI extends JFrame {
                     subCellLabels[k].addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseEntered(MouseEvent e) {
-                            // Affichez le tooltip au survol de la souris
-                            String commentaire = subCellLabels[finalK].getToolTipText();
-                            System.out.println(commentaire);
                         }
                     });
                   
