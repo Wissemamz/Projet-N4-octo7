@@ -50,6 +50,18 @@ public class Robot extends ObjetJ{
         //F.setValeur(fichier.F());
     }
 
+    public void updateXValue(int newValue) {
+        X.setValeur(newValue);
+    }
+
+    public void updateFValue(int newValue) {
+        F.setValeur(newValue);
+    }
+
+    public void updateTValue(int newValue) {
+        T.setValeur(newValue);
+    }
+
 
     
     public void setLastRegistre(Registre Y) {this.last = Y;} 

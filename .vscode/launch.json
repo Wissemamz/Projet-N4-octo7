@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "tess",
+            "request": "launch",
+            "mainClass": "model.tess",
+            "projectName": "Projet-N4_34f461c2"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "model.Main",
+            "projectName": "Projet-N4_34f461c2"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "model.Main",

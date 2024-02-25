@@ -3,6 +3,10 @@ package model;
 
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +28,9 @@ public class OctopunksGUI extends JFrame {
     ImageIcon scaledIcon;
     JPanel gridPanel;
     JPanel Prototype;
+
+    private JPanel registreRobot1;
+    private JPanel registreRobot2;
 
 
     public OctopunksGUI() {
@@ -274,7 +281,10 @@ public class OctopunksGUI extends JFrame {
             // Création du panneau droit avec une grille de 5x5
             gridPanel = new JPanel();
             gridPanel.setLayout(new GridLayout(10, 10));
-    
+            
+            JPanel flowLayoutPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+            flowLayoutPanel.add(gridPanel);
+
             // Chargement des images pour les backgrounds des cases
             ImageIcon icon = new ImageIcon("main/src/images/case.png"); // Assurez-vous de charger une image de 16x16 pixels
     
@@ -287,21 +297,21 @@ public class OctopunksGUI extends JFrame {
 
             Prototype = gridPanel;
 
-            JScrollPane codeScrollPane = new JScrollPane(gridPanel);
+            JScrollPane codeScrollPane = new JScrollPane(flowLayoutPanel);
     
             // Memory areas
-            memoryArea1 = new JTextArea(10, 72);
+            memoryArea1 = new JTextArea(10, 30);
             JScrollPane memoryScrollPane1 = new JScrollPane(memoryArea1);
             JLabel titleLabel1 = new JLabel("ROBOT 1", SwingConstants.CENTER);
             memoryScrollPane1.setColumnHeaderView(titleLabel1); // Utiliser le titre en tant que header
             memoryArea1.setBackground(Color.LIGHT_GRAY);
     
-            memoryArea2 = new JTextArea(10,72);
+            memoryArea2 = new JTextArea(10,30);
             JScrollPane memoryScrollPane2 = new JScrollPane(memoryArea2);
             JLabel titleLabel2 = new JLabel("ROBOT 2", SwingConstants.CENTER);
             memoryScrollPane2.setColumnHeaderView(titleLabel2); // Utiliser le titre en tant que header
             memoryArea2.setBackground(Color.LIGHT_GRAY);
-
+            
             // Buttons
             stepButton = new JButton("Pas");
             stepButton.addActionListener(new ActionListener() {
@@ -323,21 +333,44 @@ public class OctopunksGUI extends JFrame {
             stopButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Débloquer les zones de texte
-                    OctopunksGUI.memoryArea1.setEditable(true);
-                    OctopunksGUI.memoryArea2.setEditable(true);
-
+                    // Réinitialiser les valeurs des registres pour chaque robot
+                    resetRegisterValues(jeu.robot1);
+                    resetRegisterValues(jeu.robot2);
+            
+                    // Rafraîchir l'affichage des panneaux de registres
+                    updateRegisterPanel(registreRobot1, jeu.robot1);
+                    updateRegisterPanel(registreRobot2, jeu.robot2);
+            
+                    // Réinitialiser d'autres éléments si nécessaire
                     // Effacer le contenu des zones mémoires
                     memoryArea1.setText("");
                     memoryArea2.setText("");
 
+                    // Reouvrir les zones de texte
+                    OctopunksGUI.memoryArea1.setEditable(true);
+                    OctopunksGUI.memoryArea2.setEditable(true);
+            
                     // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
                     jeu.setNiveau1GUI();
                     jeu.resetPosition();
-                    
+            
                     // Mettre à jour l'affichage de la grille
                     createGridCells(Prototype, x, y, scaledIcon);
+                }
+            });
+            
 
+            JButton autoButton = new JButton("Auto");
+            autoButton.addActionListener(new ActionListener() {
+                @Override
+                    public void actionPerformed(ActionEvent e) {
+                    // Bloquer les zones de texte
+                    OctopunksGUI.memoryArea1.setEditable(false);
+                    OctopunksGUI.memoryArea2.setEditable(false);
+
+                    jeu.jouerGUIAuto();
+
+                    updateGUI();
                 }
             });
     
@@ -350,32 +383,48 @@ public class OctopunksGUI extends JFrame {
             JPanel controlPanel = new JPanel();
             controlPanel.setLayout(new GridLayout(1, 4));
             controlPanel.add(stepButton);
+            controlPanel.add(autoButton);
             controlPanel.add(stopButton);
-    
+            
             JPanel leftPanel = new JPanel();
             leftPanel.setLayout(new BorderLayout());
             leftPanel.add(codeScrollPane, BorderLayout.CENTER);
             leftPanel.add(controlPanel, BorderLayout.SOUTH);
-    
+            
+            //rightPanel.add(memoryScrollPane2);
+            
+            // Créer les panneaux affichant les valeurs des registres pour chaque robot
+            registreRobot1 = createRegisterPanel(jeu.robot1);
+            registreRobot2 = createRegisterPanel(jeu.robot2);
+
+            JPanel flowLayoutPanelMemoryArea1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+            flowLayoutPanelMemoryArea1.add(memoryScrollPane1);
+            flowLayoutPanelMemoryArea1.add(registreRobot1);
+            JPanel flowLayoutPanelMemoryArea2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+            flowLayoutPanelMemoryArea2.add(memoryScrollPane2);
+            flowLayoutPanelMemoryArea2.add(registreRobot2);
+
+
             JPanel rightPanel = new JPanel();
             rightPanel.setLayout(new GridLayout(2, 1));
-            rightPanel.add(memoryScrollPane1);
-            rightPanel.add(memoryScrollPane2);
+            rightPanel.add(flowLayoutPanelMemoryArea1);
+            rightPanel.add(flowLayoutPanelMemoryArea2);
     
             JPanel topPanel = new JPanel();
             topPanel.setLayout(new BorderLayout());
             topPanel.add(leftPanel, BorderLayout.CENTER);
             topPanel.add(rightPanel, BorderLayout.EAST);
-    
+            
             // Ajout de la zone de texte en bas de la page
             JLabel missionLabel = new JLabel("Zone de la mission : ");
             JPanel bottomPanel = new JPanel();
+            bottomPanel.setLayout(new BorderLayout());
             bottomPanel.add(missionLabel);
     
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(topPanel, BorderLayout.NORTH);
             getContentPane().add(gamePanel, BorderLayout.CENTER);
-            getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+            getContentPane().add(bottomPanel, BorderLayout.AFTER_LAST_LINE);
 
             setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
             //setUndecorated(true); // Enlever la décoration de fenêtre (barre de titre, boutons de fermeture, etc.)
@@ -408,15 +457,94 @@ public class OctopunksGUI extends JFrame {
         // Mettre à jour la grille graphique
         updateGUI();
     }*/
-
-    protected void updateGUI() {
-        // Ajouter le JLabel représentant la sous-case à la case principale
-
         
-        createGridCells(gridPanel, x, y, scaledIcon);
+    protected void updateGUI() {
+            // Mettre à jour l'affichage de la grille
+            createGridCells(gridPanel, x, y, scaledIcon);
     
-        // Rafraîchir l'affichage de la grille après l'exécution de la première instruction "LINK"
-        // (vous devez implémenter cette partie selon vos besoins)
+            // Mettre à jour les panneaux de registres pour chaque robot
+            updateRegisterPanel(registreRobot1, jeu.robot1);
+            updateRegisterPanel(registreRobot2, jeu.robot2);
+    
+            // Rafraîchir l'interface utilisateur
+            revalidate();
+            repaint();
+    }
+
+    private JPanel createRegisterPanel(Robot robot) {
+        // Récupérer les valeurs initiales des registres
+        int rX = robot.getX().getValeur();
+        int rF = robot.getF().getValeur();
+        int rT = robot.getT().getValeur();
+    
+        // Créer un tableau de données pour les valeurs des registres
+        String[][] data = {
+            {"X", String.valueOf(rX)},
+            {"T", String.valueOf(rT)}, // Mettez T en deuxième position
+            {"F", String.valueOf(rF)}  // Mettez F en troisième position
+        };
+
+    
+        // Créer un tableau de noms de colonnes
+        String[] columnNames = {"Registre", "Valeur"};
+    
+        // Créer un modèle de tableau avec les données et les noms de colonnes
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+    
+        // Créer un tableau avec le modèle de données
+        JTable table = new JTable(tableModel);
+    
+        // Mettre en forme le tableau
+        table.setRowHeight(30); // Définir la hauteur des lignes
+        table.setFont(new Font("Arial", Font.PLAIN, 16)); // Définir la police du texte dans le tableau
+    
+        // Créer un panneau pour contenir le tableau
+        JPanel registerPanel = new JPanel(new FlowLayout());
+        registerPanel.add(table);
+    
+        return registerPanel;
+    }
+    
+
+    private void updateRegisterPanel(JPanel registerPanel, Robot robot) {
+        // Récupérer les valeurs actuelles des registres du robot
+        int rX = robot.getX().getValeur();
+        int rF = robot.getF().getValeur();
+        int rT = robot.getT().getValeur();
+        
+        // Mettre à jour les valeurs affichées dans le tableau des registres
+        JTable table = (JTable) registerPanel.getComponent(0);
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        tableModel.setValueAt(rX + "", 0, 1); // Mise à jour de la valeur du registre X
+        tableModel.setValueAt(rT + "", 1, 1); // Mise à jour de la valeur du registre T
+        tableModel.setValueAt(rF + "", 2, 1); // Mise à jour de la valeur du registre F
+    }
+
+    private void resetRegisterValues(Robot robot) {
+        // Réinitialiser les valeurs des registres du robot
+        robot.getX().setValeur(0);
+        robot.getF().setValeur(0);
+        robot.getT().setValeur(0);
+    }
+    
+
+     private void createMemoryPanel(Robot robot) {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        // Création du label "ROBOT" avec le nom du robot comme en-tête
+        JLabel headerLabel = new JLabel(robot.getName(), JLabel.CENTER);
+        mainPanel.add(headerLabel, BorderLayout.NORTH);
+
+        // Création du JTextArea dans le côté droit
+        JTextArea memoryArea = new JTextArea(10, 10);
+        JScrollPane scrollPane = new JScrollPane(memoryArea);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Création de trois petits tableaux dans le côté gauche
+        JPanel tablePanel = new JPanel(new GridLayout(3, 1));
+        createRegisterPanel(robot);
+        
+        mainPanel.add(tablePanel, BorderLayout.WEST);
     }
     
 }
