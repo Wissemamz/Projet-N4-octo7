@@ -18,6 +18,7 @@ public class Jeu {
     private Random random;
     public Robot robot1;
     public Robot robot2;
+    public Registre M;
 
     // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
     private int positionR1 = 0;
@@ -30,6 +31,7 @@ public class Jeu {
         //grille[4][0][0] = robot1;
         //grille[4][4][0] = robot2;
         this.random=new Random();
+        this.M = new Registre();
     }
 
     
