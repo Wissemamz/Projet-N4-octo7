@@ -229,7 +229,7 @@ public class Jeu {
     }
 
 
-    /*public void jouerGUI() {
+    public void jouerGUIAuto() {
         setNiveau1();
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
         ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
@@ -275,7 +275,6 @@ public class Jeu {
             tab[0]++;
         }
     }
-    */
 
     public void jouerGUI() {
         // Si les deux zones de texte sont vides ou si l'une des deux est vide, retourner
@@ -300,7 +299,8 @@ public class Jeu {
             nextInstruR2.execute(grille, robot2, instruR2, null);
             positionR2++; // Avancer la position pour le robot 2
         }
-    
+     
+        
         // Mettre à jour l'affichage du jeu
         afficherJeuGUI();
     }
