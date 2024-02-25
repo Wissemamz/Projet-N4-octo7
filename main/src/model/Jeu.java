@@ -153,7 +153,129 @@ public class Jeu {
             System.out.println("vous etes dans la partie graphique de OCTOPUNKS");
     }
     
-    public void jouer(){
+    public void afficherMenuNiveaux() {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            System.out.println("Choisissez un niveau :");
+            System.out.println("Tapez 1 pour jouer le niveau 1");
+            System.out.println("Tapez 2 pour jouer le niveau 2");
+            System.out.println("Tapez 3 pour jouer le niveau 3");
+            System.out.println("Tapez 0 pour quitter le jeu");
+            int choix = scanner.nextInt();
+
+            switch (choix) {
+                case 1:
+                    jouer();
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+                    // Implémentez la logique pour le niveau 3
+                    break;
+                case 0:
+                    System.out.println("Merci d'avoir joué. Au revoir !");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Choix invalide. Veuillez choisir un niveau valide.");
+            }
+        } finally {
+
+            scanner.close();
+        }
+    }
+
+    public boolean verifierVictoire() {
+        // Vérifier si les fichiers sont à la position attendue
+        Fichier fichier199 = (Fichier) grille[0][2][1];
+        Fichier fichier299 = (Fichier) grille[0][2][2];
+
+        if (fichier199 != null && fichier299 != null) {
+            // Vérifier si les fichiers sont à la position [0][2]
+            if (estAEmplacementAttendu(fichier199, 0, 2, 1) && estAEmplacementAttendu(fichier299, 0, 2, 2)) {
+                System.out.println("Victoire ! Vous avez déplacé les fichiers à la position attendue.");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean estAEmplacementAttendu(Fichier fichier, int abscisseAttendue, int ordonneeAttendue,
+            int caseJAttendue) {
+        return fichier.getAbscisse() == abscisseAttendue &&
+                fichier.getOrdonnee() == ordonneeAttendue &&
+                fichier.getCaseJ() == caseJAttendue;
+    }
+
+    public boolean verifierDefaiteniveau1() {
+        return !(robot1.getVivant() && robot2.getVivant());
+    }
+
+    public void jouer() {
+        setNiveau1();
+        afficherJeu();
+        ArrayList<Instruction> instruR1 = parseTextFromInput(1);
+        ArrayList<Instruction> instruR2 = parseTextFromInput(2);
+
+        int i = 0, j = 0;
+        int[] tab1 = { i };
+        int[] tab2 = { j };
+        while (tab1[0] < instruR1.size() && tab2[0] < instruR2.size()) {
+            double choix = random.nextDouble();
+            if (choix < 0.5) {
+                if (robot1.getVivant())
+                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1);
+                if (robot2.getVivant())
+                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2);
+            } else {
+                if (robot2.getVivant())
+                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2);
+                if (robot1.getVivant())
+                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1);
+            }
+            if (verifierDefaiteniveau1()) {
+                afficherMessage("Vous avez perdu !");
+
+                tab1[0]++;
+                tab2[0]++;
+            }
+
+            // Vérification de la victoire à la fin du niveau 1
+            if (verifierVictoire()) {
+                afficherMessage("Vous avez gagné !");
+            }
+
+            // Affichage du jeu après avoir traité toutes les instructions
+            afficherJeu();
+
+            int k = 0;
+            int[] tab = { k };
+            ArrayList<Instruction> instru;
+            Robot robot;
+
+            if (tab1[0] == instruR1.size() && tab2[0] == instruR2.size())
+                return;
+            if (tab1[0] == instruR1.size() && tab2[0] < instruR2.size()) {
+                tab[0] = tab2[0];
+                instru = instruR2;
+                robot = robot2;
+            } else {
+                tab[0] = tab1[0];
+                instru = instruR1;
+                robot = robot1;
+            }
+
+            while (tab[0] < instru.size() && robot.getVivant()) {
+                instru.get(tab[0]).execute(grille, robot, instru, tab);
+                afficherJeu();
+                tab[0]++;
+            }
+        }
+    }
+
+   /* public void jouer(){
         setNiveau1();
         afficherJeu();
         ArrayList<Instruction> instruR1 = parseTextFromInput(1);
@@ -199,7 +321,7 @@ public class Jeu {
             afficherJeu();
             tab[0]++;
         }
-    }
+    }*/
 
 
     public ArrayList<Instruction> parseTextFromInput(String robotText) {
