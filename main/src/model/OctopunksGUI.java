@@ -94,7 +94,7 @@ public class OctopunksGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 Jeu leJeu = new Jeu();
-                leJeu.jouer();
+                leJeu.afficherMenuNiveaux();
 
             }
         });

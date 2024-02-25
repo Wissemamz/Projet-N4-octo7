@@ -18,7 +18,10 @@ public class Jeu {
     private Random random;
     public Robot robot1;
     public Robot robot2;
+    public Fichier f1;
+    public Fichier f2;
     public Registre M;
+    public int niveau;
 
     // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
     private int positionR1 = 0;
@@ -83,13 +86,14 @@ public class Jeu {
             grille[3][4][i] = new Obstacle("obstacle",3,4,i);
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
-        Fichier fichier = new TableauDynamique("199",2,2,1);
-        grille[2][2][1] = fichier;
-        grille[2][3][2] = new TableauDynamique("299",2,3,2);
+        f1 = new TableauDynamique("199",2,2,1);
+        grille[2][2][1] = f1;
+        f2 = new TableauDynamique("299",2,3,2);
+        grille[2][3][2] = f2;
         System.out.println("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]:");
         System.out.println();
     }
-
+ 
     public void afficherJeu () {
             for (ObjetJ[][] ligne : grille) {
                 System.out.print("|");
@@ -165,13 +169,19 @@ public class Jeu {
 
             switch (choix) {
                 case 1:
+                    niveau=1;
+                    setNiveau1();
                     jouer();
                     break;
                 case 2:
-
+                    niveau=2;
+                    setNiveau2();
+                    jouer();
                     break;
                 case 3:
-                    // Implémentez la logique pour le niveau 3
+                    niveau=3;
+                    setNiveau3();
+                    jouer();
                     break;
                 case 0:
                     System.out.println("Merci d'avoir joué. Au revoir !");
@@ -187,34 +197,50 @@ public class Jeu {
     }
 
     public boolean verifierVictoire() {
-        // Vérifier si les fichiers sont à la position attendue
-        Fichier fichier199 = (Fichier) grille[0][2][1];
-        Fichier fichier299 = (Fichier) grille[0][2][2];
-
-        if (fichier199 != null && fichier299 != null) {
-            // Vérifier si les fichiers sont à la position [0][2]
-            if (estAEmplacementAttendu(fichier199, 0, 2, 1) && estAEmplacementAttendu(fichier299, 0, 2, 2)) {
-                System.out.println("Victoire ! Vous avez déplacé les fichiers à la position attendue.");
-                return true;
-            }
-        }
-
-        return false;
+        switch (niveau) {
+            case(1) : if (f1 != null && f2 != null) {
+                    // Vérifier si les fichiers sont à la position [0][2]
+                    if (estAEmplacementAttendu(f1, 0, 2) && estAEmplacementAttendu(f2, 0, 2)) {
+                        System.out.println("Victoire ! Vous avez déplacé les fichiers à la position attendue.");
+                        return true;
+                    }
+                }
+                return false; 
+            case(2) : 
+                return false;
+            case(3) : 
+                return false;
+            default : return false;
+        } 
+        
     }
 
-    private boolean estAEmplacementAttendu(Fichier fichier, int abscisseAttendue, int ordonneeAttendue,
-            int caseJAttendue) {
+    private boolean estAEmplacementAttendu(Fichier fichier, int abscisseAttendue, int ordonneeAttendue) {
         return fichier.getAbscisse() == abscisseAttendue &&
-                fichier.getOrdonnee() == ordonneeAttendue &&
-                fichier.getCaseJ() == caseJAttendue;
+                fichier.getOrdonnee() == ordonneeAttendue ;
     }
 
-    public boolean verifierDefaiteniveau1() {
-        return !(robot1.getVivant() && robot2.getVivant());
+    public boolean verifierDefaite() {
+        switch (niveau) {
+            case(1) : 
+                return !(robot1.getVivant() && robot2.getVivant());
+            case(2) : 
+                return false;
+            case(3) : 
+                return false;
+            default : return false;
+        }
+    }
+
+    public void setNiveau2(){
+        return;
+    }
+
+    public void setNiveau3(){
+        return;
     }
 
     public void jouer() {
-        setNiveau1();
         afficherJeu();
         ArrayList<Instruction> instruR1 = parseTextFromInput(1);
         ArrayList<Instruction> instruR2 = parseTextFromInput(2);
@@ -235,28 +261,30 @@ public class Jeu {
                 if (robot1.getVivant())
                     instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1);
             }
-            if (verifierDefaiteniveau1()) {
-                afficherMessage("Vous avez perdu !");
-
+            afficherJeu();
+            if (verifierDefaite()) {
+                System.out.println("Vous avez perdu !");
+                return;
+            }
+            else {
                 tab1[0]++;
                 tab2[0]++;
             }
-
-            // Vérification de la victoire à la fin du niveau 1
-            if (verifierVictoire()) {
-                afficherMessage("Vous avez gagné !");
-            }
-
-            // Affichage du jeu après avoir traité toutes les instructions
-            afficherJeu();
+           
+        }
 
             int k = 0;
             int[] tab = { k };
             ArrayList<Instruction> instru;
             Robot robot;
 
-            if (tab1[0] == instruR1.size() && tab2[0] == instruR2.size())
+            if (tab1[0] == instruR1.size() && tab2[0] == instruR2.size()) {
+                if (verifierVictoire()) {
+                    return;
+                }
+                System.out.println("Vous avez perdu !");
                 return;
+            }
             if (tab1[0] == instruR1.size() && tab2[0] < instruR2.size()) {
                 tab[0] = tab2[0];
                 instru = instruR2;
@@ -270,9 +298,18 @@ public class Jeu {
             while (tab[0] < instru.size() && robot.getVivant()) {
                 instru.get(tab[0]).execute(grille, robot, instru, tab);
                 afficherJeu();
+                if (verifierDefaite()) {
+                    System.out.println("Vous avez perdu !");
+                    return;
+                }
                 tab[0]++;
             }
-        }
+
+            // Vérification de la victoire à la fin du niveau 1
+            if (verifierVictoire()) {
+                return;
+            }
+            System.out.println("Vous avez perdu !");
     }
 
    /* public void jouer(){
