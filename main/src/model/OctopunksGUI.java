@@ -20,8 +20,11 @@ public class OctopunksGUI extends JFrame {
 
     public static JTextArea memoryArea1;
     public static JTextArea memoryArea2;
+    public JLabel fileContentLabel;
     private JButton stepButton;
     private JButton stopButton;
+    private JButton autoButton;
+
     private JPanel gamePanel;
     private int x, y, z;
 
@@ -217,9 +220,6 @@ public class OctopunksGUI extends JFrame {
                     // Créer un JLabel pour chaque sous-case
                     subCellLabels[k] = new JLabel();
 
-                    
-              
-
                     // Vérifier le type de l'élément et agir en conséquence
                     if (jeu.grille[i][j][k] instanceof Fichier) {
                         // Ajoutez un tooltip pour afficher des informations sur le fichier
@@ -403,13 +403,21 @@ public class OctopunksGUI extends JFrame {
             JPanel flowLayoutPanelMemoryArea2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
             flowLayoutPanelMemoryArea2.add(memoryScrollPane2);
             flowLayoutPanelMemoryArea2.add(registreRobot2);
-
+            
+            // Création d'une étiquette pour afficher le contenu du fichier
+            fileContentLabel = new JLabel("", SwingConstants.CENTER);
+JLabel fileLabel = new JLabel("Contenu du fichier : ");
+JPanel filePanel = new JPanel(new FlowLayout());
+filePanel.add(fileLabel, BorderLayout.NORTH);
+filePanel.add(fileContentLabel, BorderLayout.CENTER);
+add(filePanel, BorderLayout.SOUTH);
 
             JPanel rightPanel = new JPanel();
-            rightPanel.setLayout(new GridLayout(2, 1));
+            rightPanel.setLayout(new GridLayout(3, 1));
             rightPanel.add(flowLayoutPanelMemoryArea1);
             rightPanel.add(flowLayoutPanelMemoryArea2);
-    
+            rightPanel.add(filePanel/* , BorderLayout.SOUTH*/);
+
             JPanel topPanel = new JPanel();
             topPanel.setLayout(new BorderLayout());
             topPanel.add(leftPanel, BorderLayout.CENTER);
@@ -474,14 +482,18 @@ public class OctopunksGUI extends JFrame {
     private JPanel createRegisterPanel(Robot robot) {
         // Récupérer les valeurs initiales des registres
         int rX = robot.getX().getValeur();
-        int rF = robot.getF().getValeur();
         int rT = robot.getT().getValeur();
+
+        String rF = "NONE";
+        if(robot.getFichier() != null){
+            rF = robot.getFichier().getName();
+        }
     
         // Créer un tableau de données pour les valeurs des registres
         String[][] data = {
             {"X", String.valueOf(rX)},
-            {"T", String.valueOf(rT)}, // Mettez T en deuxième position
-            {"F", String.valueOf(rF)}  // Mettez F en troisième position
+            {"T", String.valueOf(rT)},
+            {"F", rF}  
         };
 
     
@@ -509,9 +521,12 @@ public class OctopunksGUI extends JFrame {
     private void updateRegisterPanel(JPanel registerPanel, Robot robot) {
         // Récupérer les valeurs actuelles des registres du robot
         int rX = robot.getX().getValeur();
-        int rF = robot.getF().getValeur();
         int rT = robot.getT().getValeur();
-        
+        String rF = "NONE";
+        if(robot.getFichier() != null){
+            rF = robot.getFichier().getName();
+        }
+
         // Mettre à jour les valeurs affichées dans le tableau des registres
         JTable table = (JTable) registerPanel.getComponent(0);
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
@@ -523,11 +538,11 @@ public class OctopunksGUI extends JFrame {
     private void resetRegisterValues(Robot robot) {
         // Réinitialiser les valeurs des registres du robot
         robot.getX().setValeur(0);
-        robot.getF().setValeur(0);
         robot.getT().setValeur(0);
-    }
-    
+        robot.setFichier(null);
 
+    }
+    /* 
      private void createMemoryPanel(Robot robot) {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -545,6 +560,5 @@ public class OctopunksGUI extends JFrame {
         createRegisterPanel(robot);
         
         mainPanel.add(tablePanel, BorderLayout.WEST);
-    }
-    
+    }*/
 }
