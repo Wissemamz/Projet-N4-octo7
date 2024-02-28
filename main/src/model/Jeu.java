@@ -12,8 +12,10 @@ public class Jeu {
     public Robot robot2;
     public Fichier f1;
     public Fichier f2;
-    public Registre M;
     public int niveau;
+
+    private Registre M;
+    public Registre getM(){return this.M;}
 
     // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
     private int positionR1 = 0;
@@ -232,8 +234,82 @@ public class Jeu {
         return;
     }
 
-    
     public void jouer() {
+        afficherJeu();
+        ArrayList<Instruction> instruR1 = parseTextFromInput(1);
+        ArrayList<Instruction> instruR2 = parseTextFromInput(2);
+    
+        int i = 0, j = 0;
+        int[] tab1 = { i };
+        int[] tab2 = { j };
+    
+        while (tab1[0] < instruR1.size() && tab2[0] < instruR2.size()) {
+            double choix = random.nextDouble();
+            if (choix < 0.5) {
+                if (robot1.getVivant()) {
+                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1 ,M);
+                }
+                if (robot2.getVivant()) {
+                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2,M);
+                }
+            } else {
+                if (robot2.getVivant()) {
+                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2,M);
+                }
+                if (robot1.getVivant()) {
+                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1,M);
+                }
+            }
+            afficherJeu();
+            if (verifierDefaite()) {
+                System.out.println("Vous avez perdu !");
+                return;
+            } else {
+                if (robot1.isMReady() ) tab1[0]++;
+                if (robot2.isMReady()) tab2[0]++;
+            }
+        }
+    
+        int k = 0;
+        int[] tab = { k };
+        ArrayList<Instruction> instru;
+        Robot robot;
+    
+        if (tab1[0] == instruR1.size() && tab2[0] == instruR2.size()) {
+            if (verifierVictoire()) {
+                return;
+            }
+            System.out.println("Vous avez perdu !");
+            return;
+        }
+        if (tab1[0] == instruR1.size() && tab2[0] < instruR2.size()) {
+            tab[0] = tab2[0];
+            instru = instruR2;
+            robot = robot2;
+        } else {
+            tab[0] = tab1[0];
+            instru = instruR1;
+            robot = robot1;
+        }
+    
+        while (tab[0] < instru.size() && robot.getVivant()) {
+            instru.get(tab[0]).execute(grille, robot, instru, tab,M);
+            afficherJeu();
+            if (verifierDefaite()) {
+                System.out.println("Vous avez perdu !");
+                return;
+            }
+            tab[0]++;
+        }
+    
+        // Vérification de la victoire à la fin du niveau 1
+        if (verifierVictoire()) {
+            return;
+        }
+        System.out.println("Vous avez perdu !");
+    }
+    
+   /* public void jouer() {
         afficherJeu();
         ArrayList<Instruction> instruR1 = parseTextFromInput(1);
         ArrayList<Instruction> instruR2 = parseTextFromInput(2);
@@ -303,7 +379,7 @@ public class Jeu {
                 return;
             }
             System.out.println("Vous avez perdu !");
-    }
+    }*/
 
     public ArrayList<Instruction> parseTextFromInput(String robotText) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
@@ -342,19 +418,26 @@ public class Jeu {
         int i=0, j=0;
         int[] tab1 = {i};
         int[] tab2 = {j};
-        while (tab1[0]<instruR1.size() && tab2[0]<instruR2.size()){
-            double choix=random.nextDouble();
-            if(choix<0.5){
-                if (robot1.getVivant()) instruR1.get(tab1[0]).execute(grille,robot1,instruR1,tab1);
-                if (robot2.getVivant()) instruR2.get(tab2[0]).execute(grille,robot2,instruR2,tab2);
+        while (tab1[0] < instruR1.size() && tab2[0] < instruR2.size()) {
+            double choix = random.nextDouble();
+            if (choix < 0.5) {
+                if (robot1.getVivant()) {
+                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1 ,M);
+                }
+                if (robot2.getVivant()) {
+                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2,M);
+                }
+            } else {
+                if (robot2.getVivant()) {
+                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2,M);
+                }
+                if (robot1.getVivant()) {
+                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1,M);
+                }
             }
-            else{
-                if (robot2.getVivant()) instruR2.get(tab2[0]).execute(grille,robot2,instruR2,tab2);
-                if (robot1.getVivant()) instruR1.get(tab1[0]).execute(grille,robot1,instruR1,tab1);
-            }
-            tab1[0]++;
-            tab2[0]++;
-            afficherJeu();
+            
+                if (robot1.isMReady() ) tab1[0]++;
+                if (robot2.isMReady()) tab2[0]++;
         }
     
         int k=0;
@@ -375,7 +458,7 @@ public class Jeu {
         }
     
         while (tab[0]<instru.size() && robot.getVivant()) {
-            instru.get(tab[0]).execute(grille,robot,instru,tab);
+            instru.get(tab[0]).execute(grille,robot,instru,tab,M);
             afficherJeu();
             tab[0]++;
         }
@@ -390,18 +473,28 @@ public class Jeu {
         // Récupérer la prochaine instruction à exécuter pour chaque robot
         Instruction nextInstruR1 = getNextInstruction(instruR1, positionR1);
         Instruction nextInstruR2 = getNextInstruction(instruR2, positionR2);
-    
-        // Exécuter les instructions pour chaque robot s'ils sont vivants
-        if (robot1.getVivant() && nextInstruR1 != null) {
-            nextInstruR1.execute(grille, robot1, instruR1, null);
-            positionR1++; // Avancer la position pour le robot 1
-        }
-        if (robot2.getVivant() && nextInstruR2 != null) {
-            nextInstruR2.execute(grille, robot2, instruR2, null);
-            positionR2++; // Avancer la position pour le robot 2
-        }
-     
         
+        double choix = random.nextDouble();
+        if (choix < 0.5) {
+            if (robot1.getVivant() && nextInstruR1 != null) {
+                nextInstruR1.execute(grille, robot1, instruR1, null,M);
+                if(robot1.isMReady()) positionR1++; // Avancer la position pour le robot 1
+            }
+            if (robot2.getVivant() && nextInstruR2 != null) {
+                nextInstruR2.execute(grille, robot2, instruR2, null,M);
+                if(robot2.isMReady()) positionR2++; // Avancer la position pour le robot 2
+            }
+        }
+        else {
+            if (robot2.getVivant() && nextInstruR2 != null) {
+                nextInstruR2.execute(grille, robot2, instruR2, null,M);
+                if(robot2.isMReady()) positionR2++; // Avancer la position pour le robot 2
+            }
+            if (robot1.getVivant() && nextInstruR1 != null) {
+                nextInstruR1.execute(grille, robot1, instruR1, null,M);
+                if(robot1.isMReady()) positionR1++; // Avancer la position pour le robot 1
+            }
+        }
         // Mettre à jour l'affichage du jeu
         afficherJeuGUI();
     } 

@@ -11,6 +11,11 @@ public class Robot extends ObjetJ{
     private Registre last;
     private Fichier fichier;
 
+    private boolean Ready ;
+    public boolean isMReady(){return Ready;}
+    public void setReady(){Ready=true;}
+    public void setNotReady(){Ready=false;}
+
     public Robot(String name, int abscisse, int ordonnee, int caseJ){
         super(name,abscisse,ordonnee,caseJ);
         this.vivant = true;
@@ -19,6 +24,7 @@ public class Robot extends ObjetJ{
         this.F = new Registre();
         this.last = X;
         this.fichier = null;
+        Ready = true;
     }
 
     public boolean getVivant(){

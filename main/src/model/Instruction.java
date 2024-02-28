@@ -34,7 +34,7 @@ public class Instruction {
         return parametre[i];
     }
 
-    public void execute (ObjetJ[][][] grille,Robot r,ArrayList<Instruction> instructions,int[] pos){
+    public void execute (ObjetJ[][][] grille,Robot r,ArrayList<Instruction> instructions,int[] pos, Registre M){
         if (commande.equals(Commande.GRAB.toString())){
             if (parametre.length==1 && r.getFichier()==null) {
                 for (int i=0; i<4; i++){
@@ -169,96 +169,111 @@ public class Instruction {
         else if (commande.equals(Commande.COPY.toString())){
             if (parametre.length != 2) return;
             else {
-                if (parametre[0].equals("X") && parametre[1].equals("T")){
-                    r.getT().setValeur(r.getX().getValeur()) ;    
-                    r.setLastRegistre(r.getT());
-                }
-                else  if (parametre[0].equals("X") && parametre[1].equals("X")){
-                    r.getX().setValeur(r.getX().getValeur()) ; 
-                    r.setLastRegistre(r.getX());
-                }
-                else  if (parametre[0].equals("T") && parametre[1].equals("X")){
-                    r.getX().setValeur(r.getT().getValeur()) ; 
-                    r.setLastRegistre(r.getX());             
-                }
-                else  if (parametre[0].equals("T") && parametre[1].equals("T")){
-                    r.getT().setValeur(r.getT().getValeur()) ; 
-                    r.setLastRegistre(r.getT());
-                } 
-                else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("X")){
-                    int val = Integer.parseInt(parametre[0]);
-                    r.getX().setValeur(val); 
-                    r.setLastRegistre(r.getX());            
-                }
-                else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("T")){
-                    int val = Integer.parseInt(parametre[0]);
-                    r.getT().setValeur(val);  
-                    r.setLastRegistre(r.getT());             
-                }
-                else if (parametre[0].equals("X") && parametre[1].equals("F")){
-                    if (r.getFichier()==null) return;
-                    else {
-                        r.getF().setValeur(r.getX().getValeur()) ;    
-                        r.getFichier().F(r.getF().getValeur());
+                
+                    if (parametre[0].equals("X") && parametre[1].equals("T")){
+                        r.getT().setValeur(r.getX().getValeur()) ;    
+                        r.setLastRegistre(r.getT());
                     }
-                }
-                else  if (parametre[0].equals("F") && parametre[1].equals("X")){
-                    if (r.getFichier()==null) return;
-                    else {
-                        r.getF().setValeur(r.getFichier().F());
-                        r.getX().setValeur(r.getF().getValeur()) ;
-                        r.setLastRegistre(r.getX()); 
-                    }             
-                }
-                else if (parametre[0].equals("T") && parametre[1].equals("F")){
-                    if (r.getFichier()==null) return;
-                    else {
-                        r.getF().setValeur(r.getT().getValeur()) ;    
-                        r.getFichier().F(r.getF().getValeur());
-                    }
-                }
-                else  if (parametre[0].equals("F") && parametre[1].equals("T")){
-                    if (r.getFichier()==null) return;
-                    else {
-                        r.getF().setValeur(r.getFichier().F());
-                        r.getT().setValeur(r.getF().getValeur()) ;  
-                        r.setLastRegistre(r.getT());  
-                    }           
-                }
-                else if (parametre[0].equals("F") && parametre[1].equals("F")){
-                    if (r.getFichier()==null) return;
-                    else {
-                        r.getF().setValeur(r.getFichier().F()) ;    
-                        r.getFichier().F(r.getF().getValeur());
-                    }
-                }
-                else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("F")){
-                    int val = Integer.parseInt(parametre[0]);
-                    if (r.getFichier()==null) return;
-                    else {
-                        r.getF().setValeur(val) ;    
-                        r.getFichier().F(r.getF().getValeur());
-                    }              
-                }
-                /*else if (parametre[0].equals("X") && parametre[1].equals("M")) {
-                    synchronized (r.getRegistreMLock()) {
-                        r.getM().setValeur(r.getX().getValeur()); // Copier depuis X vers M
-                        r.getRegistreMLock().notify(); // Réveiller l'autre robot qui attend pour lire M
-                    }
-                } else if (parametre[0].equals("M") && parametre[1].equals("X")) {
-                    synchronized (r.getRegistreMLock()) {
-                        while (r.getM() == null) {
-                            try {
-                                r.getRegistreMLock().wait(); // Attendre que l'autre robot écrive dans M
-                            } catch (InterruptedException e) {
-                                Thread.currentThread().interrupt();
-                            }
-                        }
-                        r.getX().setValeur(r.getM().getValeur()); // Copier depuis M vers X
+                    else  if (parametre[0].equals("X") && parametre[1].equals("X")){
+                        r.getX().setValeur(r.getX().getValeur()) ; 
                         r.setLastRegistre(r.getX());
                     }
-                }*/
-                else return;
+                    else  if (parametre[0].equals("T") && parametre[1].equals("X")){
+                        r.getX().setValeur(r.getT().getValeur()) ; 
+                        r.setLastRegistre(r.getX());             
+                    }
+                    else  if (parametre[0].equals("T") && parametre[1].equals("T")){
+                        r.getT().setValeur(r.getT().getValeur()) ; 
+                        r.setLastRegistre(r.getT());
+                    } 
+                    else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("X")){
+                        int val = Integer.parseInt(parametre[0]);
+                        r.getX().setValeur(val); 
+                        r.setLastRegistre(r.getX());            
+                    }
+                    else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("T")){
+                        int val = Integer.parseInt(parametre[0]);
+                        r.getT().setValeur(val);  
+                        r.setLastRegistre(r.getT());             
+                    }
+                    else if (parametre[0].equals("X") && parametre[1].equals("F")){
+                        if (r.getFichier()==null) return;
+                        else {
+                            r.getF().setValeur(r.getX().getValeur()) ;    
+                            r.getFichier().F(r.getF().getValeur());
+                        }
+                    }
+                    else  if (parametre[0].equals("F") && parametre[1].equals("X")){
+                        if (r.getFichier()==null) return;
+                        else {
+                            r.getF().setValeur(r.getFichier().F());
+                            r.getX().setValeur(r.getF().getValeur()) ;
+                            r.setLastRegistre(r.getX()); 
+                        }             
+                    }
+                    else if (parametre[0].equals("T") && parametre[1].equals("F")){
+                        if (r.getFichier()==null) return;
+                        else {
+                            r.getF().setValeur(r.getT().getValeur()) ;    
+                            r.getFichier().F(r.getF().getValeur());
+                        }
+                    }
+                    else  if (parametre[0].equals("F") && parametre[1].equals("T")){
+                        if (r.getFichier()==null) return;
+                        else {
+                            r.getF().setValeur(r.getFichier().F());
+                            r.getT().setValeur(r.getF().getValeur()) ;  
+                            r.setLastRegistre(r.getT());  
+                        }           
+                    }
+                    else if (parametre[0].equals("F") && parametre[1].equals("F")){
+                        if (r.getFichier()==null) return;
+                        else {
+                            r.getF().setValeur(r.getFichier().F()) ;    
+                            r.getFichier().F(r.getF().getValeur());
+                        }
+                    }
+                    else if (parametre[0].matches("[+-]?\\d*(\\.\\d+)?") && parametre[1].equals("F")){
+                        int val = Integer.parseInt(parametre[0]);
+                        if (r.getFichier()==null) return;
+                        else {
+                            r.getF().setValeur(val) ;    
+                            r.getFichier().F(r.getF().getValeur());
+                        }              
+                    }
+                    else if (parametre[0].equals("X") && parametre[1].equals("M")) {
+                        if (M.getValeur()==0) {
+                            M.setValeur(r.getX().getValeur()) ;
+                            r.setReady();
+                        }
+                        else r.setNotReady();
+                    }
+                    else if (parametre[0].equals("M") && parametre[1].equals("X")) {
+                        if (M.getValeur()!=0) {
+                            r.getX().setValeur(M.getValeur());
+                            r.setLastRegistre(r.getX());
+                            M.setValeur(0);
+                            r.setReady();
+                        }
+                        else r.setNotReady();
+                    }
+                    else if (parametre[0].equals("T") && parametre[1].equals("M")) {
+                        if (M.getValeur()==0) {
+                            M.setValeur(r.getT().getValeur()) ;
+                            r.setReady();
+                        }
+                        else r.setNotReady();
+                    }
+                    else if (parametre[0].equals("M") && parametre[1].equals("T")) {
+                        if (M.getValeur()!=0) {
+                            r.getT().setValeur(M.getValeur());
+                            r.setLastRegistre(r.getT());
+                            M.setValeur(0);
+                            r.setReady();
+                        }
+                        else r.setNotReady();
+                    }
+                    else return;
             }   
         }
 
