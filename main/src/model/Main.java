@@ -8,7 +8,7 @@ public class Main {
         //leJeu.jouer();
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                OctopunksGUI octo =  new OctopunksGUI();
+                new OctopunksGUI();
             }
         });
     }

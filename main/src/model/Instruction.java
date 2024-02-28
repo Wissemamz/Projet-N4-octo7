@@ -33,7 +33,7 @@ public class Instruction {
     public String getParametreRang(int i){
         return parametre[i];
     }
-    
+
     public void execute (ObjetJ[][][] grille,Robot r,ArrayList<Instruction> instructions,int[] pos){
         if (commande.equals(Commande.GRAB.toString())){
             if (parametre.length==1 && r.getFichier()==null) {
@@ -52,9 +52,8 @@ public class Instruction {
         }
 
         else if (commande.equals(Commande.DROP.toString())){
-            if (parametre.length == 0){
-                if (r.getFichier() == null) return;
-                else {
+            //if (parametre.length == 0){
+                if (r.getFichier() != null) {
                     for (int i=0; i<4; i++){
                         if (grille[r.getAbscisse()][r.getOrdonnee()][i] == null){
                             r.getFichier().setAbscisse(r.getAbscisse());
@@ -65,10 +64,8 @@ public class Instruction {
                             return;
                         }
                     }
-                    return;
                 }
-            }
-            else return;
+            //}
         }
 
         else if (commande.equals(Commande.LINK.toString())){
@@ -243,6 +240,24 @@ public class Instruction {
                         r.getFichier().F(r.getF().getValeur());
                     }              
                 }
+                /*else if (parametre[0].equals("X") && parametre[1].equals("M")) {
+                    synchronized (r.getRegistreMLock()) {
+                        r.getM().setValeur(r.getX().getValeur()); // Copier depuis X vers M
+                        r.getRegistreMLock().notify(); // Réveiller l'autre robot qui attend pour lire M
+                    }
+                } else if (parametre[0].equals("M") && parametre[1].equals("X")) {
+                    synchronized (r.getRegistreMLock()) {
+                        while (r.getM() == null) {
+                            try {
+                                r.getRegistreMLock().wait(); // Attendre que l'autre robot écrive dans M
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                        r.getX().setValeur(r.getM().getValeur()); // Copier depuis M vers X
+                        r.setLastRegistre(r.getX());
+                    }
+                }*/
                 else return;
             }   
         }
@@ -941,6 +956,17 @@ public class Instruction {
             if (parametre.length!=0) return;
             else if (r.getFichier()==null) return;
             else r.getFichier().VOID_F();
+        }
+        else if (commande.equals(Commande.WIPE.toString())){
+            if (parametre.length==1 && r.getFichier()!=null){
+                if (r.getFichier().getName().equals(parametre[0])){
+                    r.setFichier(null);
+                }
+            }
+        }
+        else if (commande.equals(Commande.HALT.toString())){
+            r.meurt();
+            //grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()] = null;
         }
     }
 }

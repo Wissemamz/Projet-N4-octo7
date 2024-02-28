@@ -1,16 +1,8 @@
 package model;
 
 import java.util.Random;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import javax.swing.JTextArea;
-
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 
 public class Jeu {
@@ -240,6 +232,7 @@ public class Jeu {
         return;
     }
 
+    
     public void jouer() {
         afficherJeu();
         ArrayList<Instruction> instruR1 = parseTextFromInput(1);
@@ -311,55 +304,6 @@ public class Jeu {
             }
             System.out.println("Vous avez perdu !");
     }
-
-   /* public void jouer(){
-        setNiveau1();
-        afficherJeu();
-        ArrayList<Instruction> instruR1 = parseTextFromInput(1);
-        ArrayList<Instruction> instruR2 = parseTextFromInput(2);
-
-        int i=0, j=0;
-        int[] tab1 = {i};
-        int[] tab2 = {j};
-        while (tab1[0]<instruR1.size() && tab2[0]<instruR2.size()){
-            double choix=random.nextDouble();
-            if(choix<0.5){
-                if (robot1.getVivant()) instruR1.get(tab1[0]).execute(grille,robot1,instruR1,tab1);
-                if (robot2.getVivant()) instruR2.get(tab2[0]).execute(grille,robot2,instruR2,tab2);
-            }
-            else{
-                if (robot2.getVivant()) instruR2.get(tab2[0]).execute(grille,robot2,instruR2,tab2);
-                if (robot1.getVivant()) instruR1.get(tab1[0]).execute(grille,robot1,instruR1,tab1);
-            }
-            tab1[0]++;
-            tab2[0]++;
-            afficherJeu();
-        }
-
-        int k=0;
-        int[] tab = {k};
-        ArrayList<Instruction> instru;
-        Robot robot;
-
-        if (tab1[0]==instruR1.size() && tab2[0]==instruR2.size()) return;
-        if (tab1[0]==instruR1.size() && tab2[0]<instruR2.size()) {
-            tab[0]=tab2[0];
-            instru = instruR2;
-            robot = robot2;
-        } 
-        else {
-            tab[0]=tab1[0];
-            instru = instruR1;
-            robot = robot1;
-        }
-
-        while (tab[0]<instru.size() && robot.getVivant()) {
-            instru.get(tab[0]).execute(grille,robot,instru,tab);
-            afficherJeu();
-            tab[0]++;
-        }
-    }*/
-
 
     public ArrayList<Instruction> parseTextFromInput(String robotText) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
@@ -438,10 +382,6 @@ public class Jeu {
     }
 
     public void jouerGUI() {
-        // Si les deux zones de texte sont vides ou si l'une des deux est vide, retourner
-        /*if (OctopunksGUI.memoryArea1.getText().isEmpty() || OctopunksGUI.memoryArea2.getText().isEmpty()) {
-            return;
-        }*/
     
         // Récupérer les instructions à partir des zones de texte
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
@@ -464,7 +404,8 @@ public class Jeu {
         
         // Mettre à jour l'affichage du jeu
         afficherJeuGUI();
-    }
+    } 
+    
     
     private Instruction getNextInstruction(ArrayList<Instruction> instructions, int position) {
         // Vérifier si nous avons atteint la fin des instructions

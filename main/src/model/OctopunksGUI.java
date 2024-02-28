@@ -1,16 +1,10 @@
 package model;
 
-
-
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -340,8 +334,8 @@ public class OctopunksGUI extends JFrame {
             
                     // Réinitialiser d'autres éléments si nécessaire
                     // Effacer le contenu des zones mémoires
-                    memoryArea1.setText("");
-                    memoryArea2.setText("");
+                    //memoryArea1.setText("");
+                    //memoryArea2.setText("");
 
                     // Reouvrir les zones de texte
                     OctopunksGUI.memoryArea1.setEditable(true);
@@ -364,6 +358,17 @@ public class OctopunksGUI extends JFrame {
                     // Bloquer les zones de texte
                     OctopunksGUI.memoryArea1.setEditable(false);
                     OctopunksGUI.memoryArea2.setEditable(false);
+
+                    // Réinitialiser les valeurs des registres pour chaque robot
+                    resetRegisterValues(jeu.robot1);
+                    resetRegisterValues(jeu.robot2);
+            
+                    // Rafraîchir l'affichage des panneaux de registres
+                    updateRegisterPanel(registreRobot1, jeu.robot1);
+                    updateRegisterPanel(registreRobot2, jeu.robot2);
+                    // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
+                    jeu.setNiveau1GUI();
+                    jeu.resetPosition();
 
                     jeu.jouerGUIAuto();
 
@@ -471,17 +476,19 @@ public class OctopunksGUI extends JFrame {
     private JPanel createRegisterPanel(Robot robot) {
         // Récupérer les valeurs initiales des registres
         int rX = robot.getX().getValeur();
-        int rF = robot.getF().getValeur();
         int rT = robot.getT().getValeur();
-    
-        // Créer un tableau de données pour les valeurs des registres
-        String[][] data = {
-            {"X", String.valueOf(rX)},
-            {"T", String.valueOf(rT)}, // Mettez T en deuxième position
-            {"F", String.valueOf(rF)}  // Mettez F en troisième position
-        };
+        //int rF = Integer.parseInt(robot.getFichier().getName());
+        String rF = robot.getFichier()==null ? "None" : robot.getFichier().getName();
+        String rM = "None";
 
-    
+        // Créer un tableau de données pour les valeurs des registres   
+        String[][] data = {
+                {"X", String.valueOf(rX)},
+                {"T", String.valueOf(rT)}, // Mettez T en deuxième position
+                {"F", rF},  // Mettez F en troisième position
+                {"M", rM}
+        };
+            
         // Créer un tableau de noms de colonnes
         String[] columnNames = {"Registre", "Valeur"};
     
@@ -506,15 +513,18 @@ public class OctopunksGUI extends JFrame {
     private void updateRegisterPanel(JPanel registerPanel, Robot robot) {
         // Récupérer les valeurs actuelles des registres du robot
         int rX = robot.getX().getValeur();
-        int rF = robot.getF().getValeur();
         int rT = robot.getT().getValeur();
+        //int rF = Integer.parseInt(robot.getFichier().getName());
         
         // Mettre à jour les valeurs affichées dans le tableau des registres
         JTable table = (JTable) registerPanel.getComponent(0);
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
         tableModel.setValueAt(rX + "", 0, 1); // Mise à jour de la valeur du registre X
         tableModel.setValueAt(rT + "", 1, 1); // Mise à jour de la valeur du registre T
-        tableModel.setValueAt(rF + "", 2, 1); // Mise à jour de la valeur du registre F
+        if (robot.getFichier()==null) {
+            tableModel.setValueAt("None" + "", 2, 1); // Mise à jour de la valeur du registre F
+        }
+        else tableModel.setValueAt(String.valueOf(robot.getFichier().getName()) + "", 2, 1);
     }
 
     private void resetRegisterValues(Robot robot) {

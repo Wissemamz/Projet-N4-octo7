@@ -64,8 +64,7 @@ public class Robot extends ObjetJ{
 
 
     
-    public void setLastRegistre(Registre Y) {this.last = Y;} 
-
+    public void setLastRegistre(Registre Y) {this.last = Y;}  
 
     @Override
     public void afficher(){
