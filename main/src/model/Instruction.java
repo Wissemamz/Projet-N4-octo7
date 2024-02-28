@@ -50,25 +50,19 @@ public class Instruction {
             }
             else return; 
         }
-
-        else if (commande.equals(Commande.DROP.toString())){
-            if (parametre.length == 0){
-                if (r.getFichier() == null) return;
-                else {
-                    for (int i=0; i<4; i++){
-                        if (grille[r.getAbscisse()][r.getOrdonnee()][i] == null){
-                            r.getFichier().setAbscisse(r.getAbscisse());
-                            r.getFichier().setOrdonnee(r.getOrdonnee());
-                            r.getFichier().setCaseJ(i);
-                            grille[r.getAbscisse()][r.getOrdonnee()][i] = r.getFichier();
-                            r.setFichier(null);
-                            return;
-                        }
+        else if (commande.equals(Commande.DROP.toString())) {
+            // Assurez-vous que le robot tient un fichier
+            if (r.getFichier() != null) {
+                // Recherchez une case vide dans la grille pour déposer le fichier
+                for (int i = 0; i < 4; i++) {
+                    if (grille[r.getAbscisse()][r.getOrdonnee()][i] == null) {
+                        // Déposez le fichier sur la case vide
+                        grille[r.getAbscisse()][r.getOrdonnee()][i] = r.getFichier();
+                        r.setFichier(null); // Réinitialisez le fichier tenu par le robot
+                        return; // Sortez de la boucle une fois que le fichier est déposé
                     }
-                    return;
                 }
             }
-            else return;
         }
 
         else if (commande.equals(Commande.LINK.toString())){
