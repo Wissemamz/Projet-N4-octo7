@@ -5,7 +5,7 @@ import java.util.Queue;
 
 public class File extends Fichier {
 
-    private Queue<Integer> elements;
+    public Queue<Integer> elements;
     private int p;
 
     public File(String num, int abscisse, int ordonnee, int caseJ) {
