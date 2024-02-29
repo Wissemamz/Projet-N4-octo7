@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -19,6 +20,8 @@ public class File extends Fichier {
         this.elements = elements;
         this.p=0;
     }
+
+    public Queue<Integer> getElements() {return elements;}
 
     @Override
     public int getPosFichier() {return this.p;}
@@ -51,4 +54,21 @@ public class File extends Fichier {
     public boolean TEST_EOF() {
         return elements.isEmpty();
     }
+
+    @Override 
+    public boolean meme_elements(Fichier fichier) {
+        if (fichier instanceof TableauDynamique) {
+            TableauDynamique t = (TableauDynamique) fichier;
+            return t.getElements().containsAll(elements) && this.elements.containsAll(t.getElements());
+        }
+        else if (fichier instanceof Pile) {
+            Pile p = (Pile) fichier;
+            return p.getElements().containsAll(elements) && this.elements.containsAll(p.getElements());
+        }
+        else if (fichier instanceof File) {
+            File f = (File) fichier;
+            return f.getElements().containsAll(elements) && this.elements.containsAll(f.getElements());
+        }
+        else return false;
+    }   
 }

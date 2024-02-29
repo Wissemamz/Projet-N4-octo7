@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.BreakIterator;
 
 
 public class OctopunksGUI extends JFrame {
@@ -17,7 +18,7 @@ public class OctopunksGUI extends JFrame {
     public JLabel fileContentLabel;
     private JButton stepButton;
     private JButton stopButton;
-    private JButton autoButton;
+    //private JButton autoButton;
 
     private JPanel gamePanel;
     private int x, y, z;
@@ -29,6 +30,7 @@ public class OctopunksGUI extends JFrame {
     private JPanel registreRobot1;
     private JPanel registreRobot2;
 
+    int n;
 
     public OctopunksGUI() {
         jeu = new Jeu();
@@ -138,11 +140,83 @@ public class OctopunksGUI extends JFrame {
                 
                 // Ajouter les actions pour les nouveaux boutons "Levels" et "Exit"
                 btnLevels.addActionListener(new ActionListener() {
-                @Override
+                    @Override
                     public void actionPerformed(ActionEvent e) {
-                     // Ajouter l'action pour le bouton "Levels"
-                     System.exit(0);                   
-                     }
+                        dispose();
+                        graphiqueMenu.dispose();
+                        // Créer un nouveau menu pour la version graphique
+                        JFrame levelMenu = new JFrame("OCTOPUNKS Level");
+                        levelMenu.setSize(400, 320);
+                        levelMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        levelMenu.setLocationRelativeTo(null);
+                        levelMenu.setResizable(false);
+        
+                        JPanel levelMainPanel = new JPanel();
+                        levelMainPanel.setLayout(new BorderLayout());
+        
+                        JLabel levelTitleLabel = new JLabel("Level", SwingConstants.CENTER);
+                        levelTitleLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
+                        levelMainPanel.add(levelTitleLabel, BorderLayout.NORTH);
+                        levelMainPanel.setBackground(Color.white);
+        
+                        JPanel levelButtonPanel = new JPanel();
+                        levelButtonPanel.setLayout(new FlowLayout());
+                        levelButtonPanel.setBackground(Color.GRAY);
+        
+                        JButton btnLevel1 = new JButton("Niveau 1");
+                        btnLevel1.setPreferredSize(new Dimension(200, 60));
+                        btnLevel1.setFont(new Font("Arial", Font.PLAIN, 20));
+                        btnLevel1.setBackground(Color.GREEN);
+        
+                        JButton btnLevel2 = new JButton("Niveau 2");
+                        btnLevel2.setPreferredSize(new Dimension(200, 60));
+                        btnLevel2.setFont(new Font("Arial", Font.PLAIN, 20));
+                        btnLevel2.setBackground(Color.cyan);
+        
+                        JButton btnLevel3 = new JButton("Niveau 3");
+                        btnLevel3.setPreferredSize(new Dimension(200, 60));
+                        btnLevel3.setFont(new Font("Arial", Font.PLAIN, 20));
+                        btnLevel3.setBackground(Color.red);
+        
+                        
+                        btnLevel1.addActionListener(new ActionListener() {
+                        @Override
+                            public void actionPerformed(ActionEvent e) {
+                                levelMenu.dispose();
+                                jeu.setNiveau1GUI();
+                                n=1;
+                                startGUI(1);
+                            }
+                        });
+        
+                        btnLevel2.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                levelMenu.dispose();
+                                jeu.setNiveau2GUI();
+                                n=2;
+                                startGUI(2); 
+                        }
+                        });
+                        btnLevel3.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                levelMenu.dispose();
+                                jeu.setNiveau3GUI();
+                                n=3;
+                                startGUI(3);
+                            }
+                        });
+        
+                        levelButtonPanel.add(btnLevel1);
+                        levelButtonPanel.add(btnLevel2);
+                        levelButtonPanel.add(btnLevel3);
+        
+                        levelMainPanel.add(levelButtonPanel, BorderLayout.CENTER);
+        
+                        levelMenu.add(levelMainPanel);
+                        levelMenu.setVisible(true);
+                    }
                 });
 
                 btnExit.addActionListener(new ActionListener() {
@@ -157,7 +231,7 @@ public class OctopunksGUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         dispose(); // Fermer la fenêtre du menu principal
                         graphiqueMenu.dispose(); // Fermer la fenêtre du menu graphique
-                        startGUI();
+                        startGUI(1);
                     }
                 });
 
@@ -210,7 +284,7 @@ public class OctopunksGUI extends JFrame {
                 // Parcourir les sous-cases de la grille principale
                 for (int k = 0; k < z; k++) {
                     
-                    final int finalK = k;
+                    //final int finalK = k;
                     // Créer un JLabel pour chaque sous-case
                     subCellLabels[k] = new JLabel();
 
@@ -260,7 +334,7 @@ public class OctopunksGUI extends JFrame {
     
     
 
-    public void startGUI() {
+    public void startGUI(int n) {
         SwingUtilities.invokeLater(() -> {
             // Supprimer tous les composants du contenu de la fenêtre
             getContentPane().removeAll();
@@ -342,7 +416,17 @@ public class OctopunksGUI extends JFrame {
                     OctopunksGUI.memoryArea2.setEditable(true);
             
                     // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
-                    jeu.setNiveau1GUI();
+                    switch (n) {
+                        case 1 : 
+                            jeu.setNiveau1GUI();
+                            break;
+                        case 2 : 
+                            jeu.setNiveau2GUI();
+                            break;
+                        case 3 : 
+                            jeu.setNiveau3GUI();
+                            break;
+                    }
                     jeu.resetPosition();
             
                     // Mettre à jour l'affichage de la grille
@@ -366,75 +450,90 @@ public class OctopunksGUI extends JFrame {
                     // Rafraîchir l'affichage des panneaux de registres
                     updateRegisterPanel(registreRobot1, jeu.robot1);
                     updateRegisterPanel(registreRobot2, jeu.robot2);
-                    // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
-                    jeu.setNiveau1GUI();
+                    // Réinitialiser l'emplacement des robots sur la grille    )
+                    switch (n) {
+                        case 1 : 
+                            jeu.setNiveau1GUI();
+                            break;
+                        case 2 : 
+                            jeu.setNiveau2GUI();
+                            break;
+                        case 3 : 
+                            jeu.setNiveau3GUI();
+                            break;
+                    }
                     jeu.resetPosition();
 
                     jeu.jouerGUIAuto();
-
+                    /*if (jeu.verifierVictoire()) {
+                        String[] options = {"Exit", "Next Level"};
+                        int choice = JOptionPane.showOptionDialog(null, "Victoire ! Choisissez une action :", "Victoire",
+                                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                    
+                        if (choice == 0) {
+                            System.exit(0); // Exit
+                        } else if (choice == 1) {
+                            // Charger le niveau suivant ou effectuer une autre action
+                            // Par exemple :
+                            // chargerNiveauSuivant();
+                        }
+                    }*/
                     updateGUI();
                 }
             });
     
-            // Game panel
-            gamePanel = new JPanel();
-            gamePanel.setBackground(Color.WHITE);
-            gamePanel.setPreferredSize(new Dimension(600, 400));
-    
-            // Layout setup
-            JPanel controlPanel = new JPanel();
-            controlPanel.setLayout(new GridLayout(1, 4));
-            controlPanel.add(stepButton);
-            controlPanel.add(autoButton);
-            controlPanel.add(stopButton);
-            
-            JPanel leftPanel = new JPanel();
-            leftPanel.setLayout(new BorderLayout());
-            leftPanel.add(codeScrollPane, BorderLayout.CENTER);
-            leftPanel.add(controlPanel, BorderLayout.SOUTH);
-            
-            //rightPanel.add(memoryScrollPane2);
-            
-            // Créer les panneaux affichant les valeurs des registres pour chaque robot
-            registreRobot1 = createRegisterPanel(jeu.robot1);
-            registreRobot2 = createRegisterPanel(jeu.robot2);
+                // Game panel
+                gamePanel = new JPanel();
+                gamePanel.setBackground(Color.WHITE);
+                gamePanel.setPreferredSize(new Dimension(600, 400));
 
-            JPanel flowLayoutPanelMemoryArea1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-            flowLayoutPanelMemoryArea1.add(memoryScrollPane1);
-            flowLayoutPanelMemoryArea1.add(registreRobot1);
-            JPanel flowLayoutPanelMemoryArea2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-            flowLayoutPanelMemoryArea2.add(memoryScrollPane2);
-            flowLayoutPanelMemoryArea2.add(registreRobot2);
-            
-            // Création d'une étiquette pour afficher le contenu du fichier
-            fileContentLabel = new JLabel("", SwingConstants.CENTER);
-JLabel fileLabel = new JLabel("Contenu du fichier : ");
-JPanel filePanel = new JPanel(new FlowLayout());
-filePanel.add(fileLabel, BorderLayout.NORTH);
-filePanel.add(fileContentLabel, BorderLayout.CENTER);
-add(filePanel, BorderLayout.SOUTH);
+                // Layout setup
+                JPanel controlPanel = new JPanel();
+                controlPanel.setLayout(new GridLayout(1, 3));
+                controlPanel.add(stepButton);
+                controlPanel.add(autoButton);
+                controlPanel.add(stopButton);
 
-            JPanel rightPanel = new JPanel();
-            rightPanel.setLayout(new GridLayout(3, 1));
-            rightPanel.add(flowLayoutPanelMemoryArea1);
-            rightPanel.add(flowLayoutPanelMemoryArea2);
-            rightPanel.add(filePanel/* , BorderLayout.SOUTH*/);
+                JPanel leftPanel = new JPanel();
+                leftPanel.setLayout(new BorderLayout());
+                leftPanel.add(gamePanel, BorderLayout.CENTER); // Ajout du gamePanel au centre
+                leftPanel.add(codeScrollPane, BorderLayout.CENTER);
+                leftPanel.add(controlPanel, BorderLayout.SOUTH); // Ajout du controlPanel en dessous du gamePanel
 
-            JPanel topPanel = new JPanel();
-            topPanel.setLayout(new BorderLayout());
-            topPanel.add(leftPanel, BorderLayout.CENTER);
-            topPanel.add(rightPanel, BorderLayout.EAST);
-            
-            // Ajout de la zone de texte en bas de la page
-            JLabel missionLabel = new JLabel("Zone de la mission : ");
-            JPanel bottomPanel = new JPanel();
-            bottomPanel.setLayout(new BorderLayout());
-            bottomPanel.add(missionLabel);
-    
-            getContentPane().setLayout(new BorderLayout());
-            getContentPane().add(topPanel, BorderLayout.NORTH);
-            getContentPane().add(gamePanel, BorderLayout.CENTER);
-            getContentPane().add(bottomPanel, BorderLayout.AFTER_LAST_LINE);
+                // Créer les panneaux affichant les valeurs des registres pour chaque robot
+                registreRobot1 = createRegisterPanel(jeu.robot1);
+                registreRobot2 = createRegisterPanel(jeu.robot2);
+
+                JPanel flowLayoutPanelMemoryArea1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+                flowLayoutPanelMemoryArea1.add(memoryScrollPane1);
+                flowLayoutPanelMemoryArea1.add(registreRobot1);
+                JPanel flowLayoutPanelMemoryArea2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+                flowLayoutPanelMemoryArea2.add(memoryScrollPane2);
+                flowLayoutPanelMemoryArea2.add(registreRobot2);
+                //JPanel flowLayoutPanelMemoryArea3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+                //JPanel flowLayoutPanelMemoryArea4 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+                JPanel flowLayoutPanelMemoryArea3 = new JPanel(new GridLayout(2, 1));
+                JPanel flowLayoutPanelMemoryArea4 = new JPanel(new GridLayout(2, 1));
+                
+                JPanel rightPanel = new JPanel();
+                rightPanel.setLayout(new GridLayout(4, 1));
+                rightPanel.add(flowLayoutPanelMemoryArea1);
+                rightPanel.add(flowLayoutPanelMemoryArea3);
+                rightPanel.add(flowLayoutPanelMemoryArea2);
+                rightPanel.add(flowLayoutPanelMemoryArea4);
+
+                // Ajout de la zone de texte en bas de la page
+                JLabel missionLabel = new JLabel("Zone de la mission : ");
+                JPanel bottomPanel = new JPanel();
+                bottomPanel.setPreferredSize(new Dimension(600, 100));
+                bottomPanel.setLayout(new BorderLayout());
+                bottomPanel.add(missionLabel, BorderLayout.NORTH);
+
+                getContentPane().setLayout(new BorderLayout());
+                getContentPane().add(leftPanel, BorderLayout.CENTER); // leftPanel au centre
+                getContentPane().add(rightPanel, BorderLayout.EAST); // rightPanel à droite
+                getContentPane().add(bottomPanel, BorderLayout.SOUTH); // bottomPanel en bas
+
 
             setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
             //setUndecorated(true); // Enlever la décoration de fenêtre (barre de titre, boutons de fermeture, etc.)
@@ -487,7 +586,7 @@ add(filePanel, BorderLayout.SOUTH);
         int rT = robot.getT().getValeur();
         //int rF = Integer.parseInt(robot.getFichier().getName());
         String rF = robot.getFichier()==null ? "None" : robot.getFichier().getName();
-        String rM = "None";
+        String rM = jeu.getM().getValeur()==0 ? "None" : String.valueOf(jeu.getM().getValeur());
 
         // Créer un tableau de données pour les valeurs des registres   
         String[][] data = {
@@ -513,7 +612,6 @@ add(filePanel, BorderLayout.SOUTH);
         // Créer un panneau pour contenir le tableau
         JPanel registerPanel = new JPanel(new FlowLayout());
         registerPanel.add(table);
-    
         return registerPanel;
     }
     
@@ -522,22 +620,16 @@ add(filePanel, BorderLayout.SOUTH);
         // Récupérer les valeurs actuelles des registres du robot
         int rX = robot.getX().getValeur();
         int rT = robot.getT().getValeur();
-        //int rF = Integer.parseInt(robot.getFichier().getName());
-        
-        String rF = "NONE";
-        if(robot.getFichier() != null){
-            rF = robot.getFichier().getName();
-        }
+        String rF = (robot.getFichier() == null) ? "None" : String.valueOf(robot.getFichier().getName());
+        String rM = jeu.getM().getValeur()==0 ? "None" : String.valueOf(jeu.getM().getValeur());
 
         // Mettre à jour les valeurs affichées dans le tableau des registres
         JTable table = (JTable) registerPanel.getComponent(0);
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
         tableModel.setValueAt(rX + "", 0, 1); // Mise à jour de la valeur du registre X
         tableModel.setValueAt(rT + "", 1, 1); // Mise à jour de la valeur du registre T
-        if (robot.getFichier()==null) {
-            tableModel.setValueAt("None" + "", 2, 1); // Mise à jour de la valeur du registre F
-        }
-        else tableModel.setValueAt(String.valueOf(robot.getFichier().getName()) + "", 2, 1);
+        tableModel.setValueAt(rF + "", 2, 1); // Mise à jour de la valeur du registre F
+        tableModel.setValueAt(rM + "", 3, 1); // Mise à jour de la valeur du registre M
     }
 
     private void resetRegisterValues(Robot robot) {
@@ -545,7 +637,7 @@ add(filePanel, BorderLayout.SOUTH);
         robot.getX().setValeur(0);
         robot.getT().setValeur(0);
         robot.setFichier(null);
-
+        jeu.getM().setValeur(0);
     }
     /* 
      private void createMemoryPanel(Robot robot) {

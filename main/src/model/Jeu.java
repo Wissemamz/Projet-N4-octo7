@@ -31,36 +31,66 @@ public class Jeu {
         this.M = new Registre();
     }
 
-    
-    public ArrayList<Instruction> parseTextFromInput(int r) {
-        ArrayList<Instruction> instructionsList = new ArrayList<>();
-        
-        @SuppressWarnings("resource")
+    public void afficherMenuNiveaux() {
         Scanner scanner = new Scanner(System.in);
+        try {
+            System.out.println("Choisissez un niveau :");
+            System.out.println("Tapez 1 pour jouer le niveau 1");
+            System.out.println("Tapez 2 pour jouer le niveau 2");
+            System.out.println("Tapez 3 pour jouer le niveau 3");
+            System.out.println("Tapez 0 pour quitter le jeu");
+            int choix = scanner.nextInt();
 
-        System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'fin' pour terminer) :");
-
-        // Lire le texte jusqu'à ce que l'utilisateur entre "fin"
-        while (true) {
-            String inputLine = scanner.nextLine();
-
-            if (inputLine.equals("fin")) {
-                break; // Sortir de la boucle si l'utilisateur entre "fin"
+            switch (choix) {
+                case 1:
+                    niveau=1;
+                    setNiveau1();
+                    jouer();
+                    break;
+                case 2:
+                    niveau=2;
+                    setNiveau2();
+                    jouer();
+                    break;
+                case 3:
+                    niveau=3;
+                    setNiveau3();
+                    jouer();
+                    break;
+                case 0:
+                    System.out.println("Merci d'avoir joué. Au revoir !");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Choix invalide. Veuillez choisir un niveau valide.");
             }
+        } finally {
 
-            String[] parts = inputLine.split("\\s+");
-            String command = parts[0];
-
-            String[] parameters = new String[parts.length - 1];
-            System.arraycopy(parts, 1, parameters, 0, parameters.length);
-
-            Instruction instruction = new Instruction(command, parameters);
-            instructionsList.add(instruction);
+            scanner.close();
         }
+    }
 
-        //scanner.close();
+    public void afficherJeu () {
+        for (ObjetJ[][] ligne : grille) {
+            System.out.print("|");
+            for (ObjetJ[] colonne : ligne) {
+                for (ObjetJ obj : colonne){
+                    if (obj == null) {
+                        System.out.print("     ");
+                    } else {
+                        obj.afficher();
+                    }
+                }
+                System.out.print("|");
+            }
+            System.out.println();    
+        }
+        System.out.println(); 
+        System.out.println(); 
+    }
 
-        return instructionsList;
+    public void afficherJeuGUI() {
+        System.out.println("vous etes dans la partie graphique de OCTOPUNKS");
     }
 
     public void setNiveau1() {
@@ -88,23 +118,38 @@ public class Jeu {
         System.out.println();
     }
  
-    public void afficherJeu () {
-            for (ObjetJ[][] ligne : grille) {
-                System.out.print("|");
-                for (ObjetJ[] colonne : ligne) {
-                    for (ObjetJ obj : colonne){
-                        if (obj == null) {
-                            System.out.print("     ");
-                        } else {
-                            obj.afficher();
-                        }
-                    }
-                    System.out.print("|");
+    public void setNiveau2(){
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                for (int k = 0; k < grille[i][j].length; k++) {
+                    grille[i][j][k] = null; // Affecter null à chaque élément
                 }
-                System.out.println();    
             }
-            System.out.println(); 
-            System.out.println(); 
+        }
+        grille[4][0][0] = robot1;
+        grille[4][4][0] = robot2;
+        
+        for (int i=0 ;i<4; i++){
+            grille[0][3][i] = new Obstacle("obstacle",0,3,i);
+            grille[1][3][i] = new Obstacle("obstacle",1,3,i);
+            grille[2][3][i] = new Obstacle("obstacle",2,3,i);
+            grille[3][3][i] = new Obstacle("obstacle",3,3,i);        
+            grille[4][3][i] = new Obstacle("obstacle",4,3,i);        
+        }
+        ArrayList<Integer> liste = new ArrayList<>();
+        liste.add(1);
+        liste.add(2);
+        liste.add(3);
+        liste.add(4);
+        f1 = new TableauDynamique("667",0,4,3,liste);
+        grille[0][4][3] = f1;
+        
+        System.out.println("Mission : Deplacez le contenu du fichier 667 vers un fichier et deposez le dans la case [0][0]:");
+        System.out.println();
+    }
+
+    public void setNiveau3(){
+        return;
     }
 
     public void setNiveau1GUI() {
@@ -146,62 +191,68 @@ public class Jeu {
         fichier2.setOrdonnee(3);
         fichier2.setCaseJ(2);
     }
-
-    public void afficherJeuGUI() {
-            System.out.println("vous etes dans la partie graphique de OCTOPUNKS");
-    }
     
-    public void afficherMenuNiveaux() {
-        Scanner scanner = new Scanner(System.in);
-        try {
-            System.out.println("Choisissez un niveau :");
-            System.out.println("Tapez 1 pour jouer le niveau 1");
-            System.out.println("Tapez 2 pour jouer le niveau 2");
-            System.out.println("Tapez 3 pour jouer le niveau 3");
-            System.out.println("Tapez 0 pour quitter le jeu");
-            int choix = scanner.nextInt();
-
-            switch (choix) {
-                case 1:
-                    niveau=1;
-                    setNiveau1();
-                    jouer();
-                    break;
-                case 2:
-                    niveau=2;
-                    setNiveau2();
-                    jouer();
-                    break;
-                case 3:
-                    niveau=3;
-                    setNiveau3();
-                    jouer();
-                    break;
-                case 0:
-                    System.out.println("Merci d'avoir joué. Au revoir !");
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Choix invalide. Veuillez choisir un niveau valide.");
+    public void setNiveau2GUI(){
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                for (int k = 0; k < grille[i][j].length; k++) {
+                    grille[i][j][k] = null; // Affecter null à chaque élément
+                }
             }
-        } finally {
-
-            scanner.close();
         }
+        grille[4][0][0] = robot1;
+        robot1.setAbscisse(4);
+        robot1.setOrdonnee(0);
+        robot1.setCaseJ(0);
+        robot1.ressuciter();
+        robot1.setFichier(null);
+
+        grille[4][4][0] = robot2;
+        robot2.setAbscisse(4);
+        robot2.setOrdonnee(4);
+        robot2.setCaseJ(0);
+        robot2.ressuciter();
+        robot2.setFichier(null);
+
+        for (int i=0 ;i<4; i++){
+            grille[0][3][i] = new Obstacle("obstacle",0,3,i);
+            grille[1][3][i] = new Obstacle("obstacle",1,3,i);
+            grille[2][3][i] = new Obstacle("obstacle",2,3,i);
+            grille[3][3][i] = new Obstacle("obstacle",3,3,i);        
+            grille[4][3][i] = new Obstacle("obstacle",4,3,i);        
+        }
+        ArrayList<Integer> liste = new ArrayList<>();
+        liste.add(1);
+        liste.add(2);
+        liste.add(3);
+        liste.add(4);
+        f1 = new TableauDynamique("667",0,4,3,liste);
+        grille[0][4][1] = f1;
+        f1.setAbscisse(0);
+        f1.setOrdonnee(4);
+        f1.setCaseJ(1);
+    }
+
+    public void setNiveau3GUI(){
+        
     }
 
     public boolean verifierVictoire() {
         switch (niveau) {
-            case(1) : if (f1 != null && f2 != null) {
-                    // Vérifier si les fichiers sont à la position [0][2]
-                    if (estAEmplacementAttendu(f1, 0, 2) && estAEmplacementAttendu(f2, 0, 2)) {
-                        System.out.println("Victoire ! Vous avez déplacé les fichiers à la position attendue.");
-                        return true;
+            case(1) : 
+                    if (f1 != null && f2 != null) {
+                        // Vérifier si les fichiers sont à la position [0][2]
+                        return estAEmplacementAttendu(f1, 0, 2) && estAEmplacementAttendu(f2, 0, 2);
                     }
-                }
-                return false; 
+                    return false; 
             case(2) : 
-                return false;
+                    for (int k = 0; k < 4; k++){
+                        if (grille[0][0][k] instanceof Fichier) {
+                            Fichier f = (Fichier)grille[0][0][k];
+                            return f.meme_elements(f1);
+                        } 
+                    }
+                    return false; 
             case(3) : 
                 return false;
             default : return false;
@@ -210,8 +261,7 @@ public class Jeu {
     }
 
     private boolean estAEmplacementAttendu(Fichier fichier, int abscisseAttendue, int ordonneeAttendue) {
-        return fichier.getAbscisse() == abscisseAttendue &&
-                fichier.getOrdonnee() == ordonneeAttendue ;
+        return fichier.getAbscisse() == abscisseAttendue && fichier.getOrdonnee() == ordonneeAttendue ;
     }
 
     public boolean verifierDefaite() {
@@ -219,19 +269,56 @@ public class Jeu {
             case(1) : 
                 return !(robot1.getVivant() && robot2.getVivant());
             case(2) : 
-                return false;
+                return !(robot1.getVivant() && robot2.getVivant());
             case(3) : 
-                return false;
+                return !(robot1.getVivant() && robot2.getVivant());
             default : return false;
         }
     }
 
-    public void setNiveau2(){
-        return;
+    public void message_victoire(){
+        switch (niveau) {  
+            case 1 :
+                System.out.println("Victoire ! Vous avez déplacé les fichiers à la position attendue.");
+                break;
+            case 2 :
+                System.out.println("Victoire ! Vous avez copier les elements dans un fichier a la position attendue.");
+                break;
+            case 3 :
+
+                break;
+        }
     }
 
-    public void setNiveau3(){
-        return;
+    public ArrayList<Instruction> parseTextFromInput(int r) {
+        ArrayList<Instruction> instructionsList = new ArrayList<>();
+        
+        @SuppressWarnings("resource")
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'fin' pour terminer) :");
+
+        // Lire le texte jusqu'à ce que l'utilisateur entre "fin"
+        while (true) {
+            String inputLine = scanner.nextLine();
+
+            if (inputLine.equals("fin")) {
+                break; // Sortir de la boucle si l'utilisateur entre "fin"
+            }
+
+            String[] parts = inputLine.split("\\s+");
+            String command = parts[0];
+
+            String[] parameters = new String[parts.length - 1];
+            System.arraycopy(parts, 1, parameters, 0, parameters.length);
+
+            Instruction instruction = new Instruction(command, parameters);
+            instructionsList.add(instruction);
+        }
+
+        //scanner.close();
+
+        return instructionsList;
     }
 
     public void jouer() {
@@ -304,95 +391,24 @@ public class Jeu {
     
         // Vérification de la victoire à la fin du niveau 1
         if (verifierVictoire()) {
+            message_victoire();
             return;
         }
         System.out.println("Vous avez perdu !");
     }
-    
-   /* public void jouer() {
-        afficherJeu();
-        ArrayList<Instruction> instruR1 = parseTextFromInput(1);
-        ArrayList<Instruction> instruR2 = parseTextFromInput(2);
 
-        int i = 0, j = 0;
-        int[] tab1 = { i };
-        int[] tab2 = { j };
-        while (tab1[0] < instruR1.size() && tab2[0] < instruR2.size()) {
-            double choix = random.nextDouble();
-            if (choix < 0.5) {
-                if (robot1.getVivant())
-                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1);
-                if (robot2.getVivant())
-                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2);
-            } else {
-                if (robot2.getVivant())
-                    instruR2.get(tab2[0]).execute(grille, robot2, instruR2, tab2);
-                if (robot1.getVivant())
-                    instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1);
-            }
-            afficherJeu();
-            if (verifierDefaite()) {
-                System.out.println("Vous avez perdu !");
-                return;
-            }
-            else {
-                tab1[0]++;
-                tab2[0]++;
-            }
-           
-        }
-
-            int k = 0;
-            int[] tab = { k };
-            ArrayList<Instruction> instru;
-            Robot robot;
-
-            if (tab1[0] == instruR1.size() && tab2[0] == instruR2.size()) {
-                if (verifierVictoire()) {
-                    return;
-                }
-                System.out.println("Vous avez perdu !");
-                return;
-            }
-            if (tab1[0] == instruR1.size() && tab2[0] < instruR2.size()) {
-                tab[0] = tab2[0];
-                instru = instruR2;
-                robot = robot2;
-            } else {
-                tab[0] = tab1[0];
-                instru = instruR1;
-                robot = robot1;
-            }
-
-            while (tab[0] < instru.size() && robot.getVivant()) {
-                instru.get(tab[0]).execute(grille, robot, instru, tab);
-                afficherJeu();
-                if (verifierDefaite()) {
-                    System.out.println("Vous avez perdu !");
-                    return;
-                }
-                tab[0]++;
-            }
-
-            // Vérification de la victoire à la fin du niveau 1
-            if (verifierVictoire()) {
-                return;
-            }
-            System.out.println("Vous avez perdu !");
-    }*/
-
-    public ArrayList<Instruction> parseTextFromInput(String robotText) {
+    public ArrayList<Instruction> parseTextFromInputGUI(String robotText) {
         ArrayList<Instruction> instructionsList = new ArrayList<>();
         // Séparer le texte par lignes
         String[] lines = robotText.split("\n");
-    
+            
         // Parcourir chaque ligne de texte
         for (String line : lines) {
             // Séparer la ligne par les espaces
             String[] parts = line.split("\\s+");
-    
+            
             String command = parts[0];
-    
+            
             // Si la ligne contient des paramètres
             if (parts.length > 1) {
                 String[] parameters = new String[parts.length - 1];
@@ -405,13 +421,11 @@ public class Jeu {
                 instructionsList.add(instruction);
             }
         }
-    
+            
         return instructionsList;
     }
 
-
     public void jouerGUIAuto() {
-        setNiveau1();
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
         ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
 
@@ -513,34 +527,6 @@ public class Jeu {
     public void resetPosition() { 
         positionR1=0;
         positionR2=0;
-    }
-    
-    public ArrayList<Instruction> parseTextFromInputGUI(String robotText) {
-        ArrayList<Instruction> instructionsList = new ArrayList<>();
-        // Séparer le texte par lignes
-        String[] lines = robotText.split("\n");
-            
-        // Parcourir chaque ligne de texte
-        for (String line : lines) {
-            // Séparer la ligne par les espaces
-            String[] parts = line.split("\\s+");
-            
-            String command = parts[0];
-            
-            // Si la ligne contient des paramètres
-            if (parts.length > 1) {
-                String[] parameters = new String[parts.length - 1];
-                System.arraycopy(parts, 1, parameters, 0, parameters.length);
-                Instruction instruction = new Instruction(command, parameters);
-                instructionsList.add(instruction);
-            } else {
-                // Si la ligne ne contient que la commande sans paramètres
-                Instruction instruction = new Instruction(command);
-                instructionsList.add(instruction);
-            }
-        }
-            
-        return instructionsList;
     }
     
 }

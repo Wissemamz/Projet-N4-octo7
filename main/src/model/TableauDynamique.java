@@ -19,6 +19,8 @@ public class TableauDynamique extends Fichier {
         this.p=0;
     }
 
+    public ArrayList<Integer> getElements() {return this.elements;}
+
     @Override
     public int getPosFichier() {return this.p;}
 
@@ -66,4 +68,21 @@ public class TableauDynamique extends Fichier {
         if (TEST_EOF()) return;
         else this.elements.remove(p);
     }
+
+    @Override 
+    public boolean meme_elements(Fichier fichier) {
+        if (fichier instanceof TableauDynamique) {
+            TableauDynamique t = (TableauDynamique) fichier;
+            return t.getElements().containsAll(elements) && this.elements.containsAll(t.getElements());
+        }
+        else if (fichier instanceof Pile) {
+            Pile p = (Pile) fichier;
+            return p.getElements().containsAll(elements) && this.elements.containsAll(p.getElements());
+        }
+        else if (fichier instanceof File) {
+            File f = (File) fichier;
+            return f.getElements().containsAll(elements) && this.elements.containsAll(f.getElements());
+        }
+        else return false;
+    }   
 }
