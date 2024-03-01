@@ -982,7 +982,7 @@ public class Instruction {
         }
         else if (commande.equals(Commande.HALT.toString())){
             r.meurt();
-            //grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()] = null;
+            grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()] = null;
         }
     }
 }
