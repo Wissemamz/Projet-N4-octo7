@@ -3,7 +3,7 @@ import java.util.Stack;
 
 public class Pile extends Fichier {
     
-    private Stack<Integer> elements;
+    public Stack<Integer> elements;
     private int p;
 
     public Pile(String num, int abscisse, int ordonnee, int caseJ) {

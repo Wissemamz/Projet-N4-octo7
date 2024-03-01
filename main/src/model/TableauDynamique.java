@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TableauDynamique extends Fichier {
 
-    private ArrayList<Integer> elements;
+    public ArrayList<Integer> elements;
     private int p;
 
     public TableauDynamique(String num, int abscisse, int ordonnee, int caseJ) {

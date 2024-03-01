@@ -3,16 +3,15 @@ package model;
 
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.Flow;
 
 
 public class OctopunksGUI extends JFrame {
@@ -20,12 +19,18 @@ public class OctopunksGUI extends JFrame {
 
     public static JTextArea memoryArea1;
     public static JTextArea memoryArea2;
-    public JLabel fileContentLabel;
+    public JLabel fileContentLabel1;
+    public JLabel fileContentLabel2;
     private JButton stepButton;
     private JButton stopButton;
     private JButton autoButton;
 
     private JPanel gamePanel;
+    private JPanel rightPanel;
+    private JPanel filePanel1;
+    private JPanel filePanel2;
+    private JPanel memoryAndFilePanel1;
+    private JPanel memoryAndFilePanel2;
     private int x, y, z;
 
     ImageIcon scaledIcon;
@@ -282,8 +287,13 @@ public class OctopunksGUI extends JFrame {
             gridPanel = new JPanel();
             gridPanel.setLayout(new GridLayout(10, 10));
             
-            JPanel flowLayoutPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-            flowLayoutPanel.add(gridPanel);
+            // Créer le JPanel avec l'image de fond
+            ImagePanel backgroundPanel = new ImagePanel("main/src/images/FondZone.png");
+            backgroundPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+            // Ajouter le gridPanel à l'intérieur du JPanel avec l'image de fond
+            backgroundPanel.add(gridPanel);
+
 
             // Chargement des images pour les backgrounds des cases
             ImageIcon icon = new ImageIcon("main/src/images/case.png"); // Assurez-vous de charger une image de 16x16 pixels
@@ -297,7 +307,7 @@ public class OctopunksGUI extends JFrame {
 
             Prototype = gridPanel;
 
-            JScrollPane codeScrollPane = new JScrollPane(flowLayoutPanel);
+            JScrollPane codeScrollPane = new JScrollPane(backgroundPanel);
     
             // Memory areas
             memoryArea1 = new JTextArea(10, 30);
@@ -313,7 +323,17 @@ public class OctopunksGUI extends JFrame {
             memoryArea2.setBackground(Color.LIGHT_GRAY);
             
             // Buttons
-            stepButton = new JButton("Pas");
+            // Chargement des images pour les backgrounds des cases
+            ImageIcon iconPas = new ImageIcon("main/src/images/pasBouttonW.png"); // Assurez-vous de charger une image de 16x16 pixels
+    
+            // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+            Image imagePas = iconPas.getImage();
+            Image newImagePas = imagePas.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+            ImageIcon scaledPasIcon = new ImageIcon(newImagePas);
+
+            stepButton = new JButton("");
+            stepButton.setBackground(Color.BLACK);
+            stepButton.setIcon(scaledPasIcon);
             stepButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -328,8 +348,17 @@ public class OctopunksGUI extends JFrame {
                 }
             });
 
+            // Chargement des images pour les backgrounds des cases
+            ImageIcon iconStop = new ImageIcon("main/src/images/stopButtonW.png"); // Assurez-vous de charger une image de 16x16 pixels
+    
+            // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+            Image imageStop = iconStop.getImage();
+            Image newImageStop = imageStop.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+            ImageIcon scaledStopIcon = new ImageIcon(newImageStop);
 
-            stopButton = new JButton("Stop");
+            stopButton = new JButton("");
+            stopButton.setBackground(Color.BLACK);
+            stopButton.setIcon(scaledStopIcon);
             stopButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -359,8 +388,17 @@ public class OctopunksGUI extends JFrame {
                 }
             });
             
-
-            JButton autoButton = new JButton("Auto");
+            // Chargement des images pour les backgrounds des cases
+            ImageIcon iconAuto = new ImageIcon("main/src/images/autoButtonW.png"); // Assurez-vous de charger une image de 16x16 pixels
+    
+            // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+            Image imageAuto = iconAuto.getImage();
+            Image newImageAuto = imageAuto.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+            ImageIcon scaledAutoIcon = new ImageIcon(newImageAuto);
+            
+            autoButton = new JButton("");
+            autoButton.setBackground(Color.BLACK);
+            autoButton.setIcon(scaledAutoIcon);
             autoButton.addActionListener(new ActionListener() {
                 @Override
                     public void actionPerformed(ActionEvent e) {
@@ -390,49 +428,52 @@ public class OctopunksGUI extends JFrame {
             leftPanel.setLayout(new BorderLayout());
             leftPanel.add(codeScrollPane, BorderLayout.CENTER);
             leftPanel.add(controlPanel, BorderLayout.SOUTH);
-            
-            //rightPanel.add(memoryScrollPane2);
-            
+                        
             // Créer les panneaux affichant les valeurs des registres pour chaque robot
             registreRobot1 = createRegisterPanel(jeu.robot1);
             registreRobot2 = createRegisterPanel(jeu.robot2);
 
+            // Créer le zones des fichiers 
+            filePanel1 = createFilePanel(jeu.robot1);
+            filePanel2 = createFilePanel(jeu.robot2);
+            
             JPanel flowLayoutPanelMemoryArea1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
             flowLayoutPanelMemoryArea1.add(memoryScrollPane1);
             flowLayoutPanelMemoryArea1.add(registreRobot1);
+
             JPanel flowLayoutPanelMemoryArea2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
             flowLayoutPanelMemoryArea2.add(memoryScrollPane2);
             flowLayoutPanelMemoryArea2.add(registreRobot2);
-            
-            // Création d'une étiquette pour afficher le contenu du fichier
-            fileContentLabel = new JLabel("", SwingConstants.CENTER);
-JLabel fileLabel = new JLabel("Contenu du fichier : ");
-JPanel filePanel = new JPanel(new FlowLayout());
-filePanel.add(fileLabel, BorderLayout.NORTH);
-filePanel.add(fileContentLabel, BorderLayout.CENTER);
-add(filePanel, BorderLayout.SOUTH);
 
-            JPanel rightPanel = new JPanel();
-            rightPanel.setLayout(new GridLayout(3, 1));
-            rightPanel.add(flowLayoutPanelMemoryArea1);
-            rightPanel.add(flowLayoutPanelMemoryArea2);
-            rightPanel.add(filePanel/* , BorderLayout.SOUTH*/);
+            // Créer un conteneur pour chaque ensemble de mémoire et de contenu de fichier
+            memoryAndFilePanel1 = new JPanel(new BorderLayout());
+            memoryAndFilePanel1.add(flowLayoutPanelMemoryArea1, BorderLayout.NORTH);
+            memoryAndFilePanel1.add(filePanel1);
+
+            memoryAndFilePanel2 = new JPanel(new BorderLayout());
+            memoryAndFilePanel2.add(flowLayoutPanelMemoryArea2, BorderLayout.NORTH);
+            memoryAndFilePanel2.add(filePanel2);
+
+            rightPanel = new JPanel();
+            rightPanel.setLayout(new GridLayout(2, 1));
+            rightPanel.add(memoryAndFilePanel1);
+            rightPanel.add(memoryAndFilePanel2);
 
             JPanel topPanel = new JPanel();
             topPanel.setLayout(new BorderLayout());
             topPanel.add(leftPanel, BorderLayout.CENTER);
             topPanel.add(rightPanel, BorderLayout.EAST);
-            
+
             // Ajout de la zone de texte en bas de la page
             JLabel missionLabel = new JLabel("Zone de la mission : ");
             JPanel bottomPanel = new JPanel();
             bottomPanel.setLayout(new BorderLayout());
             bottomPanel.add(missionLabel);
-    
+
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(topPanel, BorderLayout.NORTH);
             getContentPane().add(gamePanel, BorderLayout.CENTER);
-            getContentPane().add(bottomPanel, BorderLayout.AFTER_LAST_LINE);
+            getContentPane().add(bottomPanel, BorderLayout.SOUTH); // Ajouter bottomPanel au Sud
 
             setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
             //setUndecorated(true); // Enlever la décoration de fenêtre (barre de titre, boutons de fermeture, etc.)
@@ -441,49 +482,84 @@ add(filePanel, BorderLayout.SOUTH);
             setVisible(true);
         });
     }
-    
 
-    /*private void executeInstructions() {
-        // Lire le contenu des zones de mémoire
-        String instructionsRobot1 = memoryArea1.getText();
-        String instructionsRobot2 = memoryArea2.getText();
-    
-        // Analyser les instructions et exécuter sur les robots
-        ArrayList<Instruction> instructions1 = parseInstructions(instructionsRobot1);
-        ArrayList<Instruction> instructions2 = parseInstructions(instructionsRobot2);
-    
-        // Exécuter les instructions sur le premier robot
-        for (Instruction instruction : instructions1) {
-            instruction.execute(grille, robot,instructions1,); // Supposons que grille et robot1 sont définis quelque part dans votre classe
-        }
-    
-        // Exécuter les instructions sur le deuxième robot
-        //for (Instruction instruction : instructions2) {
-        //    instruction.execute(grille, robot2); // Supposons que grille et robot2 sont définis quelque part dans votre classe
-        //}
-    
-        // Mettre à jour la grille graphique
-        updateGUI();
-    }*/
-        
     protected void updateGUI() {
-            // Mettre à jour l'affichage de la grille
-            createGridCells(gridPanel, x, y, scaledIcon);
-    
-            // Mettre à jour les panneaux de registres pour chaque robot
-            updateRegisterPanel(registreRobot1, jeu.robot1);
-            updateRegisterPanel(registreRobot2, jeu.robot2);
-    
-            // Rafraîchir l'interface utilisateur
-            revalidate();
-            repaint();
-    }
+        // Mettre à jour l'affichage de la grille
+        createGridCells(gridPanel, x, y, scaledIcon);
 
+        // Mettre à jour les panneaux de registres et le contenu des fichiers pour chaque robot
+        updateRegisterPanel(registreRobot1, jeu.robot1);
+        updateRegisterPanel(registreRobot2, jeu.robot2);
+
+        String fileContent = "j'ai pas de moyen pour afficher le cotenu pour le moment hihi";
+
+        // Mettre a jour de contenu des fichiers 
+        updateFilePanel(jeu.robot1,filePanel1, fileContent);
+        updateFilePanel(jeu.robot2, filePanel2, fileContent);
+
+        // Rafraîchir l'interface utilisateur
+        revalidate();
+        repaint();
+    }
+    
+    private JPanel createFilePanel(Robot robot) {
+        Fichier fichier = robot.getFichier();
+       
+        // Crée un panneau pour afficher le contenu du fichier
+        JPanel filePanel = new JPanel(new BorderLayout());
+    
+        // Crée une zone de texte pour le contenu du fichier
+        JTextArea fileContentArea = new JTextArea(5, 30);
+        fileContentArea.setEditable(false); // Assurez-vous que l'utilisateur ne peut pas modifier le contenu
+        fileContentArea.setLineWrap(true); // Assurez-vous que le texte se coupe correctement
+        fileContentArea.setWrapStyleWord(true); // Assurez-vous que les mots se coupent correctement
+        
+        JLabel fileLabel;
+        String nomFichier;
+
+        // Crée un label pour le titre
+        if(fichier != null){  
+            nomFichier = fichier.getName();
+        }else{
+            nomFichier = "";
+        }
+
+        fileLabel = new JLabel(""+ nomFichier, SwingConstants.CENTER);
+        fileLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        
+        // Ajoute le label et la zone de texte au panneau
+        filePanel.add(fileLabel, BorderLayout.NORTH);
+        filePanel.add(new JScrollPane(fileContentArea), BorderLayout.CENTER);
+    
+        return filePanel;
+    }
+    
+    private void updateFilePanel(Robot robot,JPanel filePanel, String fileContent) {
+        // Récupère la zone de texte du contenu du fichier
+        JTextArea fileContentArea = (JTextArea) ((JScrollPane) filePanel.getComponent(1)).getViewport().getView();
+    
+        // Met à jour le contenu du fichier dans la zone de texte
+        fileContentArea.setText(fileContent);
+        
+        String nomFichier;
+        // Crée un label pour le titre
+        if(robot.getFichier() != null){  
+            nomFichier = robot.getFichier() .getName();
+        }else{
+            nomFichier = "";
+        }
+
+        JLabel fileLabel = new JLabel("" + nomFichier, SwingConstants.CENTER);
+        fileLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        
+        // Ajoute le label et la zone de texte au panneau
+        filePanel.add(fileLabel, BorderLayout.NORTH);
+    }
+    
     private JPanel createRegisterPanel(Robot robot) {
         // Récupérer les valeurs initiales des registres
         int rX = robot.getX().getValeur();
         int rT = robot.getT().getValeur();
-
         String rF = "NONE";
         if(robot.getFichier() != null){
             rF = robot.getFichier().getName();
@@ -496,7 +572,6 @@ add(filePanel, BorderLayout.SOUTH);
             {"F", rF}  
         };
 
-    
         // Créer un tableau de noms de colonnes
         String[] columnNames = {"Registre", "Valeur"};
     
@@ -517,24 +592,23 @@ add(filePanel, BorderLayout.SOUTH);
         return registerPanel;
     }
     
-
     private void updateRegisterPanel(JPanel registerPanel, Robot robot) {
         // Récupérer les valeurs actuelles des registres du robot
         int rX = robot.getX().getValeur();
         int rT = robot.getT().getValeur();
         String rF = "NONE";
-        if(robot.getFichier() != null){
+        if (robot.getFichier() != null) {
             rF = robot.getFichier().getName();
         }
-
+    
         // Mettre à jour les valeurs affichées dans le tableau des registres
         JTable table = (JTable) registerPanel.getComponent(0);
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        tableModel.setValueAt(rX + "", 0, 1); // Mise à jour de la valeur du registre X
-        tableModel.setValueAt(rT + "", 1, 1); // Mise à jour de la valeur du registre T
-        tableModel.setValueAt(rF + "", 2, 1); // Mise à jour de la valeur du registre F
+        tableModel.setValueAt(rX + "", 0, 1);
+        tableModel.setValueAt(rT + "", 1, 1);
+        tableModel.setValueAt(rF + "", 2, 1);
     }
-
+    
     private void resetRegisterValues(Robot robot) {
         // Réinitialiser les valeurs des registres du robot
         robot.getX().setValeur(0);
@@ -542,23 +616,5 @@ add(filePanel, BorderLayout.SOUTH);
         robot.setFichier(null);
 
     }
-    /* 
-     private void createMemoryPanel(Robot robot) {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-
-        // Création du label "ROBOT" avec le nom du robot comme en-tête
-        JLabel headerLabel = new JLabel(robot.getName(), JLabel.CENTER);
-        mainPanel.add(headerLabel, BorderLayout.NORTH);
-
-        // Création du JTextArea dans le côté droit
-        JTextArea memoryArea = new JTextArea(10, 10);
-        JScrollPane scrollPane = new JScrollPane(memoryArea);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Création de trois petits tableaux dans le côté gauche
-        JPanel tablePanel = new JPanel(new GridLayout(3, 1));
-        createRegisterPanel(robot);
-        
-        mainPanel.add(tablePanel, BorderLayout.WEST);
-    }*/
+    
 }
