@@ -23,6 +23,7 @@ public abstract class Fichier extends ObjetJ {
     public abstract void VOID_F();
     public abstract void SEEK(int n);
     public abstract boolean meme_elements(Fichier fichier);
+    public abstract String[] elemsToString();
 
     @Override
     public ImageIcon getIcon() {

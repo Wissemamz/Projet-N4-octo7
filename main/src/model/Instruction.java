@@ -958,12 +958,13 @@ public class Instruction {
             }
         }
         else if (commande.equals(Commande.SEEK.toString())){
-            // mettre le registre T à 1 si le fichier est a sa fin, sinon 0
-            if (parametre.length!=0) return;
+            if (parametre.length!=1) return;
             else {
                 if (r.getFichier()==null) return;
-                else if (r.getFichier().TEST_EOF()) r.getT().setValeur(1);
-                else r.getT().setValeur(0);
+                else {
+                    int val = Integer.parseInt(parametre[0]);
+                    r.getFichier().SEEK(val);
+                }
             }
         }
         else if (commande.equals(Commande.VOID_F.toString())){

@@ -2,10 +2,11 @@ package model;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class File extends Fichier {
 
-    private Queue<Integer> elements;
+    public Queue<Integer> elements;
     private int p;
 
     public File(String num, int abscisse, int ordonnee, int caseJ) {
@@ -70,4 +71,17 @@ public class File extends Fichier {
         }
         else return false;
     }   
+
+    @Override
+    public String[] elemsToString(){
+        String[] elems = new String[elements.size()];
+        Queue<Integer> file = new LinkedList<Integer>();
+        for (Integer element : elements) {
+            file.add(element);
+        }
+        for (int i = 0; i <elements.size();i++) {
+            elems[i] = file.poll().toString();
+        }
+        return elems;
+    }
 }
