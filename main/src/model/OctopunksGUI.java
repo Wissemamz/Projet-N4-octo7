@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.File;
 
 
 public class OctopunksGUI extends JFrame {
@@ -511,76 +513,17 @@ public class OctopunksGUI extends JFrame {
                     jeu.resetPosition();
 
                     jeu.jouerGUIAuto();
-                    /*if (jeu.verifierVictoire()) {
-                        String[] options = {"Exit", "Next Level"};
-                        int choice = JOptionPane.showOptionDialog(null, "Victoire ! Choisissez une action :", "Victoire",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-                    
-                        if (choice == 0) {
-                            System.exit(0); // Exit
-                        } else if (choice == 1) {
-                            // Charger le niveau suivant ou effectuer une autre action
-                            // Par exemple :
-                            // chargerNiveauSuivant();
-                        }
-                    }*/
                     updateGUI();
                     stepButton.setEnabled(false);
+                    
+                    /*passerAuNiveauSuivant(1);
+                    // Vérifier la victoire
+                    if (jeu.verifierVictoire()) {
+                        message_victoireGUI();
+                    }*/
                 }
             });
     
-             /*   // Game panel
-                gamePanel = new JPanel();
-                gamePanel.setBackground(Color.WHITE);
-                gamePanel.setPreferredSize(new Dimension(600, 400));
-
-                // Layout setup
-                JPanel controlPanel = new JPanel();
-                controlPanel.setLayout(new GridLayout(1, 3));
-                controlPanel.add(stepButton);
-                controlPanel.add(autoButton);
-                controlPanel.add(stopButton);
-
-                JPanel leftPanel = new JPanel();
-                leftPanel.setLayout(new BorderLayout());
-                leftPanel.add(gamePanel, BorderLayout.CENTER); // Ajout du gamePanel au centre
-                leftPanel.add(codeScrollPane, BorderLayout.CENTER);
-                leftPanel.add(controlPanel, BorderLayout.SOUTH); // Ajout du controlPanel en dessous du gamePanel
-
-                // Créer les panneaux affichant les valeurs des registres pour chaque robot
-                registreRobot1 = createRegisterPanel(jeu.robot1);
-                registreRobot2 = createRegisterPanel(jeu.robot2);
-
-                JPanel flowLayoutPanelMemoryArea1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-                flowLayoutPanelMemoryArea1.add(memoryScrollPane1);
-                flowLayoutPanelMemoryArea1.add(registreRobot1);
-                JPanel flowLayoutPanelMemoryArea2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-                flowLayoutPanelMemoryArea2.add(memoryScrollPane2);
-                flowLayoutPanelMemoryArea2.add(registreRobot2);
-                //JPanel flowLayoutPanelMemoryArea3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-                //JPanel flowLayoutPanelMemoryArea4 = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-                JPanel flowLayoutPanelMemoryArea3 = new JPanel(new GridLayout(2, 1));
-                JPanel flowLayoutPanelMemoryArea4 = new JPanel(new GridLayout(2, 1));
-                
-                JPanel rightPanel = new JPanel();
-                rightPanel.setLayout(new GridLayout(4, 1));
-                rightPanel.add(flowLayoutPanelMemoryArea1);
-                rightPanel.add(flowLayoutPanelMemoryArea3);
-                rightPanel.add(flowLayoutPanelMemoryArea2);
-                rightPanel.add(flowLayoutPanelMemoryArea4);
-
-                // Ajout de la zone de texte en bas de la page
-                JLabel missionLabel = new JLabel("Zone de la mission : ");
-                JPanel bottomPanel = new JPanel();
-                bottomPanel.setPreferredSize(new Dimension(600, 100));
-                bottomPanel.setLayout(new BorderLayout());
-                bottomPanel.add(missionLabel, BorderLayout.NORTH);
-
-                getContentPane().setLayout(new BorderLayout());
-                getContentPane().add(leftPanel, BorderLayout.CENTER); // leftPanel au centre
-                getContentPane().add(rightPanel, BorderLayout.EAST); // rightPanel à droite
-                getContentPane().add(bottomPanel, BorderLayout.SOUTH); // bottomPanel en bas
-            */
             // Game panel
             gamePanel = new JPanel();
             gamePanel.setBackground(Color.WHITE);
@@ -652,8 +595,22 @@ public class OctopunksGUI extends JFrame {
             JPanel bottomPanel = new JPanel();
             bottomPanel.setPreferredSize(new Dimension(600, 100));
             bottomPanel.setLayout(new BorderLayout());
-            bottomPanel.add(missionLabel, BorderLayout.PAGE_START);
+            
 
+            JButton openPdfButton = new JButton("Manuel");
+            openPdfButton.setPreferredSize(new Dimension(100, 50));
+            // Définition de la taille du texte
+            Font buttonFont = new Font("Times New Roman", Font.BOLD, 20); // Exemple : taille de police de 16 pixels
+            openPdfButton.setFont(buttonFont);
+            openPdfButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ouvrirPDF();
+                }
+            });
+
+            bottomPanel.add(missionLabel, BorderLayout.PAGE_START);
+            bottomPanel.add(openPdfButton, BorderLayout.EAST);
+            
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(topPanel, BorderLayout.NORTH);
             getContentPane().add(gamePanel, BorderLayout.CENTER);
@@ -859,4 +816,88 @@ public class OctopunksGUI extends JFrame {
         //updateFilePanel(robot,filePanel,"");
         updateFilePanel(robot,filePanel,robot.getFichier());
     }
+
+     public void ouvrirPDF() {
+        try {
+            File file = new File("main/src/ManOctopunks.pdf");
+            if (file.exists()) {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(file);
+                } else {
+                    System.out.println("Desktop not supported");
+                }
+            } else {
+                System.out.println("Fichier PDF introuvable");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /*public void message_victoireGUI() {
+        // Création de la fenêtre modale
+        JFrame frame = new JFrame("");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+        frame.setLayout(new BorderLayout());
+
+        // Message de victoire
+        JLabel label = new JLabel("Félicitations ! Vous avez réussi ce niveau !");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        frame.add(label, BorderLayout.NORTH);
+
+        // Boutons "Exit" et "Niveau suivant"
+        JPanel buttonPanel = new JPanel();
+        JButton exitButton = new JButton("Exit");
+        JButton nextLevelButton = new JButton("Niveau suivant");
+
+        exitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); // Quitter le jeu
+            }
+        });
+
+        nextLevelButton.addActionListener((ActionListener) new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                passerAuNiveauSuivant(n); // Méthode pour passer au niveau suivant
+                frame.dispose(); // Fermer la fenêtre modale
+            }
+        });
+
+        buttonPanel.add(exitButton);
+        buttonPanel.add(nextLevelButton);
+        frame.add(buttonPanel, BorderLayout.CENTER);
+
+        // Centrer la fenêtre sur l'écran
+        frame.setLocationRelativeTo(null);
+
+        // Rendre la fenêtre visible
+        frame.setVisible(true);
+    }
+
+    private void passerAuNiveauSuivant(int niveauActuel) {
+        int prochainNiveau = niveauActuel + 1;
+        if (prochainNiveau <= 3) {
+            // Charger le prochain niveau en fonction de son numéro
+            switch (prochainNiveau) {
+                case 1:
+                    jeu.setNiveau1GUI();
+                    break;
+                case 2:
+                    jeu.setNiveau2GUI();
+                    break;
+                case 3:
+                    jeu.setNiveau3GUI();
+                    break;
+            }
+            // Réinitialiser la position des robots sur la grille
+            jeu.resetPosition();
+            // Mettre à jour l'affichage de la grille
+            createGridCells(Prototype, x, y, scaledIcon);
+        } else {
+            // Si le niveau actuel est déjà le niveau 3, afficher un message ou effectuer toute autre action nécessaire
+            JOptionPane.showMessageDialog(null, "Vous avez terminé tous les niveaux disponibles !", "Fin du jeu", JOptionPane.INFORMATION_MESSAGE);
+            // Vous pouvez ajouter d'autres actions ici, comme quitter le jeu
+        }
+    }*/
 }
