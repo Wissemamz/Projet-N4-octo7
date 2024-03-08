@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.*;
+
 public class Jeu {
     public ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
@@ -12,6 +14,10 @@ public class Jeu {
     public Fichier f1;
     public Fichier f2;
     public int niveau;
+    public JLabel messageLabel;
+
+    public int W=0;
+    public int L=0;
 
     private Registre M;
     public Registre getM(){return this.M;}
@@ -29,6 +35,7 @@ public class Jeu {
         //grille[4][4][0] = robot2;
         this.random=new Random();
         this.M = new Registre();
+        messageLabel = new JLabel();
     }
 
     public void afficherMenuNiveaux() {
@@ -180,16 +187,16 @@ public class Jeu {
             grille[3][4][i] = new Obstacle("obstacle",3,4,i);
             grille[4][2][i] = new Obstacle("obstacle",4,1,i);        
         }
-        Fichier fichier1 = new TableauDynamique("199",2,2,1);
-        grille[2][2][1] = fichier1;
-        fichier1.setAbscisse(2);
-        fichier1.setOrdonnee(2);
-        fichier1.setCaseJ(1);
-        Fichier fichier2 = new TableauDynamique("299",2,3,2);
-        grille[2][3][2] = fichier2;
-        fichier2.setAbscisse(2);
-        fichier2.setOrdonnee(3);
-        fichier2.setCaseJ(2);
+        f1 = new TableauDynamique("199",2,2,1);
+        grille[2][2][1] = f1;
+        f2 = new TableauDynamique("299",2,3,2);
+        grille[2][3][2] = f2;
+        f1.setAbscisse(2);
+        f1.setOrdonnee(2);
+        f1.setCaseJ(1);
+        f2.setAbscisse(2);
+        f2.setOrdonnee(3);
+        f2.setCaseJ(2);
     }
     
     public void setNiveau2GUI(){
@@ -430,9 +437,10 @@ public class Jeu {
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
         ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
 
-        int i=0, j=0;
-        int[] tab1 = {i};
-        int[] tab2 = {j};
+        int i = 0, j = 0;
+        int[] tab1 = { i };
+        int[] tab2 = { j };
+    
         while (tab1[0] < instruR1.size() && tab2[0] < instruR2.size()) {
             double choix = random.nextDouble();
             if (choix < 0.5) {
@@ -450,37 +458,58 @@ public class Jeu {
                     instruR1.get(tab1[0]).execute(grille, robot1, instruR1, tab1,M);
                 }
             }
-            
+            afficherJeu();
+            if (verifierDefaite()) {
+                L=1;
+                return;
+            } else {
                 if (robot1.isMReady() ) tab1[0]++;
                 if (robot2.isMReady()) tab2[0]++;
+            }
         }
     
-        int k=0;
-        int[] tab = {k};
+        int k = 0;
+        int[] tab = { k };
         ArrayList<Instruction> instru;
         Robot robot;
     
-        if (tab1[0]==instruR1.size() && tab2[0]==instruR2.size()) return;
-        if (tab1[0]==instruR1.size() && tab2[0]<instruR2.size()) {
-            tab[0]=tab2[0];
+        if (tab1[0] == instruR1.size() && tab2[0] == instruR2.size()) {
+            if (verifierVictoire()) {
+                W=1;
+                return;
+            }
+            L=0;
+            return;
+        }
+        if (tab1[0] == instruR1.size() && tab2[0] < instruR2.size()) {
+            tab[0] = tab2[0];
             instru = instruR2;
             robot = robot2;
-        } 
-        else {
-            tab[0]=tab1[0];
+        } else {
+            tab[0] = tab1[0];
             instru = instruR1;
             robot = robot1;
         }
     
-        while (tab[0]<instru.size() && robot.getVivant()) {
-            instru.get(tab[0]).execute(grille,robot,instru,tab,M);
+        while (tab[0] < instru.size() && robot.getVivant()) {
+            instru.get(tab[0]).execute(grille, robot, instru, tab,M);
             afficherJeu();
+            if (verifierDefaite()) {
+               L=1;
+               return;
+            }
             tab[0]++;
         }
+    
+        // Vérification de la victoire à la fin du niveau 1
+        if (verifierVictoire()) {
+            W=1;
+            return;
+        }
+        L=1;
     }
 
     public void jouerGUI() {
-    
         // Récupérer les instructions à partir des zones de texte
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
         ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
@@ -490,6 +519,8 @@ public class Jeu {
         Instruction nextInstruR2 = getNextInstruction(instruR2, t2[0]);
         
         double choix = random.nextDouble();
+        //boolean badMove = false; // Variable pour vérifier si un mauvais mouvement a été fait
+    
         if (choix < 0.5) {
             if (robot1.getVivant() && nextInstruR1 != null) {
                 nextInstruR1.execute(grille, robot1, instruR1, t1,M);
@@ -499,8 +530,7 @@ public class Jeu {
                 nextInstruR2.execute(grille, robot2, instruR2, t2,M);
                 if(robot2.isMReady()) t2[0]++; // Avancer la position pour le robot 2
             }
-        }
-        else {
+        } else {
             if (robot2.getVivant() && nextInstruR2 != null) {
                 nextInstruR2.execute(grille, robot2, instruR2, t2,M);
                 if(robot2.isMReady()) t2[0]++; // Avancer la position pour le robot 2
@@ -510,11 +540,22 @@ public class Jeu {
                 if(robot1.isMReady()) t1[0]++; // Avancer la position pour le robot 1
             }
         }
+    
         // Mettre à jour l'affichage du jeu
         afficherJeuGUI();
-    } 
     
+        // Vérifier la victoire après le mouvement
+        if (verifierDefaite()) {
+            L = 1;
+        }
+
+        if (nextInstruR1==null && nextInstruR2==null) {
+            if (verifierVictoire()) W=1;
+            else L=1;
+        }
+    }
     
+
     private Instruction getNextInstruction(ArrayList<Instruction> instructions, int position) {
         // Vérifier si nous avons atteint la fin des instructions
         if (instructions == null || position >= instructions.size()) {
@@ -529,6 +570,15 @@ public class Jeu {
         positionR1=0;
         positionR2=0;
     }
-    
+
+    /*// Méthode pour vérifier si le joueur a gagné et afficher le pop-up correspondant
+    public void verifierEtAfficherResultat() {
+        boolean victoire = verifierVictoire();
+        if (victoire) {
+            JOptionPane.showMessageDialog(null, "Félicitations, vous avez gagné !");
+        } else {
+            JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu.");
+        }
+    }*/
 }
     

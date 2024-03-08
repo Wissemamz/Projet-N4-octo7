@@ -1,5 +1,6 @@
 package model;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -8,8 +9,10 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
+import java.util.concurrent.Flow;
 
 
 public class OctopunksGUI extends JFrame {
@@ -38,7 +41,7 @@ public class OctopunksGUI extends JFrame {
     private JPanel registreRobot1;
     private JPanel registreRobot2;
 
-    int n;
+    //int n;
 
     public OctopunksGUI() {
         jeu = new Jeu();
@@ -129,21 +132,25 @@ public class OctopunksGUI extends JFrame {
                 graphiqueButtonPanel.setLayout(new FlowLayout());
                 graphiqueButtonPanel.setBackground(Color.GRAY);
 
+
                 JButton btnCommencerGraphique = new JButton("START");
                 btnCommencerGraphique.setPreferredSize(new Dimension(200, 60));
-                btnCommencerGraphique.setFont(new Font("Arial", Font.PLAIN, 20));
-                btnCommencerGraphique.setBackground(Color.GREEN);
+                btnCommencerGraphique.setFont(new Font("Arial", Font.BOLD, 20));
+                btnCommencerGraphique.setForeground(Color.WHITE);
+                btnCommencerGraphique.setBackground(Color.BLACK);
 
-                JButton btnLevels = new JButton("Levels");
+                JButton btnLevels = new JButton("LEVELS");
                 btnLevels.setPreferredSize(new Dimension(200, 60));
-                btnLevels.setFont(new Font("Arial", Font.PLAIN, 20));
-                btnLevels.setBackground(Color.cyan);
+                btnLevels.setFont(new Font("Arial", Font.BOLD, 20));
+                btnLevels.setForeground(Color.WHITE);
+                btnLevels.setBackground(Color.BLACK);
 
 
-                JButton btnExit = new JButton("Exit");
+                JButton btnExit = new JButton("EXIT");
                 btnExit.setPreferredSize(new Dimension(200, 60));
-                btnExit.setFont(new Font("Arial", Font.PLAIN, 20));
-                btnExit.setBackground(Color.red);
+                btnExit.setFont(new Font("Arial", Font.BOLD, 20));
+                btnExit.setForeground(Color.WHITE);
+                btnExit.setBackground(Color.BLACK);
 
                 
                 // Ajouter les actions pour les nouveaux boutons "Levels" et "Exit"
@@ -174,17 +181,20 @@ public class OctopunksGUI extends JFrame {
                         JButton btnLevel1 = new JButton("Niveau 1");
                         btnLevel1.setPreferredSize(new Dimension(200, 60));
                         btnLevel1.setFont(new Font("Arial", Font.PLAIN, 20));
-                        btnLevel1.setBackground(Color.GREEN);
+                        btnLevel1.setForeground(Color.WHITE);
+                        btnLevel1.setBackground(Color.BLACK);
         
                         JButton btnLevel2 = new JButton("Niveau 2");
                         btnLevel2.setPreferredSize(new Dimension(200, 60));
                         btnLevel2.setFont(new Font("Arial", Font.PLAIN, 20));
-                        btnLevel2.setBackground(Color.cyan);
+                        btnLevel2.setForeground(Color.WHITE);
+                        btnLevel2.setBackground(Color.BLACK);
         
                         JButton btnLevel3 = new JButton("Niveau 3");
                         btnLevel3.setPreferredSize(new Dimension(200, 60));
                         btnLevel3.setFont(new Font("Arial", Font.PLAIN, 20));
-                        btnLevel3.setBackground(Color.red);
+                        btnLevel3.setForeground(Color.WHITE);
+                        btnLevel3.setBackground(Color.BLACK);
         
                         
                         btnLevel1.addActionListener(new ActionListener() {
@@ -192,7 +202,7 @@ public class OctopunksGUI extends JFrame {
                             public void actionPerformed(ActionEvent e) {
                                 levelMenu.dispose();
                                 jeu.setNiveau1GUI();
-                                n=1;
+                                jeu.niveau=1;
                                 startGUI(1);
                             }
                         });
@@ -202,7 +212,7 @@ public class OctopunksGUI extends JFrame {
                             public void actionPerformed(ActionEvent e) {
                                 levelMenu.dispose();
                                 jeu.setNiveau2GUI();
-                                n=2;
+                                jeu.niveau=2;
                                 startGUI(2); 
                         }
                         });
@@ -211,7 +221,7 @@ public class OctopunksGUI extends JFrame {
                             public void actionPerformed(ActionEvent e) {
                                 levelMenu.dispose();
                                 jeu.setNiveau3GUI();
-                                n=3;
+                                jeu.niveau=3;
                                 startGUI(3);
                             }
                         });
@@ -239,6 +249,7 @@ public class OctopunksGUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         dispose(); // Fermer la fenêtre du menu principal
                         graphiqueMenu.dispose(); // Fermer la fenêtre du menu graphique
+                        jeu.niveau=1;
                         startGUI(1);
                     }
                 });
@@ -411,8 +422,14 @@ public class OctopunksGUI extends JFrame {
                     OctopunksGUI.memoryArea2.setEditable(false);
 
                     jeu.jouerGUI();
-
                     updateGUI();
+
+                    if (jeu.L==1) {
+                        JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu la partie.", "Défaite", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if (jeu.W==1){
+                        JOptionPane.showMessageDialog(null, "Felecitations, vous avez reussi la partie.", "Gagne", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             });
 
@@ -464,6 +481,8 @@ public class OctopunksGUI extends JFrame {
                             break;
                     }
                     jeu.resetPosition();
+                    jeu.W=0;
+                    jeu.L=0;
             
                     // Mettre à jour l'affichage de la grille
                     createGridCells(Prototype, x, y, scaledIcon);
@@ -514,17 +533,20 @@ public class OctopunksGUI extends JFrame {
 
                     jeu.jouerGUIAuto();
                     updateGUI();
+
                     stepButton.setEnabled(false);
                     
-                    /*passerAuNiveauSuivant(1);
-                    // Vérifier la victoire
-                    if (jeu.verifierVictoire()) {
-                        message_victoireGUI();
-                    }*/
+                    if(jeu.W==1){
+                        ImageIcon victoireIcon = new ImageIcon(resizeImage("main/src/images/octo_down.png", 50, 50));
+                        JOptionPane.showMessageDialog(null, "Felecitations, vous avez reussi la partie.", "Victoire", JOptionPane.INFORMATION_MESSAGE,victoireIcon);
+                    }
+                    else {
+                        ImageIcon defaiteIcon = new ImageIcon(resizeImage("main/src/images/Dead.png",50,50));
+                        JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu la partie.", "Défaite", JOptionPane.ERROR_MESSAGE,defaiteIcon);
+                    }
                 }
             });
     
-            // Game panel
             gamePanel = new JPanel();
             gamePanel.setBackground(Color.WHITE);
             gamePanel.setPreferredSize(new Dimension(600, 400));
@@ -624,24 +646,6 @@ public class OctopunksGUI extends JFrame {
         });
     }
 
-    /*protected void updateGUI() {
-        // Mettre à jour l'affichage de la grille
-        createGridCells(gridPanel, x, y, scaledIcon);
-
-        // Mettre à jour les panneaux de registres et le contenu des fichiers pour chaque robot
-        updateRegisterPanel(registreRobot1, jeu.robot1);
-        updateRegisterPanel(registreRobot2, jeu.robot2);
-
-        //String fileContent1 = jeu.robot1.getFichier()==null ? "" : 
-        //String fileContent2 = jeu.robot2.getFichier()==null ? "" : 
-        // Mettre a jour de contenu des fichiers 
-        updateFilePanel(jeu.robot1,filePanel1, fileContent1);
-        updateFilePanel(jeu.robot2, filePanel2, fileContent2);
-
-        // Rafraîchir l'interface utilisateur
-        revalidate();
-        repaint();
-    }*/
     protected void updateGUI() {
         // Mettre à jour l'affichage de la grille
         createGridCells(gridPanel, x, y, scaledIcon);
@@ -654,10 +658,15 @@ public class OctopunksGUI extends JFrame {
         updateFilePanel(jeu.robot1, filePanel1, jeu.robot1.getFichier());
         updateFilePanel(jeu.robot2, filePanel2, jeu.robot2.getFichier());
     
-        // Rafraîchir l'interface utilisateur
+        /*  Vérification de la victoire à la fin du niveau 1
+        if (jeu.L==1) {
+            JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu la partie.", "Défaite", JOptionPane.ERROR_MESSAGE);
+        }    
+        // Rafraîchir l'interface utilisateur*/
         revalidate();
         repaint();
     }
+    
     
     
     private JPanel createFilePanel(Robot robot) {
@@ -833,7 +842,22 @@ public class OctopunksGUI extends JFrame {
             ex.printStackTrace();
         }
     }
-
+    public static Image resizeImage(String imagePath, int width, int height) {
+        try {
+            // Chargement de l'image
+            File file = new File(imagePath);
+            BufferedImage originalImage = ImageIO.read(file);
+    
+            // Redimensionnement de l'image
+            Image resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    
+            return resizedImage;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+}
     /*public void message_victoireGUI() {
         // Création de la fenêtre modale
         JFrame frame = new JFrame("");
@@ -861,6 +885,7 @@ public class OctopunksGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 passerAuNiveauSuivant(n); // Méthode pour passer au niveau suivant
                 frame.dispose(); // Fermer la fenêtre modale
+
             }
         });
 
@@ -876,7 +901,6 @@ public class OctopunksGUI extends JFrame {
     }
 
     private void passerAuNiveauSuivant(int niveauActuel) {
-        int prochainNiveau = niveauActuel + 1;
         if (prochainNiveau <= 3) {
             // Charger le prochain niveau en fonction de son numéro
             switch (prochainNiveau) {
@@ -900,4 +924,3 @@ public class OctopunksGUI extends JFrame {
             // Vous pouvez ajouter d'autres actions ici, comme quitter le jeu
         }
     }*/
-}
