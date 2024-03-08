@@ -4,9 +4,6 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.text.Position;
-
-
 public class Jeu {
     public ObjetJ [][][] grille = new ObjetJ[5][5][4];
     private Random random;
