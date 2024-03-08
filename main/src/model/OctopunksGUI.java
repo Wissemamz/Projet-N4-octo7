@@ -465,6 +465,9 @@ public class OctopunksGUI extends JFrame {
             
                     // Mettre à jour l'affichage de la grille
                     createGridCells(Prototype, x, y, scaledIcon);
+                    stepButton.setEnabled(true);
+                    jeu.t1[0]=0;
+                    jeu.t2[0]=0;
                 }
             });
             
@@ -522,6 +525,7 @@ public class OctopunksGUI extends JFrame {
                         }
                     }*/
                     updateGUI();
+                    stepButton.setEnabled(false);
                 }
             });
     
@@ -629,11 +633,26 @@ public class OctopunksGUI extends JFrame {
             topPanel.add(leftPanel, BorderLayout.CENTER);
             topPanel.add(rightPanel, BorderLayout.EAST);
 
-            JLabel missionLabel = new JLabel("Zone de la mission : ");
+            String mission = "  Mission :  ";
+            switch (n) {
+                case (1) :
+                    mission = mission + "Deplacez les fichiers 199 et 299 dans la case [0][2]";
+                    break;
+                case (2) :
+                    mission = mission + "Deplacez le contenu du fichier 667 vers un fichier et deposez le dans la case [0][0]";
+                    break;
+                case (3) :
+                    mission = mission + "";
+                    break;
+            }
+            JLabel missionLabel = new JLabel(mission);
+            missionLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+            missionLabel.setForeground(Color.BLACK);
+
             JPanel bottomPanel = new JPanel();
             bottomPanel.setPreferredSize(new Dimension(600, 100));
             bottomPanel.setLayout(new BorderLayout());
-            bottomPanel.add(missionLabel, BorderLayout.NORTH);
+            bottomPanel.add(missionLabel, BorderLayout.PAGE_START);
 
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(topPanel, BorderLayout.NORTH);

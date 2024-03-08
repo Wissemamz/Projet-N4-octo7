@@ -920,9 +920,7 @@ public class Instruction {
             if (parametre.length != 1) return ;
             else {
                 int val = Integer.parseInt(parametre[0]);
-                if (r.getLastRegistre().getValeur()!=0) return;
-                else 
-                {
+                if (r.getLastRegistre().getValeur()==0){
                     if ((pos[0]+val<0) || (pos[0]+val>instructions.size())) return;
                     else {
                         pos[0] = pos[0] + val -1;
@@ -950,12 +948,11 @@ public class Instruction {
         }
         else if (commande.equals(Commande.TEST_EOF.toString())){
             // mettre le registre T à 1 si le fichier est a sa fin, sinon 0
-            if (parametre.length!=0) return;
-            else {
-                if (r.getFichier()==null) return;
-                else if (r.getFichier().TEST_EOF()) r.getT().setValeur(1);
-                else r.getT().setValeur(0);
-            }
+            //if (parametre.length!=0) return;
+            if (r.getFichier()==null) return;
+            if (r.getFichier().TEST_EOF()) r.getT().setValeur(1);
+            else r.getT().setValeur(0);
+            r.setLastRegistre(r.getT());
         }
         else if (commande.equals(Commande.SEEK.toString())){
             if (parametre.length!=1) return;
@@ -968,7 +965,6 @@ public class Instruction {
             }
         }
         else if (commande.equals(Commande.VOID_F.toString())){
-            // mettre le registre T à 1 si le fichier est a sa fin, sinon 0
             if (parametre.length!=0) return;
             else if (r.getFichier()==null) return;
             else r.getFichier().VOID_F();

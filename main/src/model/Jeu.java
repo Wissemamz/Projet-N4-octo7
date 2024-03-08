@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.text.Position;
+
 
 public class Jeu {
     public ObjetJ [][][] grille = new ObjetJ[5][5][4];
@@ -20,7 +22,8 @@ public class Jeu {
     // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
     private int positionR1 = 0;
     private int positionR2 = 0;
-
+    public int[] t1 = {positionR1};
+    public int[] t2 = {positionR2};
 
     public Jeu() {
         this.robot1= new Robot("Robot1", 4, 0,0);
@@ -296,14 +299,14 @@ public class Jeu {
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'fin' pour terminer) :");
+        System.out.println("Veuillez entrer le texte pour le robot "+r+",(tapez 'FIN' pour terminer) :");
 
-        // Lire le texte jusqu'à ce que l'utilisateur entre "fin"
+        // Lire le texte jusqu'à ce que l'utilisateur entre "FIN"
         while (true) {
             String inputLine = scanner.nextLine();
 
-            if (inputLine.equals("fin")) {
-                break; // Sortir de la boucle si l'utilisateur entre "fin"
+            if (inputLine.equals("FIN")) {
+                break; // Sortir de la boucle si l'utilisateur entre "FIN"
             }
 
             String[] parts = inputLine.split("\\s+");
@@ -364,6 +367,7 @@ public class Jeu {
     
         if (tab1[0] == instruR1.size() && tab2[0] == instruR2.size()) {
             if (verifierVictoire()) {
+                message_victoire();
                 return;
             }
             System.out.println("Vous avez perdu !");
@@ -483,30 +487,30 @@ public class Jeu {
         // Récupérer les instructions à partir des zones de texte
         ArrayList<Instruction> instruR1 = parseTextFromInputGUI(OctopunksGUI.memoryArea1.getText());
         ArrayList<Instruction> instruR2 = parseTextFromInputGUI(OctopunksGUI.memoryArea2.getText());
-    
+
         // Récupérer la prochaine instruction à exécuter pour chaque robot
-        Instruction nextInstruR1 = getNextInstruction(instruR1, positionR1);
-        Instruction nextInstruR2 = getNextInstruction(instruR2, positionR2);
+        Instruction nextInstruR1 = getNextInstruction(instruR1, t1[0]);
+        Instruction nextInstruR2 = getNextInstruction(instruR2, t2[0]);
         
         double choix = random.nextDouble();
         if (choix < 0.5) {
             if (robot1.getVivant() && nextInstruR1 != null) {
-                nextInstruR1.execute(grille, robot1, instruR1, null,M);
-                if(robot1.isMReady()) positionR1++; // Avancer la position pour le robot 1
+                nextInstruR1.execute(grille, robot1, instruR1, t1,M);
+                if(robot1.isMReady()) t1[0]++; // Avancer la position pour le robot 1
             }
             if (robot2.getVivant() && nextInstruR2 != null) {
-                nextInstruR2.execute(grille, robot2, instruR2, null,M);
-                if(robot2.isMReady()) positionR2++; // Avancer la position pour le robot 2
+                nextInstruR2.execute(grille, robot2, instruR2, t2,M);
+                if(robot2.isMReady()) t2[0]++; // Avancer la position pour le robot 2
             }
         }
         else {
             if (robot2.getVivant() && nextInstruR2 != null) {
-                nextInstruR2.execute(grille, robot2, instruR2, null,M);
-                if(robot2.isMReady()) positionR2++; // Avancer la position pour le robot 2
+                nextInstruR2.execute(grille, robot2, instruR2, t2,M);
+                if(robot2.isMReady()) t2[0]++; // Avancer la position pour le robot 2
             }
             if (robot1.getVivant() && nextInstruR1 != null) {
-                nextInstruR1.execute(grille, robot1, instruR1, null,M);
-                if(robot1.isMReady()) positionR1++; // Avancer la position pour le robot 1
+                nextInstruR1.execute(grille, robot1, instruR1, t1,M);
+                if(robot1.isMReady()) t1[0]++; // Avancer la position pour le robot 1
             }
         }
         // Mettre à jour l'affichage du jeu
