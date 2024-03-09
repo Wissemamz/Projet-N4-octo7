@@ -15,6 +15,9 @@ public class Robot extends ObjetJ{
     public boolean isMReady(){return Ready;}
     public void setReady(){Ready=true;}
     public void setNotReady(){Ready=false;}
+    public int modeM; 
+    public int getMode(){return modeM;}
+    public void setMode(int mode){modeM = mode;}
 
     public Robot(String name, int abscisse, int ordonnee, int caseJ){
         super(name,abscisse,ordonnee,caseJ);
@@ -25,6 +28,7 @@ public class Robot extends ObjetJ{
         this.last = X;
         this.fichier = null;
         Ready = true;
+        modeM = 1; // Global
     }
 
     public boolean getVivant(){

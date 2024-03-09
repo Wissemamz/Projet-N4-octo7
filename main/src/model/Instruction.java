@@ -34,7 +34,7 @@ public class Instruction {
         return parametre[i];
     }
 
-    public void execute (ObjetJ[][][] grille,Robot r,ArrayList<Instruction> instructions,int[] pos, Registre M){
+    public void execute (ObjetJ[][][] grille,Robot r,ArrayList<Instruction> instructions,int[] pos, Registre M, Robot autreRobot){
         if (commande.equals(Commande.GRAB.toString())){
             if (parametre.length==1 && r.getFichier()==null) {
                 for (int i=0; i<4; i++){
@@ -243,33 +243,43 @@ public class Instruction {
                     }
                     else if (parametre[0].equals("X") && parametre[1].equals("M")) {
                         if (M.getValeur()==0) {
-                            M.setValeur(r.getX().getValeur()) ;
-                            r.setReady();
+                            if ((r.getMode()==1 && autreRobot.getMode()==1) || (r.getMode()==0 && autreRobot.getMode()==0 && r.getAbscisse()==autreRobot.getAbscisse() && r.getOrdonnee()==autreRobot.getOrdonnee())) {
+                                M.setValeur(r.getX().getValeur());
+                                r.setReady();
+                            }
                         }
                         else r.setNotReady();
                     }
                     else if (parametre[0].equals("M") && parametre[1].equals("X")) {
                         if (M.getValeur()!=0) {
-                            r.getX().setValeur(M.getValeur());
-                            r.setLastRegistre(r.getX());
-                            M.setValeur(0);
-                            r.setReady();
+                            if ((r.getMode()==1 && autreRobot.getMode()==1) || (r.getMode()==0 && autreRobot.getMode()==0 && r.getAbscisse()==autreRobot.getAbscisse() && r.getOrdonnee()==autreRobot.getOrdonnee())) {
+                            
+                                r.getX().setValeur(M.getValeur());
+                                r.setLastRegistre(r.getX());
+                                M.setValeur(0);
+                                r.setReady();
+                            }
                         }
                         else r.setNotReady();
+                    
                     }
                     else if (parametre[0].equals("T") && parametre[1].equals("M")) {
                         if (M.getValeur()==0) {
-                            M.setValeur(r.getT().getValeur()) ;
-                            r.setReady();
+                            if ((r.getMode()==1 && autreRobot.getMode()==1) || (r.getMode()==0 && autreRobot.getMode()==0 && r.getAbscisse()==autreRobot.getAbscisse() && r.getOrdonnee()==autreRobot.getOrdonnee())) {
+                                M.setValeur(r.getT().getValeur()) ;
+                                r.setReady();
+                            }    
                         }
                         else r.setNotReady();
                     }
                     else if (parametre[0].equals("M") && parametre[1].equals("T")) {
                         if (M.getValeur()!=0) {
-                            r.getT().setValeur(M.getValeur());
-                            r.setLastRegistre(r.getT());
-                            M.setValeur(0);
-                            r.setReady();
+                            if ((r.getMode()==1 && autreRobot.getMode()==1) || (r.getMode()==0 && autreRobot.getMode()==0 && r.getAbscisse()==autreRobot.getAbscisse() && r.getOrdonnee()==autreRobot.getOrdonnee())) {
+                                r.getT().setValeur(M.getValeur());
+                                r.setLastRegistre(r.getT());
+                                M.setValeur(0);
+                                r.setReady();
+                            }
                         }
                         else r.setNotReady();
                     }
@@ -928,24 +938,28 @@ public class Instruction {
                 }
             }
         }
+        
         else if (commande.equals(Commande.MAKE.toString())){
             if (parametre.length!=1) return;
             else {
                 r.setFichier(new TableauDynamique(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
             }
         }
+
         else if (commande.equals(Commande.MAKELIFO.toString())){
             if (parametre.length!=1) return;
             else {
                 r.setFichier(new Pile(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
             }
         }
+
         else if (commande.equals(Commande.MAKEFIFO.toString())){
             if (parametre.length!=1) return;
             else {
                 r.setFichier(new File(parametre[0], r.getAbscisse(),r.getOrdonnee() ,r.getCaseJ()));
             }
         }
+
         else if (commande.equals(Commande.TEST_EOF.toString())){
             // mettre le registre T à 1 si le fichier est a sa fin, sinon 0
             //if (parametre.length!=0) return;
@@ -954,6 +968,7 @@ public class Instruction {
             else r.getT().setValeur(0);
             r.setLastRegistre(r.getT());
         }
+
         else if (commande.equals(Commande.SEEK.toString())){
             if (parametre.length!=1) return;
             else {
@@ -964,11 +979,13 @@ public class Instruction {
                 }
             }
         }
+
         else if (commande.equals(Commande.VOID_F.toString())){
             if (parametre.length!=0) return;
             else if (r.getFichier()==null) return;
             else r.getFichier().VOID_F();
         }
+
         else if (commande.equals(Commande.WIPE.toString())){
             if (parametre.length==1 && r.getFichier()!=null){
                 if (r.getFichier().getName().equals(parametre[0])){
@@ -976,6 +993,7 @@ public class Instruction {
                 }
             }
         }
+
         else if (commande.equals(Commande.HALT.toString())){
             r.meurt();
             grille[r.getAbscisse()][r.getOrdonnee()][r.getCaseJ()] = null;

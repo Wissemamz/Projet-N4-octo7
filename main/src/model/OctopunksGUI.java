@@ -4,11 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
@@ -448,8 +444,8 @@ public class OctopunksGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Réinitialiser les valeurs des registres pour chaque robot
-                    resetRegisterValues(jeu.robot1);
-                    resetRegisterValues(jeu.robot2);
+                    resetRegisterValues(jeu.robot1,registreRobot1);
+                    resetRegisterValues(jeu.robot2,registreRobot2);
             
                     // Rafraîchir l'affichage des panneaux de registres
                     updateRegisterPanel(registreRobot1, jeu.robot1);
@@ -489,6 +485,8 @@ public class OctopunksGUI extends JFrame {
                     stepButton.setEnabled(true);
                     jeu.t1[0]=0;
                     jeu.t2[0]=0;
+                    jeu.robot1.setMode(1);
+                    jeu.robot2.setMode(1);
                 }
             });
             
@@ -511,8 +509,8 @@ public class OctopunksGUI extends JFrame {
                     OctopunksGUI.memoryArea2.setEditable(false);
 
                     // Réinitialiser les valeurs des registres pour chaque robot
-                    resetRegisterValues(jeu.robot1);
-                    resetRegisterValues(jeu.robot2);
+                    resetRegisterValues(jeu.robot1,registreRobot1);
+                    resetRegisterValues(jeu.robot2,registreRobot2);
             
                     // Rafraîchir l'affichage des panneaux de registres
                     updateRegisterPanel(registreRobot1, jeu.robot1);
@@ -790,8 +788,46 @@ public class OctopunksGUI extends JFrame {
         table.setFont(new Font("Arial", Font.PLAIN, 16)); // Définir la police du texte dans le tableau
     
         // Créer un panneau pour contenir le tableau
-        JPanel registerPanel = new JPanel(new FlowLayout());
-        registerPanel.add(table);
+        JPanel registerPanel = new JPanel(new BorderLayout());
+        registerPanel.add(table, BorderLayout.CENTER);
+
+        // Créer et ajouter un bouton
+        final JButton button = new JButton("");
+        button.setPreferredSize(new Dimension(50, 25));
+
+        ImageIcon iconSwitch = new ImageIcon("main/src/images/pasBouttonW.png"); // Assurez-vous de charger une image de 16x16 pixels
+        // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
+        Image imageSwitch = iconSwitch.getImage();
+        Image newImageSwitch = imageSwitch.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+        ImageIcon scaledSwitchIcon = new ImageIcon(newImageSwitch);
+        button.setBackground(Color.BLACK);
+        button.setIcon(scaledSwitchIcon);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ImageIcon newIcon;
+                if (robot.getMode()==1) {
+                    robot.setMode(0);
+                    newIcon = new ImageIcon("main/src/images/autoBoutton.png");                
+                }
+                else {
+                    robot.setMode(1);
+                    newIcon = new ImageIcon("main/src/images/pasBouttonW.png"); 
+                }
+                Image image = newIcon.getImage();
+                Image newImage = image.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(newImage);
+                button.setIcon(scaledIcon);
+            }
+        });
+        
+        // Créer un panneau pour contenir le bouton
+        //JPanel buttonPanel = new JPanel();
+        //buttonPanel.add(button);
+
+        // Ajout du panneau du bouton en bas
+        registerPanel.add(button, BorderLayout.SOUTH);
         return registerPanel;
     }
     
@@ -812,12 +848,19 @@ public class OctopunksGUI extends JFrame {
     }
     
     
-    private void resetRegisterValues(Robot robot) {
+    private void resetRegisterValues(Robot robot, JPanel registerPanel) {
         // Réinitialiser les valeurs des registres du robot
         robot.getX().setValeur(0);
         robot.getT().setValeur(0);
         robot.setFichier(null);
         jeu.getM().setValeur(0);
+
+        ImageIcon newIcon = new ImageIcon("main/src/images/pasBouttonW.png"); // Insérez le chemin de votre nouvelle image
+        Image image = newIcon.getImage();
+        Image newImage = image.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(newImage);
+        JButton button = (JButton) registerPanel.getComponent(1);
+        button.setIcon(scaledIcon);
     }
     
     private void resetFilePanel(Robot robot, JPanel filePanel) {
