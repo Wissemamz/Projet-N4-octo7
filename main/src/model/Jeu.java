@@ -173,14 +173,14 @@ public class Jeu {
             grille[3][4][i] = new Obstacle("obstacle",3,3,i);        
         }
         ArrayList<Integer> liste = new ArrayList<>();
-        liste.add(24);
-        liste.add(6);
+        liste.add(1211);
+        liste.add(1102);
         liste.add(2);
-        liste.add(24);
-        f1 = new TableauDynamique("111",4,0,1,liste);
+        liste.add(3012);
+        f1 = new TableauDynamique("444",4,0,1,liste);
         grille[4][0][1] = f1;
         
-        System.out.println("Mission : Recuperer le fichier 111, additionner les 2 premiere valuers, multiplier par la troisieme, soustraire la 4eme, additionner la premiere, mettre chaque resultat dans une pile et la deposer a la case [4][4]");
+        System.out.println("Mission : Recuperer le fichier 444, additionner les 2 premieres valuers, multiplier par la troisieme, soustraire la 4eme, additionner avec la premiere, mettre tout les resultats dans une pile et la deposer a la case [4][4], detruire le fichier 444 et le robot qui l'a recuperé");
         System.out.println();
     }
 
@@ -288,21 +288,21 @@ public class Jeu {
         robot2.setFichier(null);
 
         for (int i=0 ;i<4; i++){
-            grille[0][3][i] = new Obstacle("obstacle",0,3,i);
-            grille[1][3][i] = new Obstacle("obstacle",1,3,i);
-            grille[2][3][i] = new Obstacle("obstacle",2,3,i);
-            grille[3][3][i] = new Obstacle("obstacle",3,3,i);        
-            grille[4][3][i] = new Obstacle("obstacle",4,3,i);        
+            grille[4][1][i] = new Obstacle("obstacle",0,3,i);
+            grille[3][0][i] = new Obstacle("obstacle",1,3,i);
+            grille[4][3][i] = new Obstacle("obstacle",2,3,i);
+            grille[3][4][i] = new Obstacle("obstacle",3,3,i);        
         }
+
         ArrayList<Integer> liste = new ArrayList<>();
-        liste.add(1);
+        liste.add(1211);
+        liste.add(1102);
         liste.add(2);
-        liste.add(3);
-        liste.add(4);
-        f1 = new TableauDynamique("667",0,4,3,liste);
-        grille[0][4][1] = f1;
-        f1.setAbscisse(0);
-        f1.setOrdonnee(4);
+        liste.add(3012);
+        f1 = new TableauDynamique("444",4,0,1,liste);
+        grille[4][0][1] = f1;
+        f1.setAbscisse(4);
+        f1.setOrdonnee(0);
         f1.setCaseJ(1);
     }
 
@@ -323,7 +323,23 @@ public class Jeu {
                     }
                     return false; 
             case(3) : 
-                return false;
+                    if (robot1.getVivant()) return false;
+                    for (int k = 0; k < 4; k++){
+                        if (grille[4][0][k] instanceof Fichier) return false;
+                    }
+                    ArrayList<Integer> liste = new ArrayList<>();
+                    liste.add(2313);
+                    liste.add(4626);
+                    liste.add(1614);
+                    liste.add(2825);
+                    Fichier f444 = new TableauDynamique("444",0,0,0,liste);
+                    for (int k = 0; k < 4; k++){
+                        if (grille[4][4][k] instanceof Pile) {
+                            Pile f = (Pile)grille[4][4][k];
+                            return f.meme_elements(f444);
+                        }
+                    }
+                    return false; 
             default : return false;
         } 
         
@@ -340,7 +356,7 @@ public class Jeu {
             case(2) : 
                 return !(robot1.getVivant() && robot2.getVivant());
             case(3) : 
-                return !(robot1.getVivant() && robot2.getVivant());
+                return !(robot2.getVivant());
             default : return false;
         }
     }
@@ -354,7 +370,7 @@ public class Jeu {
                 System.out.println("Victoire ! Vous avez copier les elements dans un fichier a la position attendue.");
                 break;
             case 3 :
-
+                System.out.println("Victoire ! Vous avez volé les données chiffrées sans laisser de trace.");                
                 break;
         }
     }
