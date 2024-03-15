@@ -421,10 +421,10 @@ public class OctopunksGUI extends JFrame {
                     updateGUI();
 
                     if (jeu.L==1) {
-                        JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu la partie.", "Défaite", JOptionPane.ERROR_MESSAGE);
+                        message_defaiteGUI();      
                     }
                     else if (jeu.W==1){
-                        JOptionPane.showMessageDialog(null, "Felecitations, vous avez reussi la partie.", "Gagne", JOptionPane.ERROR_MESSAGE);
+                        message_victoireGUI();
                     }
                 }
             });
@@ -535,13 +535,9 @@ public class OctopunksGUI extends JFrame {
                     stepButton.setEnabled(false);
                     
                     if(jeu.W==1){
-                        ImageIcon victoireIcon = new ImageIcon(resizeImage("main/src/images/octo_down.png", 50, 50));
-                        JOptionPane.showMessageDialog(null, "Felecitations, vous avez reussi la partie.", "Victoire", JOptionPane.INFORMATION_MESSAGE,victoireIcon);
-                    }
+                        message_victoireGUI();}
                     else {
-                        ImageIcon defaiteIcon = new ImageIcon(resizeImage("main/src/images/Dead.png",50,50));
-                        JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu la partie.", "Défaite", JOptionPane.ERROR_MESSAGE,defaiteIcon);
-                    }
+                        message_defaiteGUI();}
                 }
             });
     
@@ -900,23 +896,41 @@ public class OctopunksGUI extends JFrame {
             return null;
         }
     }
-}
-    /*public void message_victoireGUI() {
+    
+    public void message_victoireGUI() {
         // Création de la fenêtre modale
         JFrame frame = new JFrame("");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(400, 300); // Augmentation de la taille de la fenêtre
         frame.setLayout(new BorderLayout());
+        frame.getContentPane().setBackground(Color.WHITE); // Fond blanc pour la fenêtre
 
         // Message de victoire
-        JLabel label = new JLabel("Félicitations ! Vous avez réussi ce niveau !");
+        JLabel label = new JLabel("Félicitations !");
         label.setHorizontalAlignment(JLabel.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 30)); // Changement de la police d'écriture
+        label.setForeground(Color.BLACK); // Couleur du texte en noir
         frame.add(label, BorderLayout.NORTH);
 
         // Boutons "Exit" et "Niveau suivant"
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2, 1, 0, 10)); // Utilisation d'un GridLayout avec un espace vertical de 10 pixels entre les boutons
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 30, 0)); // Espacement en haut et en bas des boutons
+
         JButton exitButton = new JButton("Exit");
         JButton nextLevelButton = new JButton("Niveau suivant");
+
+        exitButton.setFont(new Font("Arial", Font.BOLD, 20)); // Changement de la police d'écriture pour les boutons
+        exitButton.setBackground(Color.BLACK); // Fond noir pour le bouton
+        exitButton.setForeground(Color.WHITE); // Texte blanc pour le bouton
+        exitButton.setFocusPainted(false); // Suppression du contour de focus
+        exitButton.setMargin(new Insets(10, 20, 10, 20)); // Espacement entre le texte et les bords du bouton
+
+        nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20)); // Changement de la police d'écriture pour les boutons
+        nextLevelButton.setBackground(Color.BLACK); // Fond noir pour le bouton
+        nextLevelButton.setForeground(Color.WHITE); // Texte blanc pour le bouton
+        nextLevelButton.setFocusPainted(false); // Suppression du contour de focus
+        nextLevelButton.setMargin(new Insets(10, 20, 10, 20)); // Espacement entre le texte et les bords du bouton
 
         exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -924,9 +938,9 @@ public class OctopunksGUI extends JFrame {
             }
         });
 
-        nextLevelButton.addActionListener((ActionListener) new ActionListener() {
+        nextLevelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                passerAuNiveauSuivant(n); // Méthode pour passer au niveau suivant
+                passerAuNiveauSuivant(jeu.niveau); // Méthode pour passer au niveau suivant
                 frame.dispose(); // Fermer la fenêtre modale
 
             }
@@ -943,10 +957,114 @@ public class OctopunksGUI extends JFrame {
         frame.setVisible(true);
     }
 
+    public void message_defaiteGUI() {
+        // Création de la fenêtre modale
+        JFrame frame = new JFrame("");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(400, 300); // Augmentation de la taille de la fenêtre
+        frame.setLayout(new BorderLayout());
+        frame.getContentPane().setBackground(Color.WHITE); // Fond blanc pour la fenêtre
+
+        // Message de défaite
+        JLabel label = new JLabel("Mince ! Vous avez perdu !");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 30)); // Changement de la police d'écriture
+        label.setForeground(Color.BLACK); // Couleur du texte en noir
+        frame.add(label, BorderLayout.NORTH);
+
+        // Boutons "Exit" et "Réessayer le niveau"
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2, 1, 0, 10)); // Utilisation d'un GridLayout avec un espace vertical de 10 pixels entre les boutons
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0)); // Espacement en haut des boutons
+
+        JButton exitButton = new JButton("Exit");
+        JButton retryLevelButton = new JButton("Réessayer le niveau");
+
+        exitButton.setFont(new Font("Arial", Font.BOLD, 20)); // Changement de la police d'écriture pour les boutons
+        exitButton.setBackground(Color.BLACK); // Fond noir pour le bouton
+        exitButton.setForeground(Color.WHITE); // Texte blanc pour le bouton
+        exitButton.setFocusPainted(false); // Suppression du contour de focus
+        exitButton.setMargin(new Insets(10, 20, 10, 20)); // Espacement entre le texte et les bords du bouton
+
+        retryLevelButton.setFont(new Font("Arial", Font.BOLD, 20)); // Changement de la police d'écriture pour les boutons
+        retryLevelButton.setBackground(Color.BLACK); // Fond noir pour le bouton
+        retryLevelButton.setForeground(Color.WHITE); // Texte blanc pour le bouton
+        retryLevelButton.setFocusPainted(false); // Suppression du contour de focus
+        retryLevelButton.setMargin(new Insets(10, 20, 10, 20)); // Espacement entre le texte et les bords du bouton
+
+        exitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); // Quitter le jeu
+            }
+        });
+
+        retryLevelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                    // Réinitialiser les valeurs des registres pour chaque robot
+                    resetRegisterValues(jeu.robot1,registreRobot1);
+                    resetRegisterValues(jeu.robot2,registreRobot2);
+            
+                    // Rafraîchir l'affichage des panneaux de registres
+                    updateRegisterPanel(registreRobot1, jeu.robot1);
+                    updateRegisterPanel(registreRobot2, jeu.robot2);
+
+                    // Reset de la zone des fichiers
+                    resetFilePanel(jeu.robot1, filePanel1);
+                    resetFilePanel(jeu.robot2, filePanel2);
+            
+                    // Réinitialiser d'autres éléments si nécessaire
+                    // Effacer le contenu des zones mémoires
+                    //memoryArea1.setText("");
+                    //memoryArea2.setText("");
+
+                    // Reouvrir les zones de texte
+                    OctopunksGUI.memoryArea1.setEditable(true);
+                    OctopunksGUI.memoryArea2.setEditable(true);
+            
+                    // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
+                    switch (jeu.niveau) {
+                        case 1 : 
+                            jeu.setNiveau1GUI();
+                            break;
+                        case 2 : 
+                            jeu.setNiveau2GUI();
+                            break;
+                        case 3 : 
+                            jeu.setNiveau3GUI();
+                            break;
+                    }
+                    jeu.resetPosition();
+                    jeu.W=0;
+                    jeu.L=0;
+            
+                    // Mettre à jour l'affichage de la grille
+                    createGridCells(Prototype, x, y, scaledIcon);
+                    stepButton.setEnabled(true);
+                    jeu.t1[0]=0;
+                    jeu.t2[0]=0;
+                    jeu.robot1.setMode(1);
+                    jeu.robot2.setMode(1);
+
+                    frame.dispose();
+                }
+        });
+
+        buttonPanel.add(exitButton);
+        buttonPanel.add(retryLevelButton);
+        frame.add(buttonPanel, BorderLayout.CENTER);
+
+        // Centrer la fenêtre sur l'écran
+        frame.setLocationRelativeTo(null);
+
+        // Rendre la fenêtre visible
+        frame.setVisible(true);
+    }
+
+
     private void passerAuNiveauSuivant(int niveauActuel) {
-        if (prochainNiveau <= 3) {
-            // Charger le prochain niveau en fonction de son numéro
-            switch (prochainNiveau) {
+        if (niveauActuel < 3) {
+            /*// Charger le prochain niveau en fonction de son numéro
+            switch (niveauActuel+1) {
                 case 1:
                     jeu.setNiveau1GUI();
                     break;
@@ -955,15 +1073,13 @@ public class OctopunksGUI extends JFrame {
                     break;
                 case 3:
                     jeu.setNiveau3GUI();
-                    break;
-            }
-            // Réinitialiser la position des robots sur la grille
-            jeu.resetPosition();
-            // Mettre à jour l'affichage de la grille
-            createGridCells(Prototype, x, y, scaledIcon);
+                    break;*/
+           
+            startGUI(niveauActuel+1);
         } else {
             // Si le niveau actuel est déjà le niveau 3, afficher un message ou effectuer toute autre action nécessaire
             JOptionPane.showMessageDialog(null, "Vous avez terminé tous les niveaux disponibles !", "Fin du jeu", JOptionPane.INFORMATION_MESSAGE);
             // Vous pouvez ajouter d'autres actions ici, comme quitter le jeu
         }
-    }*/
+    }
+}

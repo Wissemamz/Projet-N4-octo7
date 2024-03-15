@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "model.Main",
+            "projectName": "Projet-N4-octo7_7ee620bd"
+        },
+        {
+            "type": "java",
             "name": "tess",
             "request": "launch",
             "mainClass": "model.tess",
