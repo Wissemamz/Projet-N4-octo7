@@ -534,7 +534,7 @@ public class OctopunksGUI extends JFrame {
                     updateGUI();
                     
                     if(jeu.W==1){
-                        JOptionPane.showMessageDialog(null, "Felecitations, vous avez reussi la partie.", "Gagne", JOptionPane.ERROR_MESSAGE);
+                        messageVictoireGUI(); // Afficher le panel de victoire
                     }else{
                         JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu la partie.", "Défaite", JOptionPane.ERROR_MESSAGE);
                     }
