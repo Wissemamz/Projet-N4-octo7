@@ -266,7 +266,44 @@ public class Jeu {
     }
 
     public void setNiveau3GUI(){
-        
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                for (int k = 0; k < grille[i][j].length; k++) {
+                    grille[i][j][k] = null; // Affecter null à chaque élément
+                }
+            }
+        }
+        grille[4][0][0] = robot1;
+        robot1.setAbscisse(4);
+        robot1.setOrdonnee(0);
+        robot1.setCaseJ(0);
+        robot1.ressuciter();
+        robot1.setFichier(null);
+
+        grille[4][4][0] = robot2;
+        robot2.setAbscisse(4);
+        robot2.setOrdonnee(4);
+        robot2.setCaseJ(0);
+        robot2.ressuciter();
+        robot2.setFichier(null);
+
+        for (int i=0 ;i<4; i++){
+            grille[0][3][i] = new Obstacle("obstacle",0,3,i);
+            grille[1][3][i] = new Obstacle("obstacle",1,3,i);
+            grille[2][3][i] = new Obstacle("obstacle",2,3,i);
+            grille[3][3][i] = new Obstacle("obstacle",3,3,i);        
+            grille[4][3][i] = new Obstacle("obstacle",4,3,i);        
+        }
+        ArrayList<Integer> liste = new ArrayList<>();
+        liste.add(1);
+        liste.add(2);
+        liste.add(3);
+        liste.add(4);
+        f1 = new TableauDynamique("667",0,4,3,liste);
+        grille[0][4][1] = f1;
+        f1.setAbscisse(0);
+        f1.setOrdonnee(4);
+        f1.setCaseJ(1);
     }
 
     public boolean verifierVictoire() {

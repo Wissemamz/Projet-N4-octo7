@@ -795,7 +795,7 @@ public class OctopunksGUI extends JFrame {
         final JButton button = new JButton("");
         button.setPreferredSize(new Dimension(50, 25));
 
-        ImageIcon iconSwitch = new ImageIcon("main/src/images/pasBouttonW.png"); // Assurez-vous de charger une image de 16x16 pixels
+        ImageIcon iconSwitch = new ImageIcon("main/src/images/globale.jpg"); // Assurez-vous de charger une image de 16x16 pixels
         // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
         Image imageSwitch = iconSwitch.getImage();
         Image newImageSwitch = imageSwitch.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
