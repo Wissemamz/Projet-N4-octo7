@@ -22,7 +22,7 @@ public class Jeu {
     private Registre M;
     public Registre getM(){return this.M;}
 
-    // Déclarer des variables membres pour suivre la position actuelle dans les listes d'instructions de chaque robot
+    // Déclarer des variables pour suivre la position actuelle dans les listes d'instructions de chaque robot
     private int positionR1 = 0;
     private int positionR2 = 0;
     public int[] t1 = {positionR1};
@@ -31,8 +31,6 @@ public class Jeu {
     public Jeu() {
         this.robot1= new Robot("Robot1", 4, 0,0);
         this.robot2= new Robot("Robot2", 4, 4,0);
-        //grille[4][0][0] = robot1;
-        //grille[4][4][0] = robot2;
         this.random=new Random();
         this.M = new Registre();
         messageLabel = new JLabel();
@@ -401,8 +399,6 @@ public class Jeu {
             instructionsList.add(instruction);
         }
 
-        //scanner.close();
-
         return instructionsList;
     }
 
@@ -477,7 +473,7 @@ public class Jeu {
             tab[0]++;
         }
     
-        // Vérification de la victoire à la fin du niveau 1
+        // Vérification de la victoire à la fin du niveau
         if (verifierVictoire()) {
             message_victoire();
             return;
@@ -583,7 +579,7 @@ public class Jeu {
             tab[0]++;
         }
     
-        // Vérification de la victoire à la fin du niveau 1
+        // Vérification de la victoire à la fin du niveau
         if (verifierVictoire()) {
             W=1;
             return;
@@ -651,15 +647,5 @@ public class Jeu {
         positionR1=0;
         positionR2=0;
     }
-
-    /*// Méthode pour vérifier si le joueur a gagné et afficher le pop-up correspondant
-    public void verifierEtAfficherResultat() {
-        boolean victoire = verifierVictoire();
-        if (victoire) {
-            JOptionPane.showMessageDialog(null, "Félicitations, vous avez gagné !");
-        } else {
-            JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu.");
-        }
-    }*/
 }
     

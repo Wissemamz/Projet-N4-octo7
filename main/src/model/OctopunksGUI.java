@@ -8,8 +8,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
-import java.util.concurrent.Flow;
-
 
 public class OctopunksGUI extends JFrame {
     public Jeu jeu; // Instance de la classe Jeu
@@ -52,8 +50,6 @@ public class OctopunksGUI extends JFrame {
         setSize(400, 320); // Augmentation de la hauteur pour accommoder le titre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        //setResizable(false);
-        
 
         // Panel principal pour contenir tous les composants
         JPanel mainPanel = new JPanel();
@@ -71,7 +67,7 @@ public class OctopunksGUI extends JFrame {
         buttonPanel.setLayout(new FlowLayout()); // Ajout de marges entre les boutons
 
          // Chargement des images pour les backgrounds des cases
-         ImageIcon iconGraph = new ImageIcon("main/src/images/Graphique1.png"); // Assurez-vous de charger une image de 16x16 pixels
+         ImageIcon iconGraph = new ImageIcon("main/src/images/Graphique1.png");
     
          // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
          Image image = iconGraph.getImage();
@@ -79,8 +75,8 @@ public class OctopunksGUI extends JFrame {
          ImageIcon scaledIconGraph = new ImageIcon(newImageGraph);
 
          // Chargement des images pour les backgrounds des cases
-         ImageIcon iconText = new ImageIcon("main/src/images/Textuel.png"); // Assurez-vous de charger une image de 16x16 pixels
-    
+         ImageIcon iconText = new ImageIcon("main/src/images/Textuel.png");
+
          // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
          Image imageText = iconText.getImage();
          Image newImageText = imageText.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
@@ -298,8 +294,6 @@ public class OctopunksGUI extends JFrame {
 
                 // Parcourir les sous-cases de la grille principale
                 for (int k = 0; k < z; k++) {
-                    
-                    //final int finalK = k;
                     // Créer un JLabel pour chaque sous-case
                     subCellLabels[k] = new JLabel();
 
@@ -331,7 +325,6 @@ public class OctopunksGUI extends JFrame {
                        subCellLabels[k].setIcon(jeu.grille[i][j][k].getIcon());
 
                     }
-
 
                     // Ajouter le JLabel représentant la sous-case à la case principale
                     mainCellPanel.add(subCellLabels[k]);
@@ -371,7 +364,7 @@ public class OctopunksGUI extends JFrame {
 
 
             // Chargement des images pour les backgrounds des cases
-            ImageIcon icon = new ImageIcon("main/src/images/case.png"); // Assurez-vous de charger une image de 16x16 pixels
+            ImageIcon icon = new ImageIcon("main/src/images/case.png");
     
             // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
             Image image = icon.getImage();
@@ -399,8 +392,8 @@ public class OctopunksGUI extends JFrame {
             
             // Buttons
             // Chargement des images pour les backgrounds des cases
-            ImageIcon iconPas = new ImageIcon("main/src/images/pasBouttonW.png"); // Assurez-vous de charger une image de 16x16 pixels
-    
+            ImageIcon iconPas = new ImageIcon("main/src/images/pasBouttonW.png");
+
             // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
             Image imagePas = iconPas.getImage();
             Image newImagePas = imagePas.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
@@ -412,7 +405,6 @@ public class OctopunksGUI extends JFrame {
             stepButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
                     // Bloquer les zones de texte
                     OctopunksGUI.memoryArea1.setEditable(false);
                     OctopunksGUI.memoryArea2.setEditable(false);
@@ -430,7 +422,7 @@ public class OctopunksGUI extends JFrame {
             });
 
             // Chargement des images pour les backgrounds des cases
-            ImageIcon iconStop = new ImageIcon("main/src/images/stopButtonW.png"); // Assurez-vous de charger une image de 16x16 pixels
+            ImageIcon iconStop = new ImageIcon("main/src/images/stopButtonW.png");
     
             // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
             Image imageStop = iconStop.getImage();
@@ -464,7 +456,7 @@ public class OctopunksGUI extends JFrame {
                     OctopunksGUI.memoryArea1.setEditable(true);
                     OctopunksGUI.memoryArea2.setEditable(true);
             
-                    // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
+                    // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau*())
                     switch (n) {
                         case 1 : 
                             jeu.setNiveau1GUI();
@@ -491,7 +483,7 @@ public class OctopunksGUI extends JFrame {
             });
             
             // Chargement des images pour les backgrounds des cases
-            ImageIcon iconAuto = new ImageIcon("main/src/images/autoButtonW.png"); // Assurez-vous de charger une image de 16x16 pixels
+            ImageIcon iconAuto = new ImageIcon("main/src/images/autoButtonW.png");
     
             // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
             Image imageAuto = iconAuto.getImage();
@@ -515,7 +507,7 @@ public class OctopunksGUI extends JFrame {
                     // Rafraîchir l'affichage des panneaux de registres
                     updateRegisterPanel(registreRobot1, jeu.robot1);
                     updateRegisterPanel(registreRobot2, jeu.robot2);
-                    // Réinitialiser l'emplacement des robots sur la grille    )
+                    // Réinitialiser l'emplacement des robots sur la grille 
                     switch (n) {
                         case 1 : 
                             jeu.setNiveau1GUI();
@@ -615,7 +607,7 @@ public class OctopunksGUI extends JFrame {
             JButton openPdfButton = new JButton("Manuel");
             openPdfButton.setPreferredSize(new Dimension(100, 50));
             // Définition de la taille du texte
-            Font buttonFont = new Font("Times New Roman", Font.BOLD, 20); // Exemple : taille de police de 16 pixels
+            Font buttonFont = new Font("Times New Roman", Font.BOLD, 20);
             openPdfButton.setFont(buttonFont);
             openPdfButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -632,8 +624,7 @@ public class OctopunksGUI extends JFrame {
             getContentPane().add(bottomPanel, BorderLayout.AFTER_LAST_LINE); // Ajouter bottomPanel au Sud
 
             setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
-            //setUndecorated(true); // Enlever la décoration de fenêtre (barre de titre, boutons de fermeture, etc.)
-
+            
             pack();
             setVisible(true);
         });
@@ -651,10 +642,6 @@ public class OctopunksGUI extends JFrame {
         updateFilePanel(jeu.robot1, filePanel1, jeu.robot1.getFichier());
         updateFilePanel(jeu.robot2, filePanel2, jeu.robot2.getFichier());
     
-        /*  Vérification de la victoire à la fin du niveau 1
-        if (jeu.L==1) {
-            JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu la partie.", "Défaite", JOptionPane.ERROR_MESSAGE);
-        }    
         // Rafraîchir l'interface utilisateur*/
         revalidate();
         repaint();
@@ -670,9 +657,9 @@ public class OctopunksGUI extends JFrame {
     
         // Crée une zone de texte pour le contenu du fichier
         JTextArea fileContentArea = new JTextArea(5, 30);
-        fileContentArea.setEditable(false); // Assurez-vous que l'utilisateur ne peut pas modifier le contenu
-        fileContentArea.setLineWrap(true); // Assurez-vous que le texte se coupe correctement
-        fileContentArea.setWrapStyleWord(true); // Assurez-vous que les mots se coupent correctement
+        fileContentArea.setEditable(false); 
+        fileContentArea.setLineWrap(true);
+        fileContentArea.setWrapStyleWord(true);
         
         JLabel fileLabel;
         String nomFichier;
@@ -737,15 +724,14 @@ public class OctopunksGUI extends JFrame {
         // Récupérer les valeurs initiales des registres
         int rX = robot.getX().getValeur();
         int rT = robot.getT().getValeur();
-        //int rF = Integer.parseInt(robot.getFichier().getName());
         String rF = robot.getFichier()==null ? "None" : robot.getFichier().getName();
         String rM = jeu.getM().getValeur()==0 ? "None" : String.valueOf(jeu.getM().getValeur());
 
         // Créer un tableau de données pour les valeurs des registres   
         String[][] data = {
                 {"X", String.valueOf(rX)},
-                {"T", String.valueOf(rT)}, // Mettez T en deuxième position
-                {"F", rF},  // Mettez F en troisième position
+                {"T", String.valueOf(rT)}, 
+                {"F", rF}, 
                 {"M", rM}
         };
             
@@ -770,7 +756,7 @@ public class OctopunksGUI extends JFrame {
         final JButton button = new JButton("");
         button.setPreferredSize(new Dimension(50, 25));
 
-        ImageIcon iconSwitch = new ImageIcon("main/src/images/globale.jpg"); // Assurez-vous de charger une image de 16x16 pixels
+        ImageIcon iconSwitch = new ImageIcon("main/src/images/globale.jpg");
         // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
         Image imageSwitch = iconSwitch.getImage();
         Image newImageSwitch = imageSwitch.getScaledInstance(50, 25, Image.SCALE_SMOOTH);
@@ -796,10 +782,6 @@ public class OctopunksGUI extends JFrame {
                 button.setIcon(scaledIcon);
             }
         });
-        
-        // Créer un panneau pour contenir le bouton
-        //JPanel buttonPanel = new JPanel();
-        //buttonPanel.add(button);
 
         // Ajout du panneau du bouton en bas
         registerPanel.add(button, BorderLayout.SOUTH);
@@ -830,7 +812,7 @@ public class OctopunksGUI extends JFrame {
         robot.setFichier(null);
         jeu.getM().setValeur(0);
 
-        ImageIcon newIcon = new ImageIcon("main/src/images/globale.jpg"); // Insérez le chemin de votre nouvelle image
+        ImageIcon newIcon = new ImageIcon("main/src/images/globale.jpg");
         Image image = newIcon.getImage();
         Image newImage = image.getScaledInstance(50, 25, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(newImage);
@@ -840,7 +822,6 @@ public class OctopunksGUI extends JFrame {
     
     private void resetFilePanel(Robot robot, JPanel filePanel) {
         robot.setFichier(null);
-        //updateFilePanel(robot,filePanel,"");
         updateFilePanel(robot,filePanel,robot.getFichier());
     }
 
@@ -933,11 +914,6 @@ public class OctopunksGUI extends JFrame {
                 // Reset de la zone des fichiers
                 resetFilePanel(jeu.robot1, filePanel1);
                 resetFilePanel(jeu.robot2, filePanel2);
-        
-                // Réinitialiser d'autres éléments si nécessaire
-                // Effacer le contenu des zones mémoires
-                //memoryArea1.setText("");
-                //memoryArea2.setText("");
 
                 // Reouvrir les zones de texte
                 OctopunksGUI.memoryArea1.setEditable(true);
@@ -1038,11 +1014,6 @@ public class OctopunksGUI extends JFrame {
                     // Reset de la zone des fichiers
                     resetFilePanel(jeu.robot1, filePanel1);
                     resetFilePanel(jeu.robot2, filePanel2);
-            
-                    // Réinitialiser d'autres éléments si nécessaire
-                    // Effacer le contenu des zones mémoires
-                    //memoryArea1.setText("");
-                    //memoryArea2.setText("");
 
                     // Reouvrir les zones de texte
                     OctopunksGUI.memoryArea1.setEditable(true);
@@ -1100,7 +1071,8 @@ public class OctopunksGUI extends JFrame {
 
         } else {
             // Si le niveau actuel est déjà le niveau 3, afficher un message ou effectuer toute autre action nécessaire
-            JOptionPane.showMessageDialog(null, "Vous avez terminé tous les niveaux disponibles !", "Fin du jeu", JOptionPane.INFORMATION_MESSAGE);
+            ImageIcon victoireIcon = new ImageIcon(resizeImage("main/src/images/octo_down.png", 50, 50));
+            JOptionPane.showMessageDialog(null, "Vous avez terminé tous les niveaux disponibles !", "Fin du jeu", JOptionPane.INFORMATION_MESSAGE,victoireIcon);
         }
     }
 }

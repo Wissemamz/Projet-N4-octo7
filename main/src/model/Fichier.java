@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.Image;
-
 import javax.swing.ImageIcon;
 
 public abstract class Fichier extends ObjetJ {
@@ -11,9 +10,7 @@ public abstract class Fichier extends ObjetJ {
     }
 
     public void setAbscisse(int value){abscisse=value;}
-    
     public void setOrdonnee(int value){ordonnee=value;}
-
     public void setCaseJ(int value){caseJ=value;}
 
     public abstract int getPosFichier();
