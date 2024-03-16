@@ -1,19 +1,30 @@
+===========================================================================
+                    README - Instructions pour jouer à Octopunks
+===========================================================================
 
-## Compilation et Exécution
+Prérequis:
+-----------
+Avant de compiler et exécuter le jeu Octopunks, assurez-vous d'avoir les éléments suivants installés sur votre système :
 
-### Prérequis
-- Java JDK doit être installé sur votre système.
+- Java Development Kit (JDK) 
+- Mingw32-make (si vous utilisez MinGW sur Windows)
 
-### Compilation
-1. Ouvrez un terminal.
-2. Allez dans le répertoire racine du projet (`projetN4/main/src`).
-3. Exécutez la commande suivante :
-    make
+Compilation et exécution:
+----------------------------
+Pour compiler et exécuter le jeu Octopunks depuis le terminal, suivez les étapes ci-dessous :
 
-### Exécution
-Une fois le projet compilé avec succès, vous pouvez exécuter l'application en utilisant la commande suivante :
-    make run
+1. Accédez au répertoire du projet :
+    cd octopunks/main/src
 
-### Nettoyage
-Pour nettoyer les fichiers compilés, exécutez la commande suivante :
-    make clean
+2. Compilez le jeu :
+    Si vous utilisez MinGW sur Windows :
+        mingw32-make
+    Sinon, utilisez simplement la commande 'make' :
+        make
+
+3. Exécutez le jeu :
+        mingw32-make run
+
+    Note : Si vous n'utilisez pas MinGW, vous pouvez exécuter les commandes sans le préfixe 'mingw32-'.
+
+===========================================================================
