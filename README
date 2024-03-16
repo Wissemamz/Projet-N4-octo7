@@ -14,17 +14,18 @@ Compilation et exécution:
 Pour compiler et exécuter le jeu Octopunks depuis le terminal, suivez les étapes ci-dessous :
 
 1. Accédez au répertoire du projet :
-    cd octopunks/main/src
+    Projet-N4-octo7
 
 2. Compilez le jeu :
     Si vous utilisez MinGW sur Windows :
         mingw32-make
-    Sinon, utilisez simplement la commande 'make' :
+    Sinon :
         make
 
 3. Exécutez le jeu :
+    Si vous utilisez MinGW sur Windows :
         mingw32-make run
-
-    Note : Si vous n'utilisez pas MinGW, vous pouvez exécuter les commandes sans le préfixe 'mingw32-'.
+    Sinon :
+        make run
 
 ===========================================================================
