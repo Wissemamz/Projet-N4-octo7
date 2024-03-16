@@ -694,26 +694,6 @@ public class OctopunksGUI extends JFrame {
         return filePanel;
     }
     
-    /*private void updateFilePanel(Robot robot, JPanel filePanel, String fileContent) {
-        // Récupère la zone de texte du contenu du fichier
-        JTextArea fileContentArea = (JTextArea) ((JScrollPane) filePanel.getComponent(1)).getViewport().getView();
-    
-        // Met à jour le contenu du fichier dans la zone de texte
-        fileContentArea.setText(fileContent);
-    
-        String nomFichier;
-        // Obtenez le JLabel existant du panneau
-        JLabel fileLabel = (JLabel) filePanel.getComponent(0);
-    
-        // Mettre à jour le texte du JLabel avec le nouveau nom de fichier
-        if (robot.getFichier() != null) {
-            nomFichier = robot.getFichier().getName();
-        } else {
-            nomFichier = "";
-        }
-        fileLabel.setText(nomFichier);
-    }*/
-    
     protected void updateFilePanel(Robot robot, JPanel filePanel, Fichier fichier) {
         // Récupérer la zone de texte du contenu du fichier
         JTextArea fileContentArea = (JTextArea) ((JScrollPane) filePanel.getComponent(1)).getViewport().getView();
@@ -1045,6 +1025,8 @@ public class OctopunksGUI extends JFrame {
 
         retryLevelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                    dispose();
+                    frame.dispose();
                     // Réinitialiser les valeurs des registres pour chaque robot
                     resetRegisterValues(jeu.robot1,registreRobot1);
                     resetRegisterValues(jeu.robot2,registreRobot2);
@@ -1112,17 +1094,6 @@ public class OctopunksGUI extends JFrame {
 
     private void passerAuNiveauSuivant(int niveauActuel) {
         if (niveauActuel < 3) {
-            /*// Charger le prochain niveau en fonction de son numéro
-            switch (niveauActuel+1) {
-                case 1:
-                    jeu.setNiveau1GUI();
-                    break;
-                case 2:
-                    jeu.setNiveau2GUI();
-                    break;
-                case 3:
-                    jeu.setNiveau3GUI();
-                    break;*/
             jeu.niveau = niveauActuel + 1;
             startGUI(jeu.niveau);
             updateGUI();
@@ -1130,7 +1101,6 @@ public class OctopunksGUI extends JFrame {
         } else {
             // Si le niveau actuel est déjà le niveau 3, afficher un message ou effectuer toute autre action nécessaire
             JOptionPane.showMessageDialog(null, "Vous avez terminé tous les niveaux disponibles !", "Fin du jeu", JOptionPane.INFORMATION_MESSAGE);
-            // Vous pouvez ajouter d'autres actions ici, comme quitter le jeu
         }
     }
 }
