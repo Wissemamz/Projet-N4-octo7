@@ -1,6 +1,9 @@
 package model;
 
 import java.util.Random;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,6 +21,7 @@ public class Jeu {
 
     public int W=0; //win
     public int L=0; //lose
+    private ArrayList<String> tentatives = new ArrayList<>();
 
     private Registre M;
     public Registre getM(){return this.M;}
@@ -351,7 +355,7 @@ public class Jeu {
                 System.out.println("Victoire ! Vous avez déplacé les fichiers à la position attendue.");
                 break;
             case 2 :
-                System.out.println("Victoire ! Vous avez copier les elements dans un fichier a la position attendue.");
+                System.out.println("Victoire ! Vous avez copier les éléments dans un fichier a la position attendue.");
                 break;
             case 3 :
 
@@ -467,6 +471,7 @@ public class Jeu {
             return;
         }
         System.out.println("Vous avez perdu !");
+        sauvegarderPartie(instruR1, instruR2, verifierVictoire());
     }
 
     public ArrayList<Instruction> parseTextFromInputGUI(String robotText) {
@@ -635,15 +640,63 @@ public class Jeu {
         positionR1=0;
         positionR2=0;
     }
+    public void sauvegarderPartie(ArrayList<Instruction> instructionsRobot1, ArrayList<Instruction> instructionsRobot2, boolean victoire) {
+        try {
+            String cheminFichier = System.getProperty("user.home") + "/Bureau/L2/Niveau 4/Projet/Projet-N4-1/";
+            String nomFichier = "partie_" + System.currentTimeMillis() + ".txt";
+            FileWriter writer = new FileWriter(cheminFichier + nomFichier);
+            
+    
+            System.out.println("Chemin complet du fichier: " + nomFichier);
 
-    /*// Méthode pour vérifier si le joueur a gagné et afficher le pop-up correspondant
-    public void verifierEtAfficherResultat() {
-        boolean victoire = verifierVictoire();
-        if (victoire) {
-            JOptionPane.showMessageDialog(null, "Félicitations, vous avez gagné !");
-        } else {
-            JOptionPane.showMessageDialog(null, "Désolé, vous avez perdu.");
+            // Écriture des instructions du robot 1 dans le fichier
+            writer.write("Instructions Robot 1:\n");
+            for (Instruction instruction : instructionsRobot1) {
+                writer.write(instruction.toString() + "\n");
+            }
+            writer.write("\n");
+    
+            // Écriture des instructions du robot 2 dans le fichier
+            writer.write("Instructions Robot 2:\n");
+            for (Instruction instruction : instructionsRobot2) {
+                writer.write(instruction.toString() + "\n");
+            }
+            writer.write("\n");
+    
+            // Écriture du résultat de la partie dans le fichier
+            if (victoire) {
+                writer.write("Résultat: Victoire\n");
+            } else {
+                writer.write("Résultat: Défaite\n");
+            }
+    
+            // Fermeture du fichier
+            writer.close();
+    
+            System.out.println("Partie sauvegardée dans le fichier: " + nomFichier);
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la sauvegarde de la partie: " + e.getMessage());
         }
-    }*/
-}
+    }
+        public void sauvegarderInstructions(String nomFichier, ArrayList<String> instructions) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(nomFichier));
+                for (String instruction : instructions) {
+                    writer.write(instruction);
+                    writer.newLine();
+                }
+                writer.close();
+                System.out.println("Les instructions ont été sauvegardées dans le fichier " + nomFichier);
+            } catch (IOException e) {
+                System.out.println("Erreur lors de la sauvegarde des instructions dans le fichier: " + e.getMessage());
+            }
+        }
+    }
+    
+
+
+    
+
+
+>>>>>>> 50fda82 (Sauvgarde des instructions dans un fichier de sortie)
     
