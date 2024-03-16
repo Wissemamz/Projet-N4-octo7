@@ -940,8 +940,54 @@ public class OctopunksGUI extends JFrame {
 
         nextLevelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                passerAuNiveauSuivant(jeu.niveau); // Méthode pour passer au niveau suivant
-                frame.dispose(); // Fermer la fenêtre modale
+                dispose(); // Fermer la fenêtre du menu principal
+                //getContentPane().removeAll();
+                passerAuNiveauSuivant(jeu.niveau);
+                // Réinitialiser les valeurs des registres pour chaque robot
+                resetRegisterValues(jeu.robot1,registreRobot1);
+                resetRegisterValues(jeu.robot2,registreRobot2);
+        
+                // Rafraîchir l'affichage des panneaux de registres
+                updateRegisterPanel(registreRobot1, jeu.robot1);
+                updateRegisterPanel(registreRobot2, jeu.robot2);
+
+                // Reset de la zone des fichiers
+                resetFilePanel(jeu.robot1, filePanel1);
+                resetFilePanel(jeu.robot2, filePanel2);
+        
+                // Réinitialiser d'autres éléments si nécessaire
+                // Effacer le contenu des zones mémoires
+                //memoryArea1.setText("");
+                //memoryArea2.setText("");
+
+                // Reouvrir les zones de texte
+                OctopunksGUI.memoryArea1.setEditable(true);
+                OctopunksGUI.memoryArea2.setEditable(true);
+        
+                // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
+                switch (jeu.niveau) {
+                    case 1 : 
+                        jeu.setNiveau1GUI();
+                        break;
+                    case 2 : 
+                        jeu.setNiveau2GUI();
+                        break;
+                    case 3 : 
+                        jeu.setNiveau3GUI();
+                        break;
+                }
+                jeu.resetPosition();
+                jeu.W=0;
+                jeu.L=0;
+        
+                // Mettre à jour l'affichage de la grille
+                createGridCells(Prototype, x, y, scaledIcon);
+                stepButton.setEnabled(true);
+                jeu.t1[0]=0;
+                jeu.t2[0]=0;
+                jeu.robot1.setMode(1);
+                jeu.robot2.setMode(1);
+                updateGUI();
 
             }
         });
@@ -1020,6 +1066,7 @@ public class OctopunksGUI extends JFrame {
                     // Reouvrir les zones de texte
                     OctopunksGUI.memoryArea1.setEditable(true);
                     OctopunksGUI.memoryArea2.setEditable(true);
+
             
                     // Réinitialiser l'emplacement des robots sur la grille (affichage de setNiveau1())
                     switch (jeu.niveau) {
@@ -1033,6 +1080,9 @@ public class OctopunksGUI extends JFrame {
                             jeu.setNiveau3GUI();
                             break;
                     }
+                    updateGUI();
+
+
                     jeu.resetPosition();
                     jeu.W=0;
                     jeu.L=0;
@@ -1074,8 +1124,10 @@ public class OctopunksGUI extends JFrame {
                 case 3:
                     jeu.setNiveau3GUI();
                     break;*/
-           
-            startGUI(niveauActuel+1);
+            jeu.niveau = niveauActuel + 1;
+            startGUI(jeu.niveau);
+            updateGUI();
+
         } else {
             // Si le niveau actuel est déjà le niveau 3, afficher un message ou effectuer toute autre action nécessaire
             JOptionPane.showMessageDialog(null, "Vous avez terminé tous les niveaux disponibles !", "Fin du jeu", JOptionPane.INFORMATION_MESSAGE);
