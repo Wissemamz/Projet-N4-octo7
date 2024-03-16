@@ -1,0 +1,31 @@
+===========================================================================
+                    README - Instructions pour jouer à Octopunks
+===========================================================================
+
+Prérequis:
+-----------
+Avant de compiler et exécuter le jeu Octopunks, assurez-vous d'avoir les éléments suivants installés sur votre système :
+
+- Java Development Kit (JDK) 
+- Mingw32-make (si vous utilisez MinGW sur Windows)
+
+Compilation et exécution:
+----------------------------
+Pour compiler et exécuter le jeu Octopunks depuis le terminal, suivez les étapes ci-dessous :
+
+1. Accédez au répertoire du projet :
+    Projet-N4-octo7
+
+2. Compilez le jeu :
+    Si vous utilisez MinGW sur Windows :
+        mingw32-make
+    Sinon :
+        make
+
+3. Exécutez le jeu :
+    Si vous utilisez MinGW sur Windows :
+        mingw32-make run
+    Sinon :
+        make run
+
+===========================================================================

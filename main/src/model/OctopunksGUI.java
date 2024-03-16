@@ -592,19 +592,18 @@ public class OctopunksGUI extends JFrame {
             topPanel.add(leftPanel, BorderLayout.CENTER);
             topPanel.add(rightPanel, BorderLayout.EAST);
 
-            String mission = "  Mission :  ";
+            JLabel missionLabel = new JLabel();
             switch (n) {
                 case (1) :
-                    mission = mission + "Deplacez les fichiers 199 et 299 dans la case [0][2]";
+                    missionLabel.setText("Mission : Deplacez les fichiers 199 et 299 dans la case [0][2]");
                     break;
                 case (2) :
-                    mission = mission + "Deplacez le contenu du fichier 667 vers un fichier et deposez le dans la case [0][0]";
+                    missionLabel.setText("Mission : Deplacez le contenu du fichier 667 vers un fichier et deposez le dans la case [0][0]");
                     break;
                 case (3) :
-                    mission = mission + "";
+                missionLabel.setText("<html>Mission : Recuperer le fichier 444, additionner les 2 premieres valeurs, multiplier par la troisieme, soustraire la 4eme, additionner avec la premiere, <br>mettre tout les resultats dans une pile et la deposer a la case [4][4], detruire le fichier 444 et le robot qui l'a recuperé</html>");
                     break;
             }
-            JLabel missionLabel = new JLabel(mission);
             missionLabel.setFont(new Font("Arial", Font.PLAIN, 20));
             missionLabel.setForeground(Color.BLACK);
 
@@ -794,9 +793,9 @@ public class OctopunksGUI extends JFrame {
         ImageIcon iconSwitch = new ImageIcon("main/src/images/globale.jpg"); // Assurez-vous de charger une image de 16x16 pixels
         // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
         Image imageSwitch = iconSwitch.getImage();
-        Image newImageSwitch = imageSwitch.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+        Image newImageSwitch = imageSwitch.getScaledInstance(50, 25, Image.SCALE_SMOOTH);
         ImageIcon scaledSwitchIcon = new ImageIcon(newImageSwitch);
-        button.setBackground(Color.BLACK);
+        button.setBackground(Color.white);
         button.setIcon(scaledSwitchIcon);
 
         button.addActionListener(new ActionListener() {
@@ -805,14 +804,14 @@ public class OctopunksGUI extends JFrame {
                 ImageIcon newIcon;
                 if (robot.getMode()==1) {
                     robot.setMode(0);
-                    newIcon = new ImageIcon("main/src/images/autoBoutton.png");                
+                    newIcon = new ImageIcon("main/src/images/local.jpg");                
                 }
                 else {
                     robot.setMode(1);
-                    newIcon = new ImageIcon("main/src/images/pasBouttonW.png"); 
+                    newIcon = new ImageIcon("main/src/images/globale.jpg"); 
                 }
                 Image image = newIcon.getImage();
-                Image newImage = image.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+                Image newImage = image.getScaledInstance(50, 25, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(newImage);
                 button.setIcon(scaledIcon);
             }
@@ -851,9 +850,9 @@ public class OctopunksGUI extends JFrame {
         robot.setFichier(null);
         jeu.getM().setValeur(0);
 
-        ImageIcon newIcon = new ImageIcon("main/src/images/pasBouttonW.png"); // Insérez le chemin de votre nouvelle image
+        ImageIcon newIcon = new ImageIcon("main/src/images/globale.jpg"); // Insérez le chemin de votre nouvelle image
         Image image = newIcon.getImage();
-        Image newImage = image.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+        Image newImage = image.getScaledInstance(50, 25, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(newImage);
         JButton button = (JButton) registerPanel.getComponent(1);
         button.setIcon(scaledIcon);
