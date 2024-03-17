@@ -901,6 +901,7 @@ public class OctopunksGUI extends JFrame {
         nextLevelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Fermer la fenêtre du menu principal
+                frame.dispose();
                 //getContentPane().removeAll();
                 passerAuNiveauSuivant(jeu.niveau);
                 // Réinitialiser les valeurs des registres pour chaque robot
@@ -1001,7 +1002,6 @@ public class OctopunksGUI extends JFrame {
 
         retryLevelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                    dispose();
                     frame.dispose();
                     // Réinitialiser les valeurs des registres pour chaque robot
                     resetRegisterValues(jeu.robot1,registreRobot1);

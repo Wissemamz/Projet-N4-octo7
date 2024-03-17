@@ -57,7 +57,6 @@ public class Robot extends ObjetJ{
 
     public void setFichier(ObjetJ f){
         this.fichier=(Fichier) f;
-        //F.setValeur(fichier.F());
     }
 
     public void updateXValue(int newValue) {
@@ -83,7 +82,12 @@ public class Robot extends ObjetJ{
     @Override
     public ImageIcon getIcon() {
         // Chargement des images pour les backgrounds des cases
-        ImageIcon icon = new ImageIcon("main/src/images/robot.png");
+        ImageIcon icon;
+        // = new ImageIcon("main/src/images/robot.png");
+        if (this.getFichier() != null) {
+            icon = new ImageIcon("main/src/images/octo_grab.jpeg");
+        }
+        else icon = new ImageIcon("main/src/images/robot.png");
 
         // Redimensionner l'image pour qu'elle s'adapte à la taille des cases
         Image image = icon.getImage();

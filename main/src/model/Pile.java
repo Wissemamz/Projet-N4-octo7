@@ -42,7 +42,7 @@ public class Pile extends Fichier {
     } 
 
     @Override
-    public void VOID_F() {               // Méthode pour effacer la dernière case
+    public void VOID_F() {     // Méthode pour effacer la dernière case
         if (TEST_EOF()) return;
         else elements.pop();
     }
